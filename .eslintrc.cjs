@@ -22,7 +22,7 @@ module.exports = {
     "svelte3/typescript": true,
   },
   plugins: ["svelte3", "@typescript-eslint"],
-  ignorePatterns: ["node_modules"],
+  ignorePatterns: ["node_modules", "dist", ".routify"],
   overrides: [
     {
       files: ["**/*.svelte"],
