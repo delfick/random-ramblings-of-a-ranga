@@ -14,8 +14,21 @@
      */
     "allowJs": true,
     "checkJs": true,
-    "isolatedModules": true
+    "isolatedModules": true,
+
+    "lib": ["DOM", "ES2017", "WebWorker"],
+    "esModuleInterop": true,
+    "importsNotUsedAsValues": "remove",
+    "strict": true
   },
-  "include": ["src/**/*.d.ts", "src/**/*.ts", "src/**/*.js", "src/**/*.svelte"],
+  "include": [
+    "**/*.d.ts",
+    "**/*.ts",
+    "**/*.js",
+    "**/*.cjs",
+    "**/*.json",
+    "**/*.svelte",
+    ".eslintrc.cjs"
+  ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
