@@ -1,4 +1,5 @@
 import "./app.scss";
+import HMR from "@roxi/routify/hmr";
 import App from "./App.svelte";
 
 let target = document.getElementById("app");
@@ -8,4 +9,4 @@ if (target == null) {
   document.body.appendChild(target);
 }
 
-export default new App({ target });
+export default HMR(App, { target });

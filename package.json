@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "routify -c dev:vite",
     "dev:vite": "vite",
-    "build": "svelte-check && routify -b && vite build",
+    "build": "routify -b && svelte-check && vite build",
     "preview": "vite preview",
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "format": "prettier --write .",
