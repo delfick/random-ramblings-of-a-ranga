@@ -1,5 +1,7 @@
-import { defineConfig } from "vite";
 import { svelte } from "@sveltejs/vite-plugin-svelte";
+import autoprefixer from "autoprefixer";
+import tailwind from "tailwindcss";
+import { defineConfig } from "vite";
 import eslint from "vite-plugin-eslint";
 import tsconfigPaths from "vite-tsconfig-paths";
 
@@ -7,10 +9,8 @@ import tsconfigPaths from "vite-tsconfig-paths";
 export default defineConfig({
   plugins: [svelte(), eslint(), tsconfigPaths()],
   css: {
-    preprocessorOptions: {
-      scss: {
-        additionalData: '@use "src/variables.scss" as *;',
-      },
+    postcss: {
+      plugins: [tailwind(), autoprefixer()],
     },
   },
 });

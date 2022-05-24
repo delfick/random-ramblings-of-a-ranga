@@ -19,7 +19,8 @@
     "lib": ["DOM", "ES2017", "WebWorker"],
     "esModuleInterop": true,
     "importsNotUsedAsValues": "remove",
-    "strict": true
+    "strict": true,
+    "allowSyntheticDefaultImports": true
   },
   "include": [
     "**/*.d.ts",
