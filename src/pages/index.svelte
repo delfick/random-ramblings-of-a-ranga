@@ -1,4 +1,5 @@
 <script lang="ts">
+  import "./index.scss";
   import avatar from "/avatar.png";
 </script>
 
@@ -7,15 +8,13 @@
     <div>
       <img src={avatar} style="display:inline" alt="The delfick avatar" />
     </div>
-    <div><a href="https://github.com/delfick">Github</a></div>
-    <div><a href="https://www.linkedin.com/in/delfick">LinkedIn</a></div>
+    <div><p><a href="https://github.com/delfick">Github</a></p></div>
+    <div><p><a href="https://www.linkedin.com/in/delfick">LinkedIn</a></p></div>
   </div>
 </main>
 
 <style>
-  main {
+  p {
     text-align: center;
-    padding: 1em;
-    margin: 0 auto;
   }
 </style>
