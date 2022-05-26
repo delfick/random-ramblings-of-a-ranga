@@ -1,6 +1,27 @@
 <script>
   import { Router } from "@roxi/routify";
   import { routes } from "../.routify/routes";
+
+  import Icon from "/favicon.ico";
+  import Icon32 from "/favicon-32x32.png";
+  import Icon16 from "/favicon-16x16.png";
+  import Icon192 from "/android-chrome-192x192.png";
+  import Icon512 from "/android-chrome-512x512.png";
+  import WebManifest from "/site.webmanifest";
+  import AppleTouchIcon from "/apple-touch-icon.png";
 </script>
+
+<svelte:head>
+  <link rel="icon" href={Icon} />
+  <link rel="icon" type="image/png" sizes="32x32" href={Icon32} />
+  <link rel="icon" type="image/png" sizes="16x16" href={Icon16} />
+  <link rel="icon" type="image/png" sizes="192x192" href={Icon192} />
+  <link rel="icon" type="image/png" sizes="512x512" href={Icon512} />
+  <link rel="apple-touch-icon" sizes="180x180" href={AppleTouchIcon} />
+
+  <link rel="manifest" href={WebManifest} />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</svelte:head>
 
 <Router {routes} />
