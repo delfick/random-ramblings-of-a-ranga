@@ -1,6 +1,6 @@
 <script lang="ts">
   import "./index.scss";
-  import avatar from "/avatar.png";
+  import avatar from "/assets/avatar.png";
 </script>
 
 <main class="flex h-screen">

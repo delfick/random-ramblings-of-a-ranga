@@ -1,6 +1,6 @@
 <script lang="ts">
   export let inline = false;
-  import avatar from "/avatar.png";
+  import avatar from "/assets/avatar.png";
 
   $: className = inline ? "resume-home-link-inline" : "resume-home-link";
 </script>

@@ -2,13 +2,13 @@
   import { Router } from "@roxi/routify";
   import { routes } from "../.routify/routes";
 
-  import Icon from "/favicon.ico";
-  import Icon32 from "/favicon-32x32.png";
-  import Icon16 from "/favicon-16x16.png";
-  import Icon192 from "/android-chrome-192x192.png";
-  import Icon512 from "/android-chrome-512x512.png";
-  import WebManifest from "/site.webmanifest";
-  import AppleTouchIcon from "/apple-touch-icon.png";
+  import Icon from "/assets/favicon.ico";
+  import Icon32 from "/assets/favicon-32x32.png";
+  import Icon16 from "/assets/favicon-16x16.png";
+  import Icon192 from "/assets/android-chrome-192x192.png";
+  import Icon512 from "/assets/android-chrome-512x512.png";
+  import WebManifest from "/assets/site.webmanifest";
+  import AppleTouchIcon from "/assets/apple-touch-icon.png";
 </script>
 
 <svelte:head>
