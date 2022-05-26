@@ -11,3 +11,11 @@
     <div><a href="https://www.linkedin.com/in/delfick">LinkedIn</a></div>
   </div>
 </main>
+
+<style>
+  main {
+    text-align: center;
+    padding: 1em;
+    margin: 0 auto;
+  }
+</style>
