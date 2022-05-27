@@ -25,7 +25,7 @@ export default defineConfig({
   ],
   build: {
     polyfillModulePreload: false,
-    cssCodeSplit: false,
+    cssCodeSplit: true,
   },
   optimizeDeps: {
     exclude: ["@roxi/routify"],
