@@ -1,5 +1,5 @@
 <script lang="ts">
-  import avatar from "/assets/avatar.png";
+  import avatar from "/assets/avatar.svg";
   import github_logo from "/assets/brands/github.png";
   import linkedin_logo from "/assets/brands/linkedin.png";
   import twitter_logo from "/assets/brands/twitter.png";
