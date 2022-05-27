@@ -1,15 +1,15 @@
 <script>
   import dedent from "ts-dedent";
 
-  import ResumeSections from "./components/resume_sections.svelte";
-  import ResumeSection from "./components/resume_section.svelte";
-  import SummaryPoints from "./components/summary_points.svelte";
-  import SummaryPoint from "./components/summary_point.svelte";
-  import HomeLink from "./components/home_link.svelte";
-  import Contact from "./components/contact.svelte";
-  import Resume from "./components/resume.svelte";
-  import Blurb from "./components/blurb.svelte";
-  import Title from "./components/title.svelte";
+  import ResumeSections from "./_components/resume_sections.svelte";
+  import ResumeSection from "./_components/resume_section.svelte";
+  import SummaryPoints from "./_components/summary_points.svelte";
+  import SummaryPoint from "./_components/summary_point.svelte";
+  import HomeLink from "./_components/home_link.svelte";
+  import Contact from "./_components/contact.svelte";
+  import Resume from "./_components/resume.svelte";
+  import Blurb from "./_components/blurb.svelte";
+  import Title from "./_components/title.svelte";
 </script>
 
 <HomeLink />

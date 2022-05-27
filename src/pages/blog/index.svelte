@@ -1,7 +1,7 @@
 <script>
-  import Nav from "./components/nav.svelte";
-  import Tags from "./components/tags.svelte";
-  import Heading from "./components/heading.svelte";
+  import Nav from "./_components/nav.svelte";
+  import Tags from "./_components/tags.svelte";
+  import Heading from "./_components/heading.svelte";
 </script>
 
 <svelte:body class="bg-gray-100 font-sans leading-normal tracking-normal" />
