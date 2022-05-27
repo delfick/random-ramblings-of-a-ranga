@@ -1,4 +1,5 @@
 import HMR from "@roxi/routify/hmr";
+import { SvelteComponent as Component } from "svelte";
 import App from "./App.svelte";
 
 let target = document.getElementById("app");
@@ -8,4 +9,8 @@ if (target == null) {
   document.body.appendChild(target);
 }
 
-export default HMR(App, { target });
+interface WrapComponent {
+  (c: typeof App, options: unknown): Component;
+}
+
+export default (HMR as WrapComponent)(App, { target });
