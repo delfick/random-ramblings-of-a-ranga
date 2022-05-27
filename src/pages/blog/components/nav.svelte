@@ -1,8 +1,8 @@
 <script lang="ts">
   import avatar from "/assets/avatar.png";
   import github_logo from "/assets/brands/github.png";
-  import twitter_logo from "/assets/brands/twitter.png";
   import linkedin_logo from "/assets/brands/linkedin.png";
+  import twitter_logo from "/assets/brands/twitter.png";
 </script>
 
 <nav id="header" class="fixed w-full z-10 top-0">

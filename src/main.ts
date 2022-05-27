@@ -1,6 +1,6 @@
+import App from "./App.svelte";
 import HMR from "@roxi/routify/hmr";
 import { SvelteComponent as Component } from "svelte";
-import App from "./App.svelte";
 
 let target = document.getElementById("app");
 

@@ -1,6 +1,6 @@
 <script lang="ts">
-  import ResumeSection from "./resume_section.svelte";
   import HR from "./hr.svelte";
+  import ResumeSection from "./resume_section.svelte";
 </script>
 
 <HR />

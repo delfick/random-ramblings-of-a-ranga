@@ -1,6 +1,6 @@
 <script lang="ts">
-  import Markdown from "svelte-markdown";
   import Title from "./title.svelte";
+  import Markdown from "svelte-markdown";
 
   export let title: string;
   export let source = "";

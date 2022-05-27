@@ -9,4 +9,7 @@ module.exports = {
   svelteBracketNewLine: true,
   svelteIndentScriptAndStyle: true,
   trailingComma: "none",
+  importOrder: ["^@app/(.*)$", "^./(.*)$", "^[./]"],
+  importOrderSeparation: true,
+  importOrderSortSpecifiers: true,
 };
