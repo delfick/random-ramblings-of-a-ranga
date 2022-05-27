@@ -1,13 +1,9 @@
 import { svelte } from "@sveltejs/vite-plugin-svelte";
-import viteMainJs from "vite-main-js";
-import preprocess from "svelte-preprocess";
-import autoprefixer from "autoprefixer";
-import tailwind from "tailwindcss";
+import path from "path";
 import { defineConfig, Plugin } from "vite";
+import viteMainJs from "vite-main-js";
 import eslint from "vite-plugin-eslint";
 import tsconfigPaths from "vite-tsconfig-paths";
-
-const production = process.env.NODE_ENV === "production";
 
 interface ReturnPlugin {
   (): Plugin;
@@ -15,13 +11,15 @@ interface ReturnPlugin {
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  resolve: {
+    dedupe: ["@roxi/routify"],
+    alias: {
+      "@app": path.resolve(__dirname, "./src/app"),
+    },
+  },
   plugins: [
     (viteMainJs as ReturnPlugin)(),
-    svelte({
-      preprocess: preprocess(),
-      emitCss: true,
-      hot: !production,
-    }),
+    svelte(),
     eslint(),
     tsconfigPaths(),
   ],
@@ -31,13 +29,5 @@ export default defineConfig({
   },
   optimizeDeps: {
     exclude: ["@roxi/routify"],
-  },
-  resolve: {
-    dedupe: ["@roxi/routify"],
-  },
-  css: {
-    postcss: {
-      plugins: [tailwind(), autoprefixer()],
-    },
   },
 });
