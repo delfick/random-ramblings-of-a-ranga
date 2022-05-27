@@ -1,11 +1,16 @@
 <script lang="ts">
-  import avatar from "/assets/avatar.png";
+  import avatar from "/assets/avatar.svg";
 </script>
 
 <main class="flex h-screen">
   <div class="grid grid-cols-1 gap-4 content-center m-auto">
     <div>
-      <img src={avatar} style="display:inline" alt="The delfick avatar" />
+      <img
+        src={avatar}
+        style:display="inline"
+        style:height="256px"
+        alt="The delfick avatar"
+      />
     </div>
     <div><p><a href="https://github.com/delfick">Github</a></p></div>
     <div><p><a href="https://www.linkedin.com/in/delfick">LinkedIn</a></p></div>
