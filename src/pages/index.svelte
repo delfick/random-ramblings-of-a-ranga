@@ -1,5 +1,4 @@
 <script lang="ts">
-  import "./index.scss";
   import avatar from "/assets/avatar.png";
 </script>
 
