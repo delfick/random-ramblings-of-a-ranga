@@ -6,6 +6,7 @@
   import { page } from "@roxi/routify";
 
   let title = $page.title;
+  let tldr = ($page.meta as BlogMeta).tldr || "";
   let published = ($page.meta as BlogMeta).published || "";
   let tags: Array<string> = ($page.meta as BlogMeta).tags || [];
 </script>
@@ -19,7 +20,9 @@
     class="blog-content w-full px-4 md:px-6 text-xl text-gray-800 leading-normal"
     style="font-family:Georgia,serif;"
   >
-    <Heading {title} {published} />
+    {#if tldr != ""}
+      <Heading {title} {published} {tldr} />
+    {/if}
     <slot />
   </div>
 

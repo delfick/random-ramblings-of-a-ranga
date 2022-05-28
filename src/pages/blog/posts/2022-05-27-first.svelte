@@ -10,6 +10,7 @@
 <!-- routify:options tags=["one", "two"] -->
 <!-- routify:options published="27 May 2022" -->
 <!-- routify:options title="This blog article rules" -->
+<!-- routify:options tldr="I decided to make a blog" -->
 
 <svelte:head>
   <link

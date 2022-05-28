@@ -1,4 +1,7 @@
 <script lang="ts">
+  import TLDR from "../_components/tldr.svelte";
+
+  export let tldr: string;
   export let title: string;
   export let published: string;
 </script>
@@ -9,7 +12,10 @@
   >
     {title}
   </h1>
-  <p class="text-sm md:text-base font-normal text-gray-600">
-    Published {published}
+
+  <TLDR>{tldr}</TLDR>
+
+  <p class="text-right !pt-0 text-sm md:text-base font-normal text-gray-600">
+    Published <strong>{published}</strong> - Stephen Moore
   </p>
 </div>
