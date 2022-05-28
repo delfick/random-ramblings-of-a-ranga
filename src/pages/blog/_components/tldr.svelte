@@ -1,8 +1,10 @@
 <div
   class="shadow-xl border-sky-200 border-2 mb-6 full-width min-w-0 p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800"
 >
-  <div class="px-4 py-2 mt-2">
-    <div class="bg-emerald-100 shadow-2xl rounded-lg px-3 py-1 inline">
+  <div class="px-4 py-2 mt-2 dark:text-white">
+    <div
+      class="bg-emerald-100 dark:bg-dark-green-tldr shadow-2xl rounded-lg px-3 py-1 inline"
+    >
       tldr
     </div>
     <slot />

@@ -5,7 +5,9 @@ module.exports = {
     "./src/*.{js,ts,svelte}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: { "dark-green-tldr": "#2a7715" },
+    },
   },
   plugins: [],
 };
