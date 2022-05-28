@@ -19,7 +19,7 @@
           alt="The delfick avatar"
         />
       </a>
-      {#if $page.path !== "/blog/index"}
+      {#if $page.path.startsWith("/blog/posts")}
         <a class="text" href="/blog">Blog</a>
       {/if}
     </div>
