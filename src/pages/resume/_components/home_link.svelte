@@ -11,9 +11,7 @@
 </a>
 
 <style lang="scss">
-  @import "node_modules/bulma/sass/utilities/mixins.sass";
-
-  @include from($tablet) {
+  @media screen and (min-width: 769) {
     .resume-home-link {
       top: 20px;
       left: 20px;
@@ -28,7 +26,7 @@
     }
   }
 
-  @include until($tablet - 1px) {
+  @media screen and (max-width: 768) {
     .resume-home-link-inline {
       float: left;
 
