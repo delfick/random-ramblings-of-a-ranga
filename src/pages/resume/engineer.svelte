@@ -1,4 +1,5 @@
 <script>
+  import { onMount } from "svelte";
   import dedent from "ts-dedent";
 
   import ResumeSections from "./_components/resume_sections.svelte";
@@ -10,6 +11,10 @@
   import Resume from "./_components/resume.svelte";
   import Blurb from "./_components/blurb.svelte";
   import Title from "./_components/title.svelte";
+
+  onMount(() => {
+    document.body.className = "light";
+  });
 </script>
 
 <HomeLink />

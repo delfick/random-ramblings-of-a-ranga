@@ -1,4 +1,5 @@
 module.exports = {
+  darkMode: "class",
   content: [
     "./index.html",
     "./src/**/*.{js,ts,svelte}",
@@ -6,7 +7,11 @@ module.exports = {
   ],
   theme: {
     extend: {
-      colors: { "dark-green-tldr": "#2a7715" },
+      colors: {
+        "dark-green-tldr": "#2a7715",
+        "dark-back": "#252525",
+        "dark-front": "#839495",
+      },
     },
   },
   plugins: [],

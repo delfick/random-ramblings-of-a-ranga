@@ -6,7 +6,11 @@
     "module": "esnext",
     "resolveJsonModule": true,
     "baseUrl": ".",
-    "typeRoots": ["./types", "./node_modules/@types"],
+    "typeRoots": [
+      "./types",
+      "./node_modules/@types",
+      "./node_modules/svelte-dark-mode/types"
+    ],
     "paths": {
       "@app/*": ["./src/app/*"]
     },

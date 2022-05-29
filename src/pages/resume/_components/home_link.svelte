@@ -11,7 +11,7 @@
 </a>
 
 <style lang="scss">
-  @media screen and (min-width: 769) {
+  @media screen and (min-width: 769px) {
     .resume-home-link {
       top: 20px;
       left: 20px;
@@ -26,7 +26,7 @@
     }
   }
 
-  @media screen and (max-width: 768) {
+  @media screen and (max-width: 768px) {
     .resume-home-link-inline {
       float: left;
 

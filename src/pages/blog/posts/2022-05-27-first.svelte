@@ -1,5 +1,6 @@
 <script>
   import Prism from "svelte-prism";
+  import { isDark } from "@app/theme";
 
   let haveGrammar = false;
   let gotGrammar = () => {
@@ -13,10 +14,17 @@
 <!-- routify:options tldr="I decided to make a blog" -->
 
 <svelte:head>
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.28.0/themes/prism-solarizedlight.min.css"
-  />
+  {#if $isDark}
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/prism-themes/1.9.0/prism-solarized-dark-atom.min.css"
+    />
+  {:else}
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.28.0/themes/prism-solarizedlight.min.css"
+    />
+  {/if}
   <script
     src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.28.0/components/prism-python.min.js"
     on:load={gotGrammar}></script>

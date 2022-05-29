@@ -1,5 +1,5 @@
 <div
-  class="shadow-xl border-sky-200 border-2 mb-6 full-width min-w-0 p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800"
+  class="shadow-lg border-sky-200 border-2 mb-6 full-width min-w-0 p-4 bg-white rounded-lg dark:bg-gray-800 dark:shadow-dark-front"
 >
   <div class="px-4 py-2 mt-2 dark:text-white">
     <div

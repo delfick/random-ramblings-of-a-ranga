@@ -17,7 +17,7 @@
 
 <div class="w-full max-w-4xl mx-auto pt-20">
   <div
-    class="blog-content w-full px-4 md:px-6 text-xl text-gray-800 leading-normal"
+    class="blog-content w-full px-4 md:px-6 text-xl leading-normal"
     style="font-family:Georgia,serif;"
   >
     {#if tldr != ""}

@@ -1,5 +1,10 @@
 <script lang="ts">
   import avatar from "/assets/avatar.svg";
+  import { onMount } from "svelte";
+
+  onMount(() => {
+    document.body.className = "light";
+  });
 </script>
 
 <main class="flex h-screen">
