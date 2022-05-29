@@ -12,7 +12,9 @@
 
 <nav id="header" class="fixed w-full z-10 top-0">
   <div
-    class="w-full md:max-w-4xl mx-auto flex flex-wrap items-center justify-between mt-0 py-3 bg-white dark:bg-dark-back"
+    style:width="100%"
+    style:display="flex"
+    class="md:max-w-4xl mx-auto flex-wrap items-center justify-between mt-0 py-3 bg-white dark:bg-dark-back"
   >
     <div class="pl-2">
       <a href="/">
@@ -40,7 +42,10 @@
     </div>
 
     <div class="flex-grow z-20" id="nav-content">
-      <ul class="list-reset flex justify-end flex-1 items-center">
+      <ul
+        style="display: flex; justify-content: end; list-style: none"
+        class="list-reset flex-1 items-center"
+      >
         <li class="mr-3">
           <a href="https://twitter.com/delfick" target="_blank">
             <img class="contact" src={twitter_logo} alt="Twitter logo" />

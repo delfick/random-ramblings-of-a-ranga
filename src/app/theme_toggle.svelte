@@ -52,9 +52,9 @@
   <button>
     <div class="icons" on:click={toggle}>
       {#if isDark}
-        <InlineSVG src={Sun} />
+        <InlineSVG width="24px" height="24px" src={Sun} />
       {:else}
-        <InlineSVG src={Moon} />
+        <InlineSVG width="24px" height="24px" src={Moon} />
       {/if}
     </div>
   </button>
