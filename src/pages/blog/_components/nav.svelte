@@ -18,6 +18,7 @@
           src={avatar}
           style:display="inline"
           style:height="50px"
+          style:min-width="50px"
           alt="The delfick avatar"
         />
       </a>
