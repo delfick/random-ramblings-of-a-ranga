@@ -1,11 +1,11 @@
-<!-- Inspiration from https://letsbuildui.dev/articles/building-a-dark-mode-theme-toggle -->
+<script lang="ts" context="module">
+  import { cachedsvg } from "@app/assets/icons";
+</script>
+
 <script lang="ts">
   import { theme } from "./theme";
-  import Moon from "@assets/moon.svg";
-  import Sun from "@assets/sun.svg";
   import DarkMode from "svelte-dark-mode";
   import type { Theme } from "svelte-dark-mode/types/DarkMode.svelte";
-  import InlineSVG from "svelte-inline-svg";
 
   export let hidden = false;
 
@@ -52,9 +52,9 @@
   <button>
     <div class="icons" on:click={toggle}>
       {#if isDark}
-        <InlineSVG width="24px" height="24px" src={Sun} />
+        {@html $cachedsvg.sun}
       {:else}
-        <InlineSVG width="24px" height="24px" src={Moon} />
+        {@html $cachedsvg.moon}
       {/if}
     </div>
   </button>
