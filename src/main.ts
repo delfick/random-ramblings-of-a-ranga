@@ -8,4 +8,9 @@ if (target == null) {
   document.body.appendChild(target);
 }
 
+const theme = localStorage.getItem("theme");
+if (theme !== null) {
+  document.body.className = theme;
+}
+
 export default HMR(App, { target });
