@@ -6,6 +6,8 @@
   import ThemeToggle from "@app/theme_toggle.svelte";
   import { page } from "@roxi/routify";
   import { fly } from "svelte/transition";
+
+  export let changeable: boolean;
 </script>
 
 <nav id="header" class="fixed w-full z-10 top-0">
@@ -25,9 +27,15 @@
       </a>
       <ThemeToggle />
       {#if $page.path.startsWith("/blog/posts")}
-        <div class="inline-block" transition:fly={{ x: -20 }}>
-          <a class="text" href="/blog">Blog</a>
-        </div>
+        {#if changeable}
+          <div class="inline-block" transition:fly={{ x: -20 }}>
+            <a class="text" href="/blog">Blog</a>
+          </div>
+        {:else}
+          <div class="inline-block" out:fly={{ x: -20 }}>
+            <a class="text" href="/blog">Blog</a>
+          </div>
+        {/if}
       {/if}
     </div>
 

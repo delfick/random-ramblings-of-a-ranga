@@ -3,7 +3,6 @@
   import { BlogMeta } from "../_components/meta";
   import Tags from "../_components/tags.svelte";
   import { page } from "@roxi/routify";
-  import { fade } from "svelte/transition";
 
   let title = $page.title;
   let tldr = ($page.meta as BlogMeta).tldr || "";
@@ -11,7 +10,7 @@
   let tags: Array<string> = ($page.meta as BlogMeta).tags || [];
 </script>
 
-<div class="w-full max-w-4xl mx-auto pt-20" in:fade out:fade>
+<div class="w-full max-w-4xl mx-auto pt-20">
   <div
     class="blog-content w-full px-4 md:px-6 text-xl leading-normal"
     style="font-family:Georgia,serif;"
