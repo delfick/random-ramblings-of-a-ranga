@@ -1,9 +1,9 @@
 <script lang="ts">
   import Heading from "../_components/heading.svelte";
   import { BlogMeta } from "../_components/meta";
-  import Nav from "../_components/nav.svelte";
   import Tags from "../_components/tags.svelte";
   import { page } from "@roxi/routify";
+  import { fade } from "svelte/transition";
 
   let title = $page.title;
   let tldr = ($page.meta as BlogMeta).tldr || "";
@@ -11,11 +11,7 @@
   let tags: Array<string> = ($page.meta as BlogMeta).tags || [];
 </script>
 
-<svelte:body class="bg-gray-100 font-sans leading-normal tracking-normal" />
-
-<Nav />
-
-<div class="w-full max-w-4xl mx-auto pt-20">
+<div class="w-full max-w-4xl mx-auto pt-20" in:fade out:fade>
   <div
     class="blog-content w-full px-4 md:px-6 text-xl leading-normal"
     style="font-family:Georgia,serif;"

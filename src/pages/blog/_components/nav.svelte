@@ -5,6 +5,7 @@
   import twitter_logo from "/assets/brands/twitter.png";
   import ThemeToggle from "@app/theme_toggle.svelte";
   import { page } from "@roxi/routify";
+  import { fly } from "svelte/transition";
 </script>
 
 <nav id="header" class="fixed w-full z-10 top-0">
@@ -24,7 +25,9 @@
       </a>
       <ThemeToggle />
       {#if $page.path.startsWith("/blog/posts")}
-        <a class="text" href="/blog">Blog</a>
+        <div class="inline-block" transition:fly={{ x: -20 }}>
+          <a class="text" href="/blog">Blog</a>
+        </div>
       {/if}
     </div>
 
