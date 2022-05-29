@@ -15,6 +15,7 @@ export default defineConfig({
     dedupe: ["@roxi/routify"],
     alias: {
       "@app": path.resolve(__dirname, "./src/app"),
+      "@assets": path.resolve(__dirname, "./src/assets"),
     },
   },
   plugins: [

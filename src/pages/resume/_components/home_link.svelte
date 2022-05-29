@@ -1,5 +1,5 @@
 <script lang="ts">
-  import avatar from "/assets/avatar.svg";
+  import avatar from "@assets/avatar.svg";
 
   export let inline = false;
 

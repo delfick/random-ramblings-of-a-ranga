@@ -1,8 +1,8 @@
 <!-- Inspiration from https://letsbuildui.dev/articles/building-a-dark-mode-theme-toggle -->
 <script lang="ts">
   import { theme } from "./theme";
-  import Moon from "/assets/moon.svg";
-  import Sun from "/assets/sun.svg";
+  import Moon from "@assets/moon.svg";
+  import Sun from "@assets/sun.svg";
   import DarkMode from "svelte-dark-mode";
   import type { Theme } from "svelte-dark-mode/types/DarkMode.svelte";
   import InlineSVG from "svelte-inline-svg";

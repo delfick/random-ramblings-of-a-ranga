@@ -1,12 +1,8 @@
-<script>
-  import Prism from "svelte-prism";
+<script lang="ts">
+  import Prism from "@app/prism/aa";
+  import "@app/prism/python";
   import { isDark } from "@app/theme";
   import dedent from "ts-dedent";
-
-  let haveGrammar = false;
-  let gotGrammar = () => {
-    haveGrammar = true;
-  };
 </script>
 
 <!-- routify:options tags=["one", "two"] -->
@@ -26,9 +22,6 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.28.0/themes/prism-solarizedlight.min.css"
     />
   {/if}
-  <script
-    src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.28.0/components/prism-python.min.js"
-    on:load={gotGrammar}></script>
 </svelte:head>
 
 <p>👋 Welcome you</p>
@@ -42,7 +35,7 @@
 <p>Example code block:</p>
 
 <Prism
-  language={haveGrammar ? "python" : undefined}
+  language="python"
   source={dedent`
     from people import me
 

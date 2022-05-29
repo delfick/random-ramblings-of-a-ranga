@@ -12,7 +12,8 @@
       "./node_modules/svelte-dark-mode/types"
     ],
     "paths": {
-      "@app/*": ["./src/app/*"]
+      "@app/*": ["./src/app/*"],
+      "@assets/*": ["./src/assets/*"]
     },
     /**
      * Typecheck JS in `.svelte` and `.js` files by default.

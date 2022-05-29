@@ -1,9 +1,9 @@
 <script lang="ts">
-  import avatar from "/assets/avatar.svg";
-  import github_logo from "/assets/brands/github.png";
-  import linkedin_logo from "/assets/brands/linkedin.png";
-  import twitter_logo from "/assets/brands/twitter.png";
   import ThemeToggle from "@app/theme_toggle.svelte";
+  import avatar from "@assets/avatar.svg";
+  import github_logo from "@assets/brands/github.png";
+  import linkedin_logo from "@assets/brands/linkedin.png";
+  import twitter_logo from "@assets/brands/twitter.png";
   import { page } from "@roxi/routify";
   import { fly } from "svelte/transition";
 
