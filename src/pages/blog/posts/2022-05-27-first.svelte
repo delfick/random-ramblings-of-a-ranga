@@ -1,6 +1,7 @@
 <script>
   import Prism from "svelte-prism";
   import { isDark } from "@app/theme";
+  import dedent from "ts-dedent";
 
   let haveGrammar = false;
   let gotGrammar = () => {
@@ -42,7 +43,7 @@
 
 <Prism
   language={haveGrammar ? "python" : undefined}
-  source={`
+  source={dedent`
     from people import me
 
     assert me.bestest
