@@ -23,6 +23,24 @@
       docEl.style.setProperty("--background", "#252525");
     }
   }
+
+  if (typeof window.matchMedia === "undefined") {
+    // So that tossr doesn't complain
+    window.matchMedia = () =>
+      ({
+        matches: false,
+        media: "light",
+        onChange: () => {
+          return;
+        },
+        addEventListener: () => {
+          return;
+        },
+        removeEventListener: () => {
+          return;
+        },
+      } as unknown as MediaQueryList);
+  }
 </script>
 
 <DarkMode bind:theme={val} />
