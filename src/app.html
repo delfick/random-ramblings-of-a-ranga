@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    %sveltekit.head%
+  </head>
+  <body>
+    <script>
+      const theme = localStorage.getItem("theme");
+      if (theme !== null) {
+        document.body.className = theme;
+      }
+    </script>
+    <div id="app">%sveltekit.body%</div>
+  </body>
+</html>

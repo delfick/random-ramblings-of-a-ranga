@@ -1,9 +1,22 @@
+import adapter from "@sveltejs/adapter-netlify";
 import preprocess from "svelte-preprocess";
-
-const production = process.env.NODE_ENV === "production";
 
 export default {
   preprocess: preprocess({ postcss: true }),
-  emitCss: true,
-  hot: !production,
+  kit: {
+    adapter: adapter(),
+    prerender: { default: false },
+    alias: {
+      "@app": "src/app",
+      "@assets": "src/assets",
+    },
+    vite: {
+      optimizeDeps: {
+        exclude: ["svelte-kit-isolated-stores"],
+      },
+      ssr: {
+        noExternal: ["svelte-kit-isolated-stores"],
+      },
+    },
+  },
 };

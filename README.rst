@@ -1,4 +1,4 @@
 Blog
 ====
 
-Based off the svelte + ts + vite skeleton.
+Based off svelte-kit

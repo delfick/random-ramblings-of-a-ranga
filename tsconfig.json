@@ -1,44 +1,13 @@
 {
-  "extends": "@tsconfig/svelte/tsconfig.json",
+  "extends": "./.svelte-kit/tsconfig.json",
   "compilerOptions": {
-    "target": "esnext",
-    "useDefineForClassFields": true,
-    "module": "esnext",
-    "resolveJsonModule": true,
-    "baseUrl": ".",
-    "typeRoots": [
-      "./types",
-      "./node_modules/@types",
-      "./node_modules/svelte-dark-mode/types"
-    ],
-    "paths": {
-      "@app/*": ["./src/app/*"],
-      "@assets/*": ["./src/assets/*"]
-    },
-    /**
-     * Typecheck JS in `.svelte` and `.js` files by default.
-     * Disable checkJs if you'd like to use dynamic types in JS.
-     * Note that setting allowJs false does not prevent the use
-     * of JS in `.svelte` files.
-     */
     "allowJs": true,
     "checkJs": true,
-    "isolatedModules": true,
-
-    "lib": ["DOM", "ES2017", "WebWorker"],
     "esModuleInterop": true,
-    "importsNotUsedAsValues": "remove",
-    "strict": true,
-    "allowSyntheticDefaultImports": true
-  },
-  "include": [
-    "**/*.d.ts",
-    "**/*.ts",
-    "**/*.js",
-    "**/*.cjs",
-    "**/*.json",
-    "**/*.svelte",
-    ".eslintrc.cjs"
-  ],
-  "references": [{ "path": "./tsconfig.node.json" }]
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "strict": true
+  }
 }

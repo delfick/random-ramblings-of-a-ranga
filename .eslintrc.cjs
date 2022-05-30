@@ -1,37 +1,21 @@
 module.exports = {
+  root: true,
+  rules: { "@typescript-eslint/no-empty-interface": "off" },
   parser: "@typescript-eslint/parser",
-  extends: [
-    "eslint:recommended",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:@typescript-eslint/recommended-requiring-type-checking",
-  ],
+  extends: ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
+  plugins: ["svelte3", "@typescript-eslint"],
+  ignorePatterns: ["*.cjs"],
+  overrides: [{ files: ["*.svelte"], processor: "svelte3/svelte3" }],
+  settings: {
+    "svelte3/typescript": () => require("typescript"),
+  },
   parserOptions: {
-    ecmaVersion: 2020,
     sourceType: "module",
-    tsconfigRootDir: __dirname,
-    extraFileExtensions: [".svelte", ".cjs"],
-    project: "./tsconfig.json",
+    ecmaVersion: 2020,
   },
   env: {
-    es6: true,
     browser: true,
-    amd: true,
+    es2017: true,
     node: true,
   },
-  settings: {
-    "svelte3/typescript": true,
-  },
-  plugins: ["svelte3", "@typescript-eslint"],
-  ignorePatterns: [
-    "node_modules",
-    "dist",
-    ".routify",
-    "src/pages/blog/_components/post.ts",
-  ],
-  overrides: [
-    {
-      files: ["**/*.svelte"],
-      processor: "svelte3/svelte3",
-    },
-  ],
 };
