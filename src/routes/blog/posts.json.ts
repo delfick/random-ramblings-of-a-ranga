@@ -1,5 +1,5 @@
-import path from "path";
 import { EmptyMeta } from "./_components/meta";
+import pathParse from "path-parse";
 
 export const get = async () => {
   const allPostFiles = import.meta.glob("./posts/*.svelte");
@@ -8,7 +8,8 @@ export const get = async () => {
   const allPosts = await Promise.all(
     iterablePostFiles.map(async ([p, resolver]) => {
       const resolved = await resolver();
-      const parsed = path.parse(p);
+
+      const parsed = pathParse(p);
 
       if (!resolved.update || parsed.name == "__layout") {
         return;

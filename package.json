@@ -22,6 +22,7 @@
     "@sveltejs/kit": "^1.0.0-next.345",
     "@trivago/prettier-plugin-sort-imports": "^3.2.0",
     "@tsconfig/svelte": "^2.0.1",
+    "@types/path-parse": "^1.0.19",
     "@types/prismjs": "^1.26.0",
     "@types/tailwindcss": "^3.0.10",
     "@typescript-eslint/eslint-plugin": "^5.26.0",
@@ -47,5 +48,8 @@
     "ts-dedent": "^2.2.0",
     "tslib": "^2.4.0",
     "typescript": "^4.5.4"
+  },
+  "dependencies": {
+    "path-parse": "^1.0.7"
   }
 }
