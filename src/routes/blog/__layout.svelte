@@ -5,6 +5,7 @@
 </script>
 
 <script lang="ts">
+  import "../layout.postcss";
   import Nav from "./_components/nav.svelte";
   import PageTransition from "@app/page_transition.svelte";
 

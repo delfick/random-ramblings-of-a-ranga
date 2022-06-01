@@ -3,6 +3,7 @@
 </script>
 
 <script lang="ts">
+  import "./layout.postcss";
   import avatar from "@assets/avatar.svg";
   import { onMount } from "svelte";
 
