@@ -6,12 +6,6 @@
     %sveltekit.head%
   </head>
   <body>
-    <script>
-      const theme = localStorage.getItem("theme");
-      if (theme !== null) {
-        document.body.className = theme;
-      }
-    </script>
     <div id="app">%sveltekit.body%</div>
   </body>
 </html>

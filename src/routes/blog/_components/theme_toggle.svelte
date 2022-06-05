@@ -1,33 +1,36 @@
 <script lang="ts">
   import { browser } from "$app/env";
-  import { theme } from "@app/theme";
+  import { changeableTheme, theme, isDark } from "@app/theme";
+  import Cookies from "js-cookie";
   import DarkMode from "svelte-dark-mode";
-  import type { Theme } from "svelte-dark-mode/types/DarkMode.svelte";
 
   export let hidden = false;
 
   let started = !browser;
-  let val: Theme = ((browser && localStorage.getItem("theme")) ||
-    "light") as Theme;
 
-  let toggle = () => (val = val == "light" ? "dark" : "light");
+  let toggle = () => theme.set($theme == "light" ? "dark" : "light");
 
-  $: theme.set(val);
+  $: if ($changeableTheme) {
+    Cookies.set("theme", $theme);
+  }
   $: if (browser) {
-    document.body.className = val as string;
+    let t = $theme as string;
+    if (!changeableTheme) {
+      t = "light";
+    }
+    document.body.className = t;
 
     const docEl = document.documentElement;
 
-    if (isDark) {
+    if (t == "dark") {
       docEl.style.setProperty("--background", "#839495");
     } else {
       docEl.style.setProperty("--background", "#252525");
     }
   }
-  $: isDark = val == "dark";
 </script>
 
-<DarkMode bind:theme={val} on:change={() => (started = true)} />
+<DarkMode bind:theme={$theme} on:change={() => (started = true)} />
 
 {#if !hidden && started}
   <div
@@ -36,11 +39,11 @@
     style="padding-left:10px; padding-top:4px"
   >
     <button
-      aria-label="switch to {isDark ? 'light' : 'dark'} theme"
+      aria-label="switch to {$isDark ? 'light' : 'dark'} theme"
       width="24px"
       height="24px"
     >
-      {#if isDark}
+      {#if $isDark}
         <svg
           id="hidden-sun-svg"
           width="24px"

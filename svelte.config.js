@@ -29,8 +29,6 @@ export default {
           "https:",
           "unsafe-inline",
           "strict-dynamic",
-          // The inline script in app.html
-          "sha256-gXWcBjQNffL0O67LvUwpJnqKB3MfAwAXIKj4/oEk2v4=",
         ],
       },
     },
