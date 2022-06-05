@@ -1,3 +1,7 @@
+<script context="module">
+  export const hydrate = false;
+</script>
+
 <script lang="ts">
   import Title from "./title.svelte";
   import Markdown from "svelte-markdown";
@@ -12,7 +16,7 @@
 </script>
 
 <div class="resume-section {extraClass}">
-  <Title size={4} color={title_color}>{title}</Title>
+  <Title size={2} color={title_color}>{title}</Title>
   {#if source === ""}
     <slot />
   {:else}

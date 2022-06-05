@@ -8,7 +8,7 @@
 
 <svelte:element
   this={component}
-  class="title {size === 0 ? '' : `is-${size}`}"
+  class="title {size === 0 ? '' : 'is-4'}}"
   style:color
   style:overflow={hide_overflow ? "hidden" : "auto"}
 >

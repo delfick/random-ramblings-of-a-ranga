@@ -76,7 +76,7 @@
     <ResumeSection
       title="Notable examples: Deployment Tooling"
       print_breakable
-      title_color="#19b0b0"
+      title_color="#228c8c"
       source={dedent`
     The first job where I provided a significant amount of tooling in the
     workplace led me to creating a number of deployment tools and then using
@@ -102,7 +102,7 @@
     />
     <ResumeSection
       title="Notable examples: Business wide tooling"
-      title_color="#19b0b0"
+      title_color="#228c8c"
       source={dedent`
     When I worked with Smart Light bulbs, my primary focus was developing
     applications that sit in our GCP kubernetes cluster but my passion led me
@@ -135,7 +135,7 @@
     />
     <ResumeSection
       title="Notable examples: Other projects"
-      title_color="#19b0b0"
+      title_color="#228c8c"
       source={dedent`
     I believe that as a software engineer my job requires a lot more than
     typing, but the programming part is definitely the most fun and so

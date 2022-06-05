@@ -8,6 +8,7 @@
 
 <svelte:head>
   <title>Resume</title>
+  <meta name="description" content="My resume" />
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.4/css/bulma.min.css"

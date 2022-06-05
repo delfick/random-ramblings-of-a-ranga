@@ -7,7 +7,12 @@
 </script>
 
 <a href="/" class={className} style:display="none">
-  <img src={avatar} alt="The delfick avatar" />
+  <img
+    width={inline ? "40px" : "52px"}
+    height={inline ? "30px" : "50px"}
+    src={avatar}
+    alt="The delfick avatar"
+  />
 </a>
 
 <style lang="scss">
