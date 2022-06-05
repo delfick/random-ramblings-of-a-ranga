@@ -1,6 +1,8 @@
 import adapter from "@sveltejs/adapter-netlify";
 import preprocess from "svelte-preprocess";
 
+const prod = process.env.NODE_ENV == "production";
+
 export default {
   preprocess: preprocess({ postcss: true }),
   kit: {
@@ -19,7 +21,7 @@ export default {
       },
     },
     csp: {
-      mode: "hash",
+      mode: prod ? "hash" : "auto",
       directives: {
         "base-uri": ["delfick.com"],
         "object-src": ["none"],
