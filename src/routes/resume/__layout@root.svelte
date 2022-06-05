@@ -1,3 +1,11 @@
+<script lang="ts">
+  import { onMount } from "svelte";
+
+  onMount(() => {
+    document.body.className = "light";
+  });
+</script>
+
 <svelte:head>
   <title>Resume</title>
   <link
