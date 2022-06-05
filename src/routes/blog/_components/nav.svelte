@@ -14,43 +14,67 @@
     style:display="flex"
     class="md:max-w-4xl mx-auto flex-wrap items-center justify-between mt-0 py-3 bg-white dark:bg-dark-back"
   >
-    <div class="pl-2">
+    <div class="pl-2" style:display="flex" style="align-items: center">
       <a href="/">
         <img
           class="avatar"
           src={avatar}
-          style:display="inline"
           style:height="50px"
           style:min-width="50px"
           alt="The delfick avatar"
+          width="50px"
+          height="50px"
         />
       </a>
       <ThemeToggle />
       {#if $page.url.pathname.startsWith("/blog/posts")}
-        <div class="inline-block" transition:fly={{ x: -20 }}>
+        <div transition:fly={{ x: -20 }}>
           <a class="text" href="/blog">Blog</a>
         </div>
       {/if}
     </div>
 
-    <div class="flex-grow z-20" id="nav-content">
+    <div
+      id="nav-content"
+      style:display="flex"
+      style="align-items: center"
+      class="flex-grow z-20"
+    >
       <ul
         style="display: flex; justify-content: end; list-style: none"
         class="list-reset flex-1 items-center"
       >
         <li class="mr-3">
           <a href="https://twitter.com/delfick" target="_blank">
-            <img class="contact" src={twitter_logo} alt="Twitter logo" />
+            <img
+              class="contact"
+              src={twitter_logo}
+              alt="Twitter logo"
+              width="37px"
+              height="30px"
+            />
           </a>
         </li>
         <li class="mr-3">
           <a href="https://github.com/delfick" target="_blank">
-            <img class="contact" src={github_logo} alt="Github Mark" />
+            <img
+              class="contact"
+              src={github_logo}
+              alt="Github Mark"
+              width="30px"
+              height="30px"
+            />
           </a>
         </li>
         <li class="mr-3">
           <a href="https://www.linkedin.com/in/delfick/" target="_blank">
-            <img class="contact" src={linkedin_logo} alt="LinkedIn Logo" />
+            <img
+              class="contact"
+              src={linkedin_logo}
+              alt="LinkedIn Logo"
+              width="35px"
+              height="30px"
+            />
           </a>
         </li>
       </ul>

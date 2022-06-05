@@ -10,10 +10,15 @@
 </script>
 
 <script lang="ts">
+  import { isDark } from "@app/theme";
   import "prism-svelte";
   import { onMount } from "svelte";
 
+  var ready = false;
+  var prismcss: HTMLLinkElement;
+
   onMount(() => {
+    ready = true;
     if (browser) {
       window.Prism = prism;
     }
@@ -36,6 +41,20 @@
       formattedCode =
         language === "none" ? body : prism.highlight(body, grammar, language);
     }
+  }
+
+  $: prismhref = $isDark
+    ? "https://cdnjs.cloudflare.com/ajax/libs/prism-themes/1.9.0/prism-one-dark.min.css"
+    : "https://cdnjs.cloudflare.com/ajax/libs/prism-themes/1.9.0/prism-one-light.min.css";
+
+  $: if (ready) {
+    if (prismcss) {
+      document.head.removeChild(prismcss);
+    }
+    prismcss = document.createElement("link");
+    prismcss.rel = "stylesheet";
+    prismcss.href = prismhref;
+    document.head.appendChild(prismcss);
   }
 </script>
 

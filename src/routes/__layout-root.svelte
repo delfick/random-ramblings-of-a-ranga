@@ -4,7 +4,6 @@
   import Icon16 from "@assets/favicon-16x16.png";
   import Icon192 from "@assets/android-chrome-192x192.png";
   import Icon512 from "@assets/android-chrome-512x512.png";
-  import WebManifest from "@assets/site.webmanifest";
   import AppleTouchIcon from "@assets/apple-touch-icon.png";
 </script>
 
@@ -16,9 +15,10 @@
   <link rel="icon" type="image/png" sizes="512x512" href={Icon512} />
   <link rel="apple-touch-icon" sizes="180x180" href={AppleTouchIcon} />
 
-  <link rel="manifest" href={WebManifest} />
+  <link rel="manifest" href="/site.webmanifest" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#ffffff" />
 </svelte:head>
 
 <slot />

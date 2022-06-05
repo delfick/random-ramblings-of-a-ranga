@@ -18,5 +18,21 @@ export default {
         noExternal: ["svelte-kit-isolated-stores"],
       },
     },
+    csp: {
+      mode: "hash",
+      directives: {
+        "base-uri": ["delfick.com"],
+        "object-src": ["none"],
+        "script-src": [
+          "self",
+          "http:",
+          "https:",
+          "unsafe-inline",
+          "strict-dynamic",
+          // The inline script in app.html
+          "sha256-gXWcBjQNffL0O67LvUwpJnqKB3MfAwAXIKj4/oEk2v4=",
+        ],
+      },
+    },
   },
 };

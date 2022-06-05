@@ -6,28 +6,29 @@
 
 <script lang="ts">
   import Heading from "../_components/heading.svelte";
-  import { meta } from "../_components/meta";
+  import { meta as m } from "../_components/meta";
   import Tags from "../_components/tags.svelte";
 </script>
+
+<svelte:head>
+  <meta name="description" content={$m.tldr} />
+  <meta name="author" content={$m.author} />
+</svelte:head>
 
 <div class="w-full max-w-4xl mx-auto pt-20">
   <div
     class="blog-content w-full px-4 md:px-6 text-xl leading-normal"
     style="font-family:Georgia,serif;"
   >
-    {#if $meta.tldr != ""}
-      <Heading
-        title={$meta.title}
-        published={$meta.published}
-        tldr={$meta.tldr}
-      />
+    {#if $m.tldr != ""}
+      <Heading title={$m.title} published={$m.published} tldr={$m.tldr} />
     {/if}
     <slot />
   </div>
 
   <hr class="border-b-2 border-gray-400 mx-4" />
 
-  <Tags tags={$meta.tags} />
+  <Tags tags={$m.tags} />
 </div>
 
 <style lang="postcss">

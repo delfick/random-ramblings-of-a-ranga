@@ -1,10 +1,11 @@
-import { loadWithStores, defineWritable } from "svelte-kit-isolated-stores";
+import { defineWritable, loadWithStores } from "svelte-kit-isolated-stores";
 
 export const meta = defineWritable(() => EmptyMeta);
 
 export declare interface BlogMeta {
   title: string;
   tldr: string;
+  author: string;
   tags: Array<string>;
   published: string;
 }
@@ -17,6 +18,7 @@ export declare interface Post {
 export const EmptyMeta = {
   title: "A blog",
   tldr: "Forgot to add meta to this post",
+  author: "Stephen Moore",
   published: "the past",
   tags: ["forgot-meta"],
 };
