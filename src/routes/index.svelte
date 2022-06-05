@@ -12,6 +12,10 @@
   });
 </script>
 
+<svelte:head>
+  <title>Random Ramblings of a Ranga</title>
+</svelte:head>
+
 <main class="flex h-screen">
   <div class="grid grid-cols-1 gap-4 content-center m-auto">
     <div>

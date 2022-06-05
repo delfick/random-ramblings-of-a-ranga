@@ -7,7 +7,7 @@ import Icon from "@assets/favicon.ico";
 
 const manifest = {
   name: "Stephen Moore's personal website",
-  short_name: "delfick.com",
+  short_name: "Random Ramblings of a Ranga",
   icons: [
     { src: Icon, type: "image/ico" },
     { src: Icon32, type: "image/png", sizes: "32x32" },

@@ -1,4 +1,5 @@
 import { defineWritable, loadWithStores } from "svelte-kit-isolated-stores";
+import type { Load } from "@sveltejs/kit";
 
 export const meta = defineWritable(() => EmptyMeta);
 
@@ -26,7 +27,7 @@ export const EmptyMeta = {
 export declare type BlogMetaUpdater = (m: BlogMeta) => BlogMeta;
 
 export declare interface LoadExports {
-  load: unknown;
+  load: Load;
   update: BlogMetaUpdater;
 }
 

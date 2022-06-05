@@ -11,6 +11,7 @@
 </script>
 
 <svelte:head>
+  <title>{$m.title} - Random Ramblings of a Ranga</title>
   <meta name="description" content={$m.tldr} />
   <meta name="author" content={$m.author} />
 </svelte:head>
