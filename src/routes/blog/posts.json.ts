@@ -2,7 +2,7 @@ import { EmptyMeta } from "./_components/meta";
 import pathParse from "path-parse";
 
 export const get = async () => {
-  const allPostFiles = import.meta.glob("./posts/*.svelte");
+  const allPostFiles = import.meta.glob("./posts/**/*.svelte");
   const iterablePostFiles = Object.entries(allPostFiles);
 
   const allPosts = await Promise.all(

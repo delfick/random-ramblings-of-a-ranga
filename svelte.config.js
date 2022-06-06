@@ -10,6 +10,7 @@ export default {
     prerender: { default: false },
     alias: {
       "@app": "src/app",
+      "@blog": "src/routes/blog/_components",
       "@assets": "src/assets",
     },
     vite: {

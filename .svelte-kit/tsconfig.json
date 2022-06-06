@@ -8,6 +8,12 @@
 			"@app/*": [
 				"src/app/*"
 			],
+			"@blog": [
+				"src/routes/blog/_components"
+			],
+			"@blog/*": [
+				"src/routes/blog/_components/*"
+			],
 			"@assets": [
 				"src/assets"
 			],

@@ -1,20 +1,18 @@
 <script lang="ts" context="module">
-  import { loader } from "../_components/meta";
-  import type { BlogMeta } from "../_components/meta";
+  import { loader } from "@blog/meta";
+  import type { BlogMeta } from "@blog/meta";
 
-  const { load, update } = loader((meta: BlogMeta): BlogMeta => {
+  export const { load, update } = loader((meta: BlogMeta): BlogMeta => {
     meta.title = "This blog article rules";
     meta.published = "27 May 2022";
     meta.tags = ["one", "two"];
     meta.tldr = "I decided to make a blog";
     return meta;
   });
-
-  export { load, update };
 </script>
 
 <script lang="ts">
-  import Prism from "@app/prism/python";
+  import { default as Python } from "@app/prism/python.svelte";
   import { dedent } from "ts-dedent";
 </script>
 
@@ -28,8 +26,7 @@
 
 <p>Example code block:</p>
 
-<Prism
-  language="python"
+<Python
   source={dedent`
     from people import me
 
