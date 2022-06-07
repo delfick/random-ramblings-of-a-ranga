@@ -26,12 +26,37 @@ export default {
       directives: {
         "base-uri": ["delfick.com"],
         "object-src": ["none"],
+        "frame-src": [
+          "self",
+          "https://twitter.com",
+          "platform.twitter.com",
+          "syndication.twitter.com",
+        ],
+
+        "img-src": [
+          "self",
+          "data:",
+          "abs.twimg.com",
+          "https://pbs.twimg.com",
+          "ton.twimg.com",
+          "platform.twitter.com",
+          "https://syndication.twitter.com",
+        ],
+
         "script-src": [
           "self",
           "http:",
           "https:",
+          "https://cdn.syndication.twimg.com",
+          "api.twitter.com",
+          "platform.twitter.com",
+          "sha256-rwMOiOeVICH7/Cjy5SkreID3OOi5HTrit357k22hUDQ=",
+        ],
+        "style-src": [
+          "self",
           "unsafe-inline",
-          "strict-dynamic",
+          "https://ton.twimg.com",
+          "platform.twitter.com",
         ],
       },
     },

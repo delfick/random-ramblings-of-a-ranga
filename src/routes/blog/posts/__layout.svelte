@@ -35,11 +35,28 @@
 <style lang="postcss">
   .blog-content {
     :global(p) {
-      @apply py-6;
+      @apply py-4;
+    }
+
+    :global(h2) {
+      @apply leading-tight text-4xl mt-0 mb-2 pr-2 text-right font-bold font-mono;
+      @apply border-r-8 border-indigo-500;
     }
 
     :global(blockquote) {
       @apply border-l-4 border-green-500 italic my-8 pl-8 md:pl-12;
+    }
+
+    :global(mark) {
+      @apply inline-block pr-1 pl-1 text-base text-mark-front bg-mark-back rounded-md shadow-md bg-opacity-100;
+    }
+  }
+
+  :global(body.dark) {
+    .blog-content {
+      :global(mark) {
+        @apply text-mark-front-dark bg-mark-back-dark;
+      }
     }
   }
 
