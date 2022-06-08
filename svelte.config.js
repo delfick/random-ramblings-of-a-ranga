@@ -42,7 +42,6 @@ export default {
           "platform.twitter.com",
           "https://syndication.twitter.com",
         ],
-
         "script-src": [
           "self",
           "http:",
@@ -54,6 +53,7 @@ export default {
         ],
         "style-src": [
           "self",
+          "unsafe-inline",
           "https://ton.twimg.com",
           "platform.twitter.com",
           "https://cdnjs.cloudflare.com",
