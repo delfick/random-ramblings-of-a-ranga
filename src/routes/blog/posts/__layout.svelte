@@ -5,9 +5,9 @@
 </script>
 
 <script lang="ts">
-  import Heading from "../_components/heading.svelte";
-  import { meta as m } from "../_components/meta";
-  import Tags from "../_components/tags.svelte";
+  import Heading from "@blog/heading.svelte";
+  import { meta as m } from "@blog/meta";
+  import PostTags from "@blog/post_tags.svelte";
 </script>
 
 <svelte:head>
@@ -27,9 +27,7 @@
     <slot />
   </div>
 
-  <hr class="border-b-2 border-gray-400 mx-4" />
-
-  <Tags tags={$m.tags} />
+  <PostTags tags={$m.tags} published={$m.published} />
 </div>
 
 <style lang="postcss">

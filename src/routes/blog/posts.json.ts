@@ -15,7 +15,7 @@ export const get = async () => {
         return;
       }
 
-      const meta = resolved.update(EmptyMeta);
+      const meta = { ...resolved.update(EmptyMeta) };
 
       return {
         meta,
