@@ -16,7 +16,7 @@
   <meta name="author" content={$m.author} />
 </svelte:head>
 
-<div class="w-full max-w-4xl mx-auto pt-20">
+<div class="w-full max-w-4xl mx-auto pt-20 pb-5">
   <div
     class="blog-content w-full px-4 md:px-6 text-xl leading-normal"
     style="font-family:Georgia,serif;"
@@ -27,7 +27,7 @@
     <slot />
   </div>
 
-  <PostTags tags={$m.tags} published={$m.published} />
+  <PostTags tags={$m.tags} published={$m.published} margin="0.5rem" />
 </div>
 
 <style lang="postcss">

@@ -7,7 +7,7 @@
 
 <li>
   <div
-    class="border-sky-200 border-2 mb-6 full-width min-w-0 p-4 !pb-0 bg-white rounded-lg dark:bg-gray-800 dark:shadow-dark-front"
+    class="border-sky-200 border-2 mb-6 ml-2 mr-2 full-width min-w-0 p-4 !pb-0 bg-white rounded-lg dark:bg-gray-800 dark:shadow-dark-front"
   >
     <div class="font-bold text-xl mb-2">
       <a href={post.path}>{post.meta.title}</a>
