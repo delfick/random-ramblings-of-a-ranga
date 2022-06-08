@@ -54,9 +54,9 @@ export default {
         ],
         "style-src": [
           "self",
-          "unsafe-inline",
           "https://ton.twimg.com",
           "platform.twitter.com",
+          "https://cdnjs.cloudflare.com",
         ],
       },
     },
