@@ -27,7 +27,7 @@
         />
       </a>
       <ThemeToggle />
-      {#if $page.url.pathname.startsWith("/blog/posts")}
+      {#if $page.url.pathname.startsWith("/blog/posts") || $page.url.pathname.startsWith("/blog/tags")}
         <div transition:fly={{ x: -20 }}>
           <a class="text" href="/blog">Blog</a>
         </div>
