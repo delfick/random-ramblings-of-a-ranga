@@ -15,6 +15,7 @@ module.exports = {
         "mark-front": "#fff",
         "mark-back-dark": "#d19696",
         "mark-front-dark": "#000",
+        "blog-heading-dark": "#8B8DFF",
       },
     },
   },

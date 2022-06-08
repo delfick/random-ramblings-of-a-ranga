@@ -58,6 +58,9 @@
         @apply text-mark-front-dark bg-mark-back-dark;
       }
     }
+    :global(h2) {
+      @apply !border-blog-heading-dark;
+    }
   }
 
   @media screen(md) {
