@@ -2,7 +2,7 @@
   import { loadWithStores } from "svelte-kit-isolated-stores";
 
   export const load = loadWithStores(() => ({
-    stuff: { base: "blog" },
+    stuff: { base: "experiments" },
   }));
 </script>
 
@@ -20,7 +20,7 @@
 
 <div class="w-full max-w-4xl mx-auto pt-20 pb-5">
   <div
-    class="blog-content w-full px-4 md:px-6 text-xl leading-normal"
+    class="experiment-content w-full px-4 md:px-6 text-xl leading-normal"
     style="font-family:Georgia,serif;"
   >
     {#if $m.tldr != ""}
@@ -33,7 +33,7 @@
 </div>
 
 <style lang="postcss">
-  .blog-content {
+  .experiment-content {
     :global(p) {
       @apply py-4;
     }
@@ -53,7 +53,7 @@
   }
 
   :global(body.dark) {
-    .blog-content {
+    .experiment-content {
       :global(mark) {
         @apply text-mark-front-dark bg-mark-back-dark;
       }
@@ -64,7 +64,7 @@
   }
 
   @media screen(md) {
-    .blog-content {
+    .experiment-content {
       :global(blockquote) {
         @apply pl-12;
       }

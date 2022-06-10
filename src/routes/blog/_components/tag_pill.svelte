@@ -1,13 +1,22 @@
 <script lang="ts">
+  import { page } from "$app/stores";
+
   export let tag: string;
   export let float = true;
   export let size = "sm";
   export let linkable = true;
+
+  // My text editor can't see app.d.ts and I can't figure out why
+  interface Stuff {
+    base: string;
+  }
+
+  const base = ($page.stuff as Stuff).base;
 </script>
 
 <svelte:element
   this={linkable ? "a" : "span"}
-  {...linkable ? { href: `/blog/tags/${encodeURIComponent(tag)}` } : {}}
+  {...linkable ? { href: `/${base}/tags/${encodeURIComponent(tag)}` } : {}}
 >
   <span
     class="{float

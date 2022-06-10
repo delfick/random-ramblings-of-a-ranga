@@ -1,11 +1,20 @@
 <script lang="ts" context="module">
+  import type { Load } from "@sveltejs/kit";
+
   export const prerender = true;
+
+  export const load: Load = async ({ url }) => ({
+    props: { url },
+  });
 </script>
 
 <script lang="ts">
   import "./layout.postcss";
+  import PageTransition from "@app/page_transition.svelte";
   import avatar from "@assets/avatar.svg";
   import { onMount } from "svelte";
+
+  export let url: URL;
 
   onMount(() => {
     document.body.className = "light";
@@ -16,20 +25,26 @@
   <title>Random Ramblings of a Ranga</title>
 </svelte:head>
 
-<main class="flex h-screen">
-  <div class="grid grid-cols-1 gap-4 content-center m-auto">
-    <div>
-      <img
-        src={avatar}
-        style:display="inline"
-        style:height="256px"
-        alt="The delfick avatar"
-      />
+<PageTransition refresh={url.pathname}>
+  <main class="flex h-screen">
+    <div class="grid grid-cols-1 gap-4 content-center m-auto">
+      <div>
+        <img
+          src={avatar}
+          style:display="inline"
+          style:height="256px"
+          alt="The delfick avatar"
+        />
+      </div>
+      <div><p><a href="/blog">Blog</a></p></div>
+      <div><p><a href="https://github.com/delfick">Github</a></p></div>
+      <div>
+        <p><a href="https://www.linkedin.com/in/delfick">LinkedIn</a></p>
+      </div>
+      <div><p><a href="/experiments">Experiments</a></p></div>
     </div>
-    <div><p><a href="https://github.com/delfick">Github</a></p></div>
-    <div><p><a href="https://www.linkedin.com/in/delfick">LinkedIn</a></p></div>
-  </div>
-</main>
+  </main>
+</PageTransition>
 
 <style>
   p {

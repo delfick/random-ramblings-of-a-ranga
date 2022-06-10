@@ -6,6 +6,13 @@
   import linkedin_logo from "@assets/brands/linkedin.png";
   import twitter_logo from "@assets/brands/twitter.png";
   import { fly } from "svelte/transition";
+
+  // My text editor can't see app.d.ts and I can't figure out why
+  interface Stuff {
+    base: string;
+  }
+
+  const base = ($page.stuff as Stuff).base;
 </script>
 
 <nav id="header" class="fixed w-full z-10 top-0">
@@ -27,9 +34,11 @@
         />
       </a>
       <ThemeToggle />
-      {#if $page.url.pathname.startsWith("/blog/posts") || $page.url.pathname.startsWith("/blog/tags")}
+      {#if $page.url.pathname.startsWith(`/${base}/posts`) || $page.url.pathname.startsWith(`/${base}/tags`)}
         <div transition:fly={{ x: -20 }}>
-          <a class="text" href="/blog">Blog</a>
+          <a class="text" href="/{base}"
+            >{base.charAt(0).toUpperCase() + base.slice(1)}</a
+          >
         </div>
       {/if}
     </div>

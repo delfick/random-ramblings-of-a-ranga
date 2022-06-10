@@ -1,17 +1,31 @@
 import pathParse from "path-parse";
 
 import { EmptyMeta } from "./_components/meta";
-import type { Post, BlogMeta } from "./_components/meta";
+import type { Post, BlogMeta, BlogMetaUpdater } from "./_components/meta";
+import type { RequestEvent } from "@sveltejs/kit";
 
-export const get = async () => {
-  const allPostFiles = import.meta.glob("./posts/**/*.svelte");
-  const iterablePostFiles = Object.entries(allPostFiles);
+type Module = {
+  update: BlogMetaUpdater;
+};
+
+export const get = async (
+  _: RequestEvent,
+  base: string,
+  allposts: Record<string, () => Promise<Module>>
+) => {
+  if (!base) {
+    base = "blog";
+  }
+  if (!allposts) {
+    allposts = import.meta.glob("./posts/**/*.svelte");
+  }
+  const iterablePostFiles = Object.entries(allposts);
 
   const allPosts: Array<Post> = [];
 
   await Promise.all(
     iterablePostFiles.map(async ([p, resolver]) => {
-      const resolved = await resolver();
+      const resolved = (await resolver()) as Module;
 
       const parsed = pathParse(p);
 
@@ -20,9 +34,9 @@ export const get = async () => {
       }
 
       const meta: BlogMeta = { ...resolved.update(EmptyMeta) };
-      const path = `/blog/${parsed.dir.substring(2)}/${parsed.name}`;
+      const path = `/${base}/${parsed.dir.substring(2)}/${parsed.name}`;
       const match =
-        new RegExp(`/blog/posts/([^/]+)/([^/]+)/([^-]+).+`).exec(path) || [];
+        new RegExp(`/${base}/posts/([^/]+)/([^/]+)/([^-]+).+`).exec(path) || [];
 
       allPosts.push({
         meta,

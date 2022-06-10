@@ -10,6 +10,7 @@ declare namespace App {
   interface Session {}
 
   interface Stuff {
+    base: string;
     posts: Array<Post>;
   }
 }
