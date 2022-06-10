@@ -9,21 +9,9 @@
 </script>
 
 <script lang="ts">
-  import PostSummary from "@blog/post_summary.svelte";
+  import Posts from "@blog/posts.svelte";
 
   export let posts: Array<Post>;
 </script>
 
-<svelte:head>
-  <title>Random Ramblings of a Ranga</title>
-  <meta name="description" content="delfick's blog" />
-  <meta name="author" content="Stephen Moore" />
-</svelte:head>
-
-<div class="w-full max-w-4xl mx-auto pt-20">
-  <ul>
-    {#each [...posts].reverse() as post}
-      <PostSummary {post} />
-    {/each}
-  </ul>
-</div>
+<Posts description="delfick's blog" {posts} noheading />

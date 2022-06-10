@@ -3,12 +3,14 @@
   import type { Load } from "@sveltejs/kit";
 
   export const load: Load = async ({ fetch, params }) => {
-    const tag = params.tag;
     const posts: Array<Post> = await (await fetch(`/blog/posts.json`)).json();
     return {
       props: {
-        posts: posts.filter((post: Post) => post.meta.tags.includes(tag)),
-        tag,
+        posts: posts.filter((post) =>
+          post.path.startsWith(`/blog/posts/${params.year}/${params.month}/`)
+        ),
+        year: params.year,
+        month: params.month,
       },
     };
   };
@@ -16,12 +18,12 @@
 
 <script lang="ts">
   import Posts from "@blog/posts.svelte";
-  import TagPill from "@blog/tag_pill.svelte";
 
-  export let tag: string;
+  export let year: string;
+  export let month: string;
   export let posts: Array<Post>;
 </script>
 
-<Posts description="#{tag} posts from delfick's blog" {posts}>
-  Posts for <TagPill {tag} linkable={false} size="4xl" float={false} />
+<Posts description="delfick's blog posts from {month}, {year}" {posts}>
+  Posts from {month}, {year}
 </Posts>
