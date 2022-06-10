@@ -38,6 +38,7 @@
       </div>
       <div><p><a href="/blog">Blog</a></p></div>
       <div><p><a href="https://github.com/delfick">Github</a></p></div>
+      <div><p><a href="/resume/engineer">Resume</a></p></div>
       <div>
         <p><a href="https://www.linkedin.com/in/delfick">LinkedIn</a></p>
       </div>
