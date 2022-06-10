@@ -20,10 +20,14 @@ export const get = async () => {
       }
 
       const meta: BlogMeta = { ...resolved.update(EmptyMeta) };
+      const path = `/blog/${parsed.dir.substring(2)}/${parsed.name}`;
+      const match =
+        new RegExp(`/blog/posts/([^/]+)/([^/]+)/([^-]+).+`).exec(path) || [];
 
       allPosts.push({
         meta,
-        path: `/blog/${parsed.dir.substring(2)}/${parsed.name}`,
+        path,
+        date: new Date(`${match[1]}-${match[2]}-${match[3]}`),
       });
     })
   );

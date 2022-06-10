@@ -1,5 +1,7 @@
 /// <reference types="@sveltejs/kit" />
 
+import type { Post } from "@blog/meta";
+
 declare namespace App {
   interface Locals {}
 
@@ -7,5 +9,7 @@ declare namespace App {
 
   interface Session {}
 
-  interface Stuff {}
+  interface Stuff {
+    posts: Array<Post>;
+  }
 }

@@ -13,6 +13,7 @@ export declare interface BlogMeta {
 
 export declare interface Post {
   meta: BlogMeta;
+  date: Date;
   path: string;
 }
 

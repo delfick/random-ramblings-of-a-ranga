@@ -14,4 +14,4 @@
   export let posts: Array<Post>;
 </script>
 
-<Posts description="delfick's blog" {posts} noheading />
+<Posts description="delfick's blog" {posts} noheading rss />
