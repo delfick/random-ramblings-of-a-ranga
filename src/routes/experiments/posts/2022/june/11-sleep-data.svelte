@@ -96,7 +96,11 @@
     21:54,08:06
   `;
 
+  let linegap = 1;
+  let lineheight = 5;
+
   $: gap = gridWidth / 24;
+  $: gridheight = 100 + pairs.length * (lineheight + linegap);
   $: {
     times = [];
     for (let i = 0; i < 24; i++) {
@@ -135,7 +139,7 @@
 
 <div bind:clientWidth={gridWidth} bind:clientHeight={gridHeight}>
   <div id="content">
-    <svg class="w-full" style="min-height: {100 + pairs.length * 5}px">
+    <svg class="w-full" style="min-height: {gridheight}px">
       {#if gridWidth > 1 && gridHeight > 1}
         {#each times as time, i}
           {#if i % 2 != 0}
@@ -144,10 +148,10 @@
         {/each}
         {#each pairs as pair, i}
           <rect
-            y={40 + i * 5}
+            y={40 + i * (lineheight + linegap)}
             x={pair.s * gap}
             width={(pair.e - pair.s) * gap}
-            height={2}
+            height={lineheight}
             fill="red"
           />
         {/each}
@@ -164,7 +168,7 @@
         {/each}
         {#each times as time, i}
           {#if i % 2 != 0}
-            <text x={time.x - 10} y={100 + pairs.length * 5}>{time.h}</text>
+            <text x={time.x - 10} y={gridHeight}>{time.h}</text>
           {/if}
         {/each}
       {/if}
