@@ -40,6 +40,10 @@
             >{base.charAt(0).toUpperCase() + base.slice(1)}</a
           >
         </div>
+      {:else if $page.url.pathname.startsWith(`/${base}/draft-`)}
+        <div transition:fly={{ x: -20 }}>
+          <a class="text" href="/{base}/drafts">Drafts</a>
+        </div>
       {/if}
     </div>
 
