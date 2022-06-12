@@ -21,5 +21,5 @@
   tldr={$m.tldr}
   published={$m.published}
   tags={$m.tags}
-  title={$m.title}
-/>
+  title={$m.title}><slot /></FullPost
+>
