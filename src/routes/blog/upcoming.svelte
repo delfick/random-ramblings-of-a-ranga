@@ -1,9 +1,10 @@
 <script lang="ts" context="module">
+  import { dev } from "$app/env";
   import type { Post } from "@blog/meta";
   import type { Load } from "@sveltejs/kit";
 
   export const load: Load = async ({ fetch }) => {
-    const posts: Array<Post> = await (await fetch(`/blog/posts.json`)).json();
+    const posts: Array<Post> = await (await fetch(`/blog/drafts.json`)).json();
     return { props: { posts } };
   };
 </script>
@@ -14,4 +15,6 @@
   export let posts: Array<Post>;
 </script>
 
-<Posts description="delfick's blog" {posts} noheading rss showupcoming />
+<Posts isupcoming={!dev} description="delfick's blog" {posts}
+  >Upcoming Posts</Posts
+>

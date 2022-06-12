@@ -1,12 +1,15 @@
 <script lang="ts">
   import RSS from "@assets/brands/rss.png";
   import type { Post } from "@blog/meta";
+  import { UpcomingPost } from "@blog/meta";
   import PostSummary from "@blog/post_summary.svelte";
 
   export let description: string;
   export let posts: Array<Post>;
   export let noheading = false;
   export let rss = false;
+  export let isupcoming = false;
+  export let showupcoming = false;
 </script>
 
 <svelte:head>
@@ -36,8 +39,11 @@
   {/if}
   <div class="w-full max-w-4xl mx-auto pt-3">
     <ul>
+      {#if showupcoming}
+        <PostSummary post={UpcomingPost} />
+      {/if}
       {#each [...posts].reverse() as post}
-        <PostSummary {post} />
+        <PostSummary {post} {isupcoming} />
       {/each}
     </ul>
   </div>

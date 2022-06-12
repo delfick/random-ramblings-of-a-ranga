@@ -34,7 +34,7 @@
         />
       </a>
       <ThemeToggle />
-      {#if $page.url.pathname.startsWith(`/${base}/posts`) || $page.url.pathname.startsWith(`/${base}/tags`)}
+      {#if $page.url.pathname.startsWith(`/${base}/posts`) || $page.url.pathname.startsWith(`/${base}/tags`) || $page.url.pathname.startsWith(`/${base}/upcoming`)}
         <div transition:fly={{ x: -20 }}>
           <a class="text" href="/{base}"
             >{base.charAt(0).toUpperCase() + base.slice(1)}</a

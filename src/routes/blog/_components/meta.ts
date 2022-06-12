@@ -25,6 +25,18 @@ export const EmptyMeta = {
   tags: ["forgot-meta"],
 };
 
+export const UpcomingPost = {
+  meta: {
+    ...EmptyMeta,
+    title: "Upcoming posts",
+    tldr: "Any posts I haven't finished yet",
+    published: "",
+    tags: [],
+  },
+  date: new Date(),
+  path: "/blog/upcoming",
+};
+
 export declare type BlogMetaUpdater = (m: BlogMeta) => BlogMeta;
 
 export declare interface LoadExports {
