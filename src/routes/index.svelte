@@ -12,6 +12,7 @@
   import "./layout.postcss";
   import PageTransition from "@app/page_transition.svelte";
   import avatar from "@assets/avatar.svg";
+  import LinkedIn from "@blog/links/linkedin.svelte";
   import { onMount } from "svelte";
 
   export let url: URL;
@@ -43,9 +44,7 @@
       <div><p><a href="/resume/engineer">Resume</a></p></div>
       <div>
         <p>
-          <a target="_blank" href="https://www.linkedin.com/in/delfick"
-            >LinkedIn</a
-          >
+          <LinkedIn />
         </p>
       </div>
       <div><p><a href="/experiments">Experiments</a></p></div>

@@ -40,6 +40,10 @@
     :global(mark) {
       @apply inline-block pr-1 pl-1 text-base text-mark-front bg-mark-back rounded-md shadow-md bg-opacity-100;
     }
+
+    :global(ul) {
+      list-style: disc;
+    }
   }
 
   :global(body.dark) {
