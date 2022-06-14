@@ -43,7 +43,7 @@
         {#if showupcoming}
           <PostSummary post={UpcomingPost} />
         {/if}
-        {#each [...posts].reverse() as post}
+        {#each [...posts] as post}
           <PostSummary {post} {isupcoming} />
         {/each}
       </ul>
