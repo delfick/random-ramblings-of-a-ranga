@@ -37,16 +37,20 @@
       >Blog
     </h2>
   {/if}
-  <div class="w-full max-w-4xl mx-auto pt-3">
-    <ul>
-      {#if showupcoming}
-        <PostSummary post={UpcomingPost} />
-      {/if}
-      {#each [...posts].reverse() as post}
-        <PostSummary {post} {isupcoming} />
-      {/each}
-    </ul>
-  </div>
+  {#if posts.length > 0}
+    <div class="w-full max-w-4xl mx-auto pt-3">
+      <ul>
+        {#if showupcoming}
+          <PostSummary post={UpcomingPost} />
+        {/if}
+        {#each [...posts].reverse() as post}
+          <PostSummary {post} {isupcoming} />
+        {/each}
+      </ul>
+    </div>
+  {:else}
+    <slot name="noposts" />
+  {/if}
 </div>
 
 <style lang="postcss">
