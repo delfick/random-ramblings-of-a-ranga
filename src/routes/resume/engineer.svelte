@@ -89,8 +89,8 @@
     infrastructure operations that has given me a strong understanding of the
     difference between running software locally, on CI, and in a deployed
     environment. I have lots of experience in taking a project and "shuffling"
-    the code so that it becomes possible to expand it's feature set without
-    buying unmanageable technical debt. All my experience is within small
+    the code **so that it becomes possible to expand it's feature set without
+    buying unmanageable technical debt**. All my experience is within small
     teams that have a wide range of responsibilities and I have seen the cost
     of different leadership and prioritisation approaches.
 
@@ -107,8 +107,8 @@
     what should be built.
 
     I make a conscious effort to be available, approachable and honest.
-    Creating a good experience is not limited to creating magic code
-    and throwing it over the fence! Effectively helping users involves
+    **Creating a good experience is not limited to creating magic code
+    and throwing it over the fence!** Effectively helping users involves
     being able to offer guidance through debugging strange behaviour with
     the product and knowing who in the business is appropriate to ask when
     more insight is required.
@@ -116,9 +116,9 @@
     I have strong opinions about how to make software and try my best to cater
     my methods to the way my autistic brain works. I believe that agile rituals
     are useful tools that should be adjusted to better suit the team rather
-    than the team changed to better suit the rituals. Context of a situation
+    than the team changed to better suit the rituals. **Context of a situation
     will always be the most important factor in deciding how a team should
-    operate, and a foundation of openness, honesty and good faith combined with
+    operate**, and a foundation of openness, honesty and good faith combined with
     a desire to reflect and improve will always lead to a productive and happy
     team.
 
@@ -155,7 +155,7 @@
       title="Learning Style"
       title_color="#1938b0"
       source={dedent`
-    I have found that I learn best when I have a need for the skill or
+    I have found that **I learn best when I have a need** for the skill or
     technology that I'm trying to gain. This means I tend not to dedicate time
     to research just for the sake of knowledge. For example I attempted to
     learn Rust but because I had no need for it I couldn't find the motivation
@@ -174,8 +174,8 @@
     better and incorporated that into those projects instead.
 
     I learnt TypeScript and modern PHP as part of uplifting old code at
-    Papercut and along with learning type hints in Python I have a large
-    appreciation for how type annotations can be used to help clarify code
+    Papercut and along with learning type hints in Python **I have a large
+    appreciation for type annotations** helping us clarify the code
     for humans and the computer.
 
     I find this approach lets me to get the most out of the skills I pick up;
@@ -193,7 +193,7 @@
         title="Deployment Tooling"
         source={dedent`
         A large part of my time at realcommercial.com.au was spent embedded as the
-        single person for deployment support for around 20 engineers across
+        **single person for deployment support for around 20 engineers** across
         Melbourne and Xi'an. In this time I created three tools in particular: a
         docker client, a cloudformation management tool, and a general aws
         synchronisation tool built with boto.
@@ -214,12 +214,12 @@
 
         Having the ability to stand up a local system that lets the developer
         focus on the functionality of the system without being distracted by
-        the operational reality of running code in the cloud and  allows a tight
+        the operational reality of running code in the cloud allows a tight
         feedback loop on making the code perform it's functional requirements.
 
         When paired with a staging environment that clones the infrastructure of
-        production, we can can discover and resolve the vast majority of edge
-        cases and bugs with a high level of confidence before code sees production
+        production, **we can can discover and resolve the vast majority of edge
+        cases and bugs with a high level of confidence** before code sees production
         use.
         `}
       />
@@ -229,8 +229,8 @@
         When I worked with Smart Light bulbs, my primary focus was developing
         applications that sit in our GCP kubernetes cluster but my passion led me
         to creating a large framework of functionality that could interact with
-        devices. This codebase became the defacto second implementation of all
-        the functionality in the consumer mobile apps and factory code. I also
+        devices. **This codebase became the defacto second implementation of all
+        the functionality** in the consumer mobile apps and factory code. I also
         built 10 applications on top of that foundation. Code from this project
         sat in the cloud, was used by support, used in the warehouse, used by
         sales and used by all engineer teams to interact with our devices during
@@ -239,8 +239,8 @@
         This codebase included over 137 thousand lines of python (including the
         10 applications and over 60 thousand lines of tests) and was essentially
         entirely written by me. There's too many features to list here
-        but I'm most proud of my "fake device" which allowed us to emulate the
-        behaviour of different hardware/firmware versions of the product range
+        but I'm most proud of my "fake device" which allowed us to **emulate the
+        behaviour of different hardware/firmware** versions of the product range
         without having specific hardware or even before firmware changes have
         been implemented. This code also powered some basic smoke tests that
         would constantly check that devices could connect to the cloud and be
