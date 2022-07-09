@@ -80,6 +80,108 @@
       </SummaryPoint>
     </SummaryPoints>
     <ResumeSection
+      title="Desired work"
+      title_color="#b019ae"
+      source={dedent`
+    I want my job to be about enabling people. I have experience in cloud
+    infrastructure operations that has given me a strong understanding of the
+    difference between running software locally, on CI, and in a deployed
+    environment. I have lots of experience in taking a project and "shuffling"
+    the code so that it becomes possible to expand it's feature set without
+    buying unmanageable technical debt. All my experience is within small
+    teams that have a wide range of responsibilities and I have seen the cost
+    of different leadership and prioritisation approaches.
+
+    I really enjoy and have passion for doing what I can to make it easier to
+    do the technical parts of our job so that my colleagues can focus on the
+    business problem itself.
+    `}
+    />
+    <ResumeSection
+      title="Approach"
+      title_color="#b019ae"
+      source={dedent`
+    I'm very quick at creating solutions and part of that is understanding
+    what should be built.
+
+    I make a conscious effort to be available, approachable and honest.
+    Creating a good experience is not limited to creating magic code
+    and throwing it over the fence! Effectively helping users involves
+    being able to offer guidance through debugging strange behaviour with
+    the product and knowing who in the business is appropriate to ask when
+    more insight is required.
+
+    I have strong opinions about how to make software and try my best to cater
+    my methods to the way my autistic brain works. I believe that agile rituals
+    are useful tools that should be adjusted to better suit the team rather
+    than the team changed to better suit the rituals. Context of a situation
+    will always be the most important factor in deciding how a team should
+    operate, and a foundation of openness, honesty and good faith combined with
+    a desire to reflect and improve will always lead to a productive and happy
+    team.
+
+    I also advocate for approaches to describing and deploying software changes
+    that let us ship quality code faster and with confidence.
+    `}
+    />
+    <ResumeSection
+      title="Language Skills"
+      title_color="#b019ae"
+      source={dedent`
+    I'm most comfortable with Python, which I've been using for around 15
+    years. I am proficient with JavaScript, am comfortable with Typescript and
+    have a a passable ability to create web GUIs using React and Redux.
+    I built applications for the cloud using Go and gRPC for most of the 5
+    years I was at LIFX. And at Papercut I found an appreciation for modern PHP.
+    
+    I have worked with Ruby before and whilst I enjoy the language I never got
+    into the ecosystem to any large extent. Though I sometimes use some ruby
+    language features when I write pseudo code, which is a weird combination
+    of python, ruby and English.
+
+    My background in operations work means I have a strong grasp of using bash,
+    and the terminal in general. These skills and an ability to find the right
+    tool for the job has meant that I'm known for delivering value quickly.
+
+    When it comes to databases I have a reasonable understanding of SQL and
+    tend to favour Postgres and sqlite. However when it comes to maintaining
+    a Postgres cluster, I'm much more comfortable when I have access to people
+    who can provide guidance.
+    `}
+    />
+    <ResumeSection
+      title="Learning Style"
+      title_color="#b019ae"
+      source={dedent`
+    I have found that I learn best when I have a need for the skill or
+    technology that I'm trying to gain. This means I tend not to dedicate time
+    to research just for the sake of knowledge. For example I attempted to
+    learn Rust but because I had no need for it I couldn't find the motivation
+    to continue that. It did seem interesting though!
+
+    In the Photons framework I mentioned above, it was very clear very early
+    on that using Python async/await would be very useful and this is around
+    the time that Python 3.5 just came out. And so over those 5 years I
+    created a number of patterns and utilities for working with await/async and
+    how it behaves. This knowledge was not only fun and interesting to learn
+    but enabled me to write Photons in a way that is maintainable and scales
+    at run time.
+
+    My understanding of Redux Saga comes from finding Redux Thunk difficult
+    to scale and in my search for an alternative I decided Saga would be much
+    better and incorporated that into those projects instead.
+
+    I learnt TypeScript and modern PHP as part of uplifting old code at
+    Papercut and along with learning type hints in Python I have a large
+    appreciation for how type annotations can be used to help clarify code
+    for humans and the computer.
+
+    I find this approach lets me to get the most out of the skills I pick up;
+    and for the technologies I don't personally know it's usually easy to find
+    someone who can provide opinion or guidance.
+    `}
+    />
+    <ResumeSection
       title="Notable examples: Deployment Tooling"
       print_breakable
       title_color="#228c8c"
@@ -156,108 +258,6 @@
 
     Since late 2020 I have considerably less time for these side projects but
     it is something I enjoy to do every so often.
-    `}
-    />
-    <ResumeSection
-      title="Approach"
-      title_color="#b019ae"
-      source={dedent`
-    I'm very quick at creating solutions and part of that is understanding
-    what should be built.
-
-    I make a conscious effort to be available, approachable and honest.
-    Creating a good experience is not limited to creating magic code
-    and throwing it over the fence! Effectively helping users involves
-    being able to offer guidance through debugging strange behaviour with
-    the product and knowing who in the business is appropriate to ask when
-    more insight is required.
-
-    I have strong opinions about how to make software and try my best to cater
-    my methods to the way my autistic brain works. I believe that agile rituals
-    are useful tools that should be adjusted to better suit the team rather
-    than the team changed to better suit the rituals. Context of a situation
-    will always be the most important factor in deciding how a team should
-    operate, and a foundation of openness, honesty and good faith combined with
-    a desire to reflect and improve will always lead to a productive and happy
-    team.
-
-    I also advocate for approaches to describing and deploying software changes
-    that let us ship quality code faster and with confidence.
-    `}
-    />
-    <ResumeSection
-      title="Desired work"
-      title_color="#b019ae"
-      source={dedent`
-    I want my job to be about enabling people. I have experience in cloud
-    infrastructure operations that has given me a strong understanding of the
-    difference between running software locally, on CI, and in a deployed
-    environment. I have lots of experience in taking a project and "shuffling"
-    the code so that it becomes possible to expand it's feature set without
-    buying unmanageable technical debt. All my experience is within small
-    teams that have a wide range of responsibilities and I have seen the cost
-    of different leadership and prioritisation approaches.
-
-    I really enjoy and have passion for doing what I can to make it easier to
-    do the technical parts of our job so that my colleagues can focus on the
-    business problem itself.
-    `}
-    />
-    <ResumeSection
-      title="Technical Skills"
-      title_color="#b019ae"
-      source={dedent`
-    I'm most comfortable with Python, which I've been using for around 15
-    years. I am proficient with JavaScript, am comfortable with Typescript and
-    have a a passable ability to create web GUIs using React and Redux.
-    I built applications for the cloud using Go and gRPC for most of the 5
-    years I was at LIFX. And at Papercut I found an appreciation for modern PHP.
-    
-    I have worked with Ruby before and whilst I enjoy the language I never got
-    into the ecosystem to any large extent. Though I sometimes use some ruby
-    language features when I write pseudo code, which is a weird combination
-    of python, ruby and English.
-
-    My background in operations work means I have a strong grasp of using bash,
-    and the terminal in general. These skills and an ability to find the right
-    tool for the job has meant that I'm known for delivering value quickly.
-
-    When it comes to databases I have a reasonable understanding of SQL and
-    tend to favour Postgres and sqlite. However when it comes to maintaining
-    a Postgres cluster, I'm much more comfortable when I have access to people
-    who can provide guidance.
-    `}
-    />
-    <ResumeSection
-      title="Learning Style"
-      title_color="#b019ae"
-      source={dedent`
-    I have found that I learn best when I have a need for the skill or
-    technology that I'm trying to gain. This means I tend not to dedicate time
-    to research just for the sake of knowledge. For example I attempted to
-    learn Rust but because I had no need for it I couldn't find the motivation
-    to continue that. It did seem interesting though!
-
-    In the Photons framework I mentioned above, it was very clear very early
-    on that using Python async/await would be very useful and this is around
-    the time that Python 3.5 just came out. And so over those 5 years I
-    created a number of patterns and utilities for working with await/async and
-    how it behaves. This knowledge was not only fun and interesting to learn
-    but enabled me to write Photons in a way that is maintainable and scales
-    at run time.
-
-    My understanding of Redux Saga comes from finding Redux Thunk difficult
-    to scale and in my search for an alternative I decided Saga would be much
-    better and incorporated that into those projects instead.
-
-    I learnt TypeScript and modern PHP as part of uplifting old code at
-    Papercut and along with learning type hints in Python I have a large
-    appreciation for how type annotations can be used to help clarify code
-    for humans and the computer.
-
-    I find this approach lets me to get the most out of the skills I pick up;
-    and for the technologies I don't personally know it's usually easy to find
-    someone who can provide opinion or guidance.
     `}
     />
     <Contact
