@@ -39,8 +39,9 @@
     simple Web services, performance profiling and optimisation of high load
     services, tooling used by warehouse workers, asynchronously interacting with
     IoT hardware over local and remote networks; and creation and maintenance of
-    an internal portal for user information. As well as infrastructure and tooling
-    for testing, application deployment, and the cloud itself.
+    an internal portal for user information. As well as interacting with third
+    party developers, infrastructure and tooling for testing, application
+    deployment, and cloud sysadmin activities.
 
     I have also developed a focus on how I work to ensure what I build matches the
     constraints of the problems they aim to help with; and also don't lead to a
