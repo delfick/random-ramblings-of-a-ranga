@@ -22,5 +22,6 @@
     size: auto;
     margin: 0;
     margin-top: 5mm;
+    margin-bottom: 5mm;
   }
 </style>

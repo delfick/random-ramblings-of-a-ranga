@@ -83,6 +83,7 @@
     </SummaryPoints>
     <ResumeSection
       title="Desired work"
+      print_breakable
       title_color="#b019ae"
       source={dedent`
     I want my job to be about enabling people. I have experience in cloud
@@ -128,6 +129,7 @@
     />
     <ResumeSection
       title="Language Skills"
+      print_breakable
       title_color="#1938b0"
       source={dedent`
     I'm most comfortable with Python, which I've been using for around 16
@@ -185,8 +187,8 @@
     />
     <ResumeSection
       title="Notable examples"
-      print_breakable
       title_color="#228c8c"
+      print_breakable
     >
       <SubResumeSection
         notoppadding
