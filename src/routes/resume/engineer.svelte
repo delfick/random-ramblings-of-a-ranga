@@ -30,7 +30,7 @@
 
   <Blurb
     source={dedent`
-    I'm a senior software engineer with 10 years of industry experience who is
+    I'm a senior software engineer with 11 years of industry experience who is
     passionate about using software to solve real problems. I have a history of
     finding challenges that can be assisted with automation and building tools
     that do just that.
@@ -55,8 +55,8 @@
   />
   <ResumeSections>
     <SummaryPoints>
-      <SummaryPoint>Over 15 years experience with Python</SummaryPoint>
-      <SummaryPoint>Over 10 years industry experience</SummaryPoint>
+      <SummaryPoint>Over 16 years experience with Python as of 2022</SummaryPoint>
+      <SummaryPoint>Over 11 years industry experience (starting 2011)</SummaryPoint>
       <SummaryPoint>Over 8 years focus on server/cloud operations</SummaryPoint>
       <SummaryPoint>Extremely comfortable with Git and scripting</SummaryPoint>
       <SummaryPoint>
