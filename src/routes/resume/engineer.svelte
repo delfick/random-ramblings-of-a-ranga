@@ -55,17 +55,23 @@
   />
   <ResumeSections>
     <SummaryPoints>
-      <SummaryPoint>Over 16 years experience with Python as of 2022</SummaryPoint>
-      <SummaryPoint>Over 11 years industry experience (starting 2011)</SummaryPoint>
+      <SummaryPoint>
+        Over 16 years experience with Python as of 2022
+      </SummaryPoint>
+      <SummaryPoint>Over 11 years industry experience as of 2022</SummaryPoint>
       <SummaryPoint>Over 8 years focus on server/cloud operations</SummaryPoint>
       <SummaryPoint>Extremely comfortable with Git and scripting</SummaryPoint>
+      <SummaryPoint>
+        Experience with AWS and GCE cloud environments
+      </SummaryPoint>
+      <SummaryPoint>
+        Experience in a microsystem environment backed by GCE managed K8S
+      </SummaryPoint>
       <SummaryPoint>
         History and interest in building tools that become invaluable to my
         colleagues
       </SummaryPoint>
-      <SummaryPoint>
-        Approachable, available, honest and helpful persona
-      </SummaryPoint>
+      <SummaryPoint>Approachable, available, honest and helpful</SummaryPoint>
       <SummaryPoint>
         Highly pragmatic and understands when compromises need to be made
       </SummaryPoint>
