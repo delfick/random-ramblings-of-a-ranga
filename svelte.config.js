@@ -31,6 +31,7 @@ export default {
           "https://twitter.com",
           "platform.twitter.com",
           "syndication.twitter.com",
+          "app.netlify.com",
         ],
 
         "img-src": [
