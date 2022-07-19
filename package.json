@@ -49,7 +49,7 @@
     "svelte": "^3.44.0",
     "svelte-check": "^2.2.7",
     "svelte-dark-mode": "^2.1.0",
-    "svelte-kit-isolated-stores": "^1.0.0-alpha.2",
+    "svelte-kit-isolated-stores": "^1.0.0-alpha.3",
     "svelte-markdown": "^0.2.2",
     "svelte-preprocess": "^4.10.5",
     "svelte-prism": "^1.1.5",

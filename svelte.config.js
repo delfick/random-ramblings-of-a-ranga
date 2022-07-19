@@ -7,7 +7,7 @@ export default {
   preprocess: preprocess({ postcss: true }),
   kit: {
     adapter: adapter(),
-    prerender: { default: false },
+    prerender: { default: true },
     alias: {
       "@app": "src/app",
       "@blog": "src/routes/blog/_components",

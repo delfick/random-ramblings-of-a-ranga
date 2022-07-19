@@ -1,7 +1,3 @@
-<script lang="ts" context="module">
-  export const prerender = true;
-</script>
-
 <script>
   import { onMount } from "svelte";
   import { dedent } from "ts-dedent";
