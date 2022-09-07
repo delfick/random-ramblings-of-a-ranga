@@ -16,6 +16,7 @@ export default {
     vite: {
       optimizeDeps: {
         exclude: ["svelte-kit-isolated-stores"],
+        include: ["papaparse"],
       },
       ssr: {
         noExternal: ["svelte-kit-isolated-stores"],
