@@ -7,19 +7,10 @@ export default {
   preprocess: preprocess({ postcss: true }),
   kit: {
     adapter: adapter(),
-    prerender: { default: true },
     alias: {
       "@app": "src/app",
       "@blog": "src/routes/blog/_components",
       "@assets": "src/assets",
-    },
-    vite: {
-      optimizeDeps: {
-        exclude: ["svelte-kit-isolated-stores"],
-      },
-      ssr: {
-        noExternal: ["svelte-kit-isolated-stores"],
-      },
     },
     csp: {
       mode: prod ? "hash" : "auto",
