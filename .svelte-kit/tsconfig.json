@@ -9,10 +9,16 @@
 				"src/app/*"
 			],
 			"@blog": [
-				"src/routes/blog/_components"
+				"src/app/blog"
 			],
 			"@blog/*": [
-				"src/routes/blog/_components/*"
+				"src/app/blog/*"
+			],
+			"@resume": [
+				"src/app/resume"
+			],
+			"@resume/*": [
+				"src/app/resume/*"
 			],
 			"@assets": [
 				"src/assets"

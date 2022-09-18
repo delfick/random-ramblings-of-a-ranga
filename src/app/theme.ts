@@ -1,7 +1,7 @@
+import { page } from "$app/stores";
+import Cookies from "js-cookie";
 import type { Theme } from "svelte-dark-mode/types/DarkMode.svelte";
 import { writable, derived } from "svelte/store";
-import Cookies from "js-cookie";
-import { page } from "$app/stores";
 
 const val: Theme = (Cookies.get("theme") || "light") as Theme;
 export const theme = writable<Theme>(val);
