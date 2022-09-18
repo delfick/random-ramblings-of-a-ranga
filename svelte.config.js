@@ -9,7 +9,8 @@ export default {
     adapter: adapter(),
     alias: {
       "@app": "src/app",
-      "@blog": "src/routes/blog/_components",
+      "@blog": "src/app/blog",
+      "@resume": "src/app/resume",
       "@assets": "src/assets",
     },
     csp: {

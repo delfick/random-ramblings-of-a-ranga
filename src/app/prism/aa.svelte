@@ -1,5 +1,5 @@
 <script context="module" lang="ts">
-  import { browser } from "$app/env";
+  import { browser } from "$app/environment";
   import { default as _prism } from "prismjs";
 
   export const prism = _prism;

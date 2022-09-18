@@ -47,7 +47,6 @@
     "svelte": "^3.50.1",
     "svelte-check": "^2.9.0",
     "svelte-dark-mode": "^2.1.0",
-    "svelte-kit-isolated-stores": "^1.0.0-alpha.3",
     "svelte-markdown": "^0.2.3",
     "svelte-preprocess": "^4.10.7",
     "svelte-prism": "^1.1.6",
