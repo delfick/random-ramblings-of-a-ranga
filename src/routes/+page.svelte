@@ -39,6 +39,9 @@
       </p>
     </div>
     <div><p><a href="/experiments">Experiments</a></p></div>
+    <div style="display:none">
+      <a rel="me" href="https://mastodon.social/@delfick">Mastodon</a>
+    </div>
   </div>
 </main>
 
