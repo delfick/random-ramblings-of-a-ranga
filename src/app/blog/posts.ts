@@ -40,12 +40,12 @@ export const getter = async (
   const compare = (p1: Post, p2: Post): number => {
     const numbered = (path: string): string =>
       path.replace(
-        /(jan|feb|march|april|may|june|july|august|september|october|november|december)/,
+        /(january|february|march|april|may|june|july|august|september|october|november|december)/,
         (_, month: string) =>
           String(
             {
-              jan: 1,
-              feb: 2,
+              january: 1,
+              february: 2,
               march: 3,
               april: 4,
               may: 5,
@@ -65,5 +65,5 @@ export const getter = async (
     return path1.localeCompare(path2) || 0;
   };
 
-  return { body: allPosts.filter((p) => p != null).sort(compare) };
+  return { body: allPosts.filter((p) => p != null).sort(compare).reverse() };
 };
