@@ -12,7 +12,7 @@
 
 <div class="w-full max-w-4xl mx-auto pt-20 pb-5">
   <div
-    class="experiment-content w-full px-4 md:px-6 text-xl leading-normal"
+    class="experiment-content w-full px-4 md:px-6 text-l leading-normal"
     style="font-family:Georgia,serif;"
   >
     {#if $m.tldr != ""}

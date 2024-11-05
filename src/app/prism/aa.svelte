@@ -68,3 +68,10 @@
         class="language-{language}"
         >{#if language === "none"}{formattedCode}{:else}{@html formattedCode}{/if}</code
     ></pre>
+
+<style>
+    :not(pre) > code[class*="language-"],
+    pre[class*="language-"] {
+        font-size: 80%;
+    }
+</style>
