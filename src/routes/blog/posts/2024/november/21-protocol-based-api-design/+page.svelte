@@ -5,29 +5,23 @@
 </script>
 
 <p>
-    I have a perspective of programming that comes from a history of rewriting
-    the same code over and over again. It means my main programming skill is to
-    take code that acheives something and rearranging the flow of data and logic
-    to be arguably clearer and easier to work with.
+    I've gone through a journey with static typing, starting from thinking
+    static types were the programming equivalent of unnecessary bureaucracy to
+    thinking it's insane to write any code without having some kind of type
+    checker!
 </p>
 
 <p>
-    I read code breadth first, I have a functional OO design philosophy and I
-    see myself as a framework developer (I care more about how than what) and so
-    for me clearer and easier to work with comes from a place that prioritises
-    separation of concern at every level.
+    My appreciation for a type checker started when I learnt how to write Scala
+    and then cemented when I spent five years writing Go for LIFX. Around 2022 I
+    started to figure out how to use mypy and what it looks like to take my
+    style of Python and formalise how everything fits together and from the
+    start of 2023 I've had a few sprints where I tried to push the limits of
+    mypy and I'm gonna use this post to explain the approach I've currently
+    landed on.
 </p>
 
-<p>
-    I started to figure out how to use Python static type checking since a
-    couple years ago, and I’ve especially leaned into pushing the limits of
-    static type checking in Python over the past year (from a background of
-    learning to appreciate type systems from five years of experience with Go,
-    and from learning Scala) and I’m gonna attempt to write here some thoughts
-    of how I think about typing.Protocol.
-</p>
-
-<h2>what is a typing.Protocol?</h2>
+<h2>What is a typing.Protocol?</h2>
 
 <p>
     Python’s static type checking is an interesting thing cause it’s effectively
@@ -36,34 +30,35 @@
 </p>
 
 <p>
-    I’ve been writing Python nonstop for over 15 years at this point (for a
-    large period of that I really mean nonstop) and I learnt how to use the
-    language without types. What I’ve found as I learn to adapt my style to
-    including these type annotations is a lot of what I did to make code
-    reliable at runtime was the same things the type system formalises.
+    I’ve been writing Python nonstop for over 15 years at this point (and for a
+    large period of that I really mean an unhealthy type of nonstop) and I
+    learnt how to use the language without types. What I’ve found as I learn to
+    adapt my style to including these type annotations is a lot of what I did to
+    make code reliable at runtime was the same things the type system
+    formalises.
 </p>
 
 <p>
     The <mark>typing.Protocol</mark> provided to us is a way to declare the shape
-    of some object. It’s like an interface in Go for those familiar with that language,
-    but with attributes and operator overloading (python dunder methods).
+    of some object. For those familiar with Go, they're like an Interface in that
+    language, but with some more capability.
 </p>
 
 <p>
     For example, if I want to represent an object that has at least a <code
         >blah</code
-    >
-    method:
+    > method:
 </p>
 
 <Python
-    source={`class Thing:
+    source={`
+class Thing:
     def blah(self) -> None: ...
 `}
 />
 
 <p>
-    And just like Go interfaces (and unlike java interfaces) I don’t need to
+    And like Go interfaces (and unlike java interfaces) I don’t need to
     explicitly declare when an object satisfies this interface.
 </p>
 
@@ -71,22 +66,27 @@
     source={`
 import dataclasses
 
+
 class One:
     def blah(self) -> None:
         print("one")
 
+
 class Two:
     def blah(self) -> None:
         print("two")
+
     def other(self) -> int:
         print("three")
+
 
 @dataclasses.dataclass
 class Three:
     option: str
+
     def blah(self, arg1: int = 1) -> None:
         print(self.option)
-        `}
+`}
 />
 
 <p>
@@ -95,8 +95,10 @@ class Three:
 </p>
 
 <Python
-    source={`def takes_thing(thing: Thing) -> None:
+    source={`
+def takes_thing(thing: Thing) -> None:
     thing.blah()
+
 
 takes_thing(One())
 takes_thing(Two())
@@ -106,17 +108,18 @@ takes_thing(Three(option="three"))
 
 <p>
     In all of these cases what’s important is that there is a <mark>blah</mark> method
-    that can be called without passing anything in, that returns a None value. What
-    that method does or where it gets other input from isn’t relevant.
+    that can be called without passing anything in and a None value is returned.
+    What that method does or where it gets other input from isn’t relevant.
 </p>
 
 <p>
-    This gets even more interesting with the dunder methods. Especially the
+    This gets even more interesting with the "dunder" methods. Especially the
     ability to represent a callable object
 </p>
 
 <Python
-    source={`class MyCallable(Protocol):
+    source={`
+class MyCallable(Protocol):
     def __call__(self, val: str, /) -> str: ...
 `}
 />
@@ -124,61 +127,84 @@ takes_thing(Three(option="three"))
 <p>There are multiple ways to satisfy this</p>
 
 <Python
-    source={`def _with_def_syntax(val: str) -> str:
-    # note that this still satisfies the interface even without the slash
+    source={`
+import functools
+
+
+def _with_def_syntax(val: str) -> str:
     return val
+
 
 with_def_syntax: MyCallable = _with_def_syntax
 
 as_a_lambda: MyCallable = lambda val: "hi"
 
+
+# This function by itself doesn't satisfy the protocol
 def _function_taking_more(val: str, times: int) -> str:
     return val * times
 
+
+# But we can curry it to make it satisfy "MyCallable"
 with_currying: MyCallable = functools.partial(_function_taking_more, times=10)
+
+
+def _function_taking_more_with_defaults(val: str, times: int = 10) -> str:
+    return val * times
+
+
+all_extra_params_have_defaults: MyCallable = _function_taking_more_with_defaults
+
 
 class ACallable:
     def __call__(val: str) -> str:
-        return f"from a noun: {val}"
+        return f"You gave me this value! '{val}'"
 
+
+# It's the instance of "ACallable" that satisfies the interface
 as_an_object: MyCallable = ACallable()
 `}
 />
 
-<p>And a really important example, representing a constructor:</p>
+<Note>
+    Note <mark>_with_def_syntax</mark> doesn't have the slash in the signature but
+    it still satisfies the interface, because not having the slash means there are
+    more ways to call this method rather than less. If it was the other way round
+    then the implementation would have less functionality than the protocol and the
+    type checker would complain.
+</Note>
+
+<h2>Represent class constructors as a separate protocol</h2>
+
+<p>
+    A pattern that is less obvious but very powerful is the idea that the
+    constructor of an object is it's own separate protocol
+</p>
 
 <Python
-    source={`class Thing(Protocol):
+    source={`
+from typing import Protocol
+
+
+class Thing(Protocol):
     def answer(self) -> int: ...
+
 
 class ThingMaker(Protocol):
     def __call__(self) -> Thing: ...
 `}
 />
 
-<h2>represent class constructors as a separate protocol</h2>
-
 <p>
-    I find people go through the stages of grief with that last example in the
-    previous section and I feel it’s emblematic of the reason lots of Python
-    developers find it difficult to grok static type checking in Python.
-</p>
-
-<Note>
-    I’ll take a moment to point out the title of this post is "strong opinions"
-    for a reason
-</Note>
-
-<p>
-    The idea is that making an object is separate from what the object is, and
-    that the <mark>__init__</mark> dunder method is an implementation detail rather
-    than the only way to get that object.
+    The idea is that a constructor (specifically <mark>__init__</mark> in the Python
+    language) is an implementation detail for creating an object rather than an intrinsic
+    part of that object.
 </p>
 
 <p>
     The reason this is useful is the same reason Java has multiple constructors.
-    It lets us represent what the object needs without making the object be hard
-    coded to any particular way of getting those requirements.
+    It lets us represent what the object is and needs separately from how we
+    satisfy those needs.
 </p>
 
 <p>
@@ -187,11 +213,19 @@ class ThingMaker(Protocol):
 </p>
 
 <Python
-    source={`class Stuff(Protocol):
+    source={`
+import dataclasses
+from collections.abc import Sequence
+from typing import Protocol, Self
+
+
+class Stuff(Protocol):
     numbers: Sequence[int]
+
 
 class StuffMaker(Protocol):
     def __call__(self, *, start: int, end: int) -> Stuff: ...
+
 
 @dataclasses.dataclass
 class MyStuff:
@@ -204,26 +238,33 @@ class MyStuff:
 />
 
 <p>
-    Here we have an object that holds a sequence of numbers and one way of
-    creating it from a start and end. Very contrived example, but the idea is
-    that it’s far more flexible to represent it like this where there is a 1:n
-    relationship of object to constructor.
+    In this example there is a protocol that represents the shape for some
+    object, a protocol that represents the ability to create that object from
+    two integers, and a single implementation that satisfies both protocols.
 </p>
 
-<p>Whereas a more straightforward implementation may instead do</p>
+<p>Whereas a more "straightforward" implementation may instead do</p>
 
 <Python
-    source={`class Stuff(Protocol):
+    source={`
+import dataclasses
+from collections.abc import Sequence
+from typing import Protocol
+
+
+class Stuff(Protocol):
     numbers: Sequence[int]
 
-    def __init__(self, *, start: int, end: int) -> Stuff: ...
+    def __init__(self, *, start: int, end: int) -> "Stuff": ...
 
-class MyStuffVariant1:
+
+class MyStuffWithOperationInConstructor:
     def __init__(self, *, start: int, end: int) -> None:
         self.numbers = list(range(start, end))
 
-@dataclasses.dataclass
-class MyStuffVariant2:
+
+@dataclasses.dataclass(frozen=True)
+class MyStuffWithDynamicNumbersAttribute:
     start: int
     end: int
 
@@ -233,30 +274,33 @@ class MyStuffVariant2:
 `}
 />
 
-<p>I have three problems with this</p>
-<ol>
+<p>
+    There are three properties of this design that I believe is less than ideal
+</p>
+<ul>
     <li>
         <p>
-            We are creating an object with a <mark>__init__</mark> that throws away
-            what it receives
+            In <mark>MyStuffWithOperationInConstructor</mark> we are creating an
+            object with an <mark>__init__</mark> method that throws away what it
+            receives
         </p>
     </li>
     <li>
         <p>
-            We are either creating an <mark>__init__</mark> that performs an action
-            or creating an object with a dynamic property that should be static
+            The <mark>numbers</mark> attribute on such an object will either be
+            dynamic when it should be static, or the <mark>__init__</mark> method
+            needs to perform some calculations to set the value for it.
         </p>
     </li>
     <li>
         <p>
-            When writing tests for code that receives one of these <code
-                >Stuff</code
-            >
-            objects, I have to care about objects used to construct the object that
-            I otherwise may not care about in that test.
+            When writing stub implementations of <mark>Stuff</mark> for tests, I
+            have to know about and care about the objects use to construct this object
+            in deployed environments that I otherwise may not care about in that
+            test (i.e. unnecessary coupling with implementation details).
         </p>
     </li>
-</ol>
+</ul>
 
 <p>
     The separation of concern here is separating what I want from how to get it.
@@ -269,7 +313,7 @@ class MyStuffVariant2:
     trying to communicate that something about that flow is awkward.
 </Note>
 
-<h2>confirming something satisfies an interface</h2>
+<h2>Confirming something satisfies an interface</h2>
 
 <p>
     It’s very useful that we don’t have to explicitly declare that an object
@@ -280,40 +324,50 @@ class MyStuffVariant2:
 </p>
 
 <p>
-    There isn’t really a built in way to do this in mypy but there is a trick
-    that is another thing I feel people go through the stages of grief over
+    There isn’t a purpose built way to do this in mypy but there is a trick that
+    I find most people go through the stages of grief over:
 </p>
 
 <Python
-    source={`class Want(Protocol):
+    source={`
+from typing import TYPE_CHECKING, Protocol, cast
+
+
+class Want(Protocol):
     def __call__(self) -> bool: ...
 
+
 class MyFirstCallable:
-    def __call__(self) -> bool: return True
+    def __call__(self) -> bool:
+        return True
 
-Class MySecondCallable:
-    def __call__(self) -> bool: return False
 
-C = lambda: True
+class MySecondCallable:
+    def __call__(self) -> bool:
+        return False
+
+
+MyThirdCallable = lambda: True
 
 if TYPE_CHECKING:
-    _MFC: Want = cast(A, None)
-    _MSC: Want = cast(B, None)
-    _C: Want = C
+    _MFC: Want = cast(MyFirstCallable, None)
+    _MSC: Want = cast(MySecondCallable, None)
+    _MTC: Want = MyThirdCallable
 `}
 />
 
 <p>There are several parts to this orchestra:</p>
-<ol>
+
+<ul class="tight-list">
     <li><p>The if condition</p></li>
     <li><p>The naming scheme</p></li>
     <li><p>The cast</p></li>
     <li><p>What mypy sees</p></li>
-</ol>
+</ul>
 
 <p>
-    So first, that if condition. This says only look at this code at mypy time.
-    Effectively this means this code is never executed. It is only ever
+    So first, that if condition. This says only look at this code at static
+    time. Effectively this means this code is never executed. It is only ever
     statically analyzed. This isn’t strictly necessary but as python is an
     interpreted language, it brings the neglible runtime risk to zero, ensures
     we don’t create anything that may accidentally be used by external modules
@@ -338,18 +392,15 @@ if TYPE_CHECKING:
 <p>
     In Python the cast lets us tell mypy to think that we have an object here
     whose type is the first argument. At runtime this function returns that
-    second argument without any processing and nothing changes. But at mypy time
-    mypy will believe the object here is this other type. As a general rule i’m
-    not a fan of cast and I think it’s easy to use it to create code that isn’t
-    type safe, but it’s perfect for this situation.
+    second argument without any processing and nothing changes. But at static
+    time mypy will believe the object here is this other type. As a general rule
+    i’m not a fan of cast and I think it’s easy to use it to create code that
+    isn’t type safe, but it’s perfect for this situation.
 </p>
 
 <p>So in effect we say</p>
 
-<Python
-    source={`_MFC: Want = cast(A, None)
-`}
-/>
+<Python source={`_MFC: Want = cast(A, None)`} />
 
 <p>
     Mypy will interpret this as saying we have a variable that has type <code
@@ -361,40 +412,54 @@ if TYPE_CHECKING:
     our expectations)
 </p>
 
-<p>When new to mypy it’s tempting to instead do this</p>
+<p>When a developer is new to mypy it’s tempting to instead do this</p>
 
-<Python
-    source={`_MFC: type[Want] = A
+<Python source={`_MFC: type[Want] = A`} />
+
+<p>
+    However this gives really poor errors cause, whilst this description isn't
+    technically true, mypy effectively sees:
+</p>
+
+<Python source={`_MFC: Callable[[] Want] = Callable[[], A]`} />
+
+<p>
+    And mypy doesn't give the same level of detail when comparing the values
+    inside a generic (<mark>Callable</mark> is a generic container)
+</p>
+
+<p>Also, I'll draw some attention to that last example:</p>
+<p>
+    <Python
+        source={`
+from typing import TYPE_CHECKING, Protocol
+
+
+class Want(Protocol):
+    def __call__(self) -> bool: ...
+
+
+MyThirdCallable = lambda: True
+
+if TYPE_CHECKING:
+    _MTC: Want = MyThirdCallable
 `}
-/>
+    />
+</p>
 
 <p>
-    However this gives really poor errors cause, whilst technically this isn’t
-    true, mypy effectively interprets this as
+    We don't need the same <mark>cast</mark> trick here because
+    <mark>MyThirdCallable</mark> is already an object that satisfies the protocol!
+</p>
+
+<p>
+    For completeness, the examples in the previous section about splitting the
+    shape of the object from the construction of that object, I'd write:
 </p>
 
 <Python
-    source={`_MFC: Callable[[] Want] = Callable[[], A]
-`}
-/>
-
-<p>
-    And doesn’t expand on the difference between Want and A in as useful a way
-    as when you compare an instance to the type.
-</p>
-
-<p>
-    One final point is I don’t need to use cast when comparing <mark>C</mark>
-    because C is already an object that satisfies <mark>Want</mark>.
-</p>
-
-<p>
-    In our examples above around splitting the shape of an object from it’s
-    constructor we end up with
-</p>
-
-<Python
-    source={`if TYPE_CHECKING:
+    source={`
+if TYPE_CHECKING:
     _S: Stuff = cast(MyStuff, None)
     _SC: StuffMaker = MyStuff.create_from_range
 `}
@@ -404,14 +469,16 @@ if TYPE_CHECKING:
 
 <p>
     I find the patterns above to be useful when generics aren’t involved, but
-    they become very useful when generics are involved. Especially when mypy
-    strict mode is used (which I recommend, lots of frustration has led to a
-    much greater understanding).
+    they become especially useful when generics are involved. Especially when
+    mypy strict mode is used (which I recommend, it makes it a lot more obvious
+    when mypy isn't complaining because it's comparing against <mark>Any</mark> types)
 </p>
 
-<p>I’ll expand on that further down, but first:</p>
+<p>I’ll expand on what I mean further down, but first:</p>
 
-<h2>runtime_checkable doesn’t do what it looks like it’s doing</h2>
+<h2>
+    The runtime_checkable decorator doesn’t do what it looks like it’s doing
+</h2>
 
 <p>
     I want to dive into the difference between an <mark>abc</mark> class and a protocol.
@@ -421,54 +488,60 @@ if TYPE_CHECKING:
 
 <p>
     In short, Protocol classes are the interface for use and abc classes are the
-    interface for implementation
-</p>
-
-<p>
-    There is a 1:n relationship between a protocol and an abc class (and
-    potentially vice verca!)
+    interface for implementation. There is a 1:n relationship between a protocol
+    and an abc class (and potentially vice verca!)
 </p>
 
 <p>
     This is relevant to a conversation about protocols because sometimes you
-    need to do checks at runtime to know what shape an object is.
+    need to do checks at runtime to know what shape an object is. And it’s
+    really tempting to do the following:
 </p>
 
-<p>And it’s really tempting to do this</p>
-
 <Python
-    source={`@runtime_checkable
+    source={`
+from typing import Protocol, runtime_checkable
+
+
+@runtime_checkable
 class MyProtocol(Protocol):
     val: str
 
-    def process(self) -> bool:...
+    def process(self) -> bool: ...
 
 
 def do_something(o: object) -> bool:
-    if isinistance(o, MyProtocol):
+    if isinstance(o, MyProtocol):
         return o.process()
 `}
 />
 
 <p>
-    The problem however is that runtime_checkable only checks that names exist
-    on the object. It does not check that those attributes are the correct type
-    (and fundamentally can’t do that kind of check at runtime, especially when
+    The problem however is that <mark>runtime_checkable</mark> only checks that
+    names exist on the object.
+    <strong>It does not check that those attributes are the correct type</strong
+    > (and fundamentally can’t do that kind of check at runtime, especially when
     generics are involved)
 </p>
 
 <p>
     It’s certainly safe to do that kind of check on known abc classes though.
-    Here’s an example that’s easy to (incorrectly) dismiss as verbose and not
-    DRY in a bad way:
+    Here’s an example that’s easy to (incorrectly) dismiss as verbose and
+    repetitive.
 </p>
 
 <Python
-    source={`class Thing(Protocol):
+    source={`
+import abc
+from typing import Protocol
+
+
+class Thing(Protocol):
     @property
     def val(self) -> str: ...
 
     def process(self) -> bool: ...
+
 
 class ThingBase(abc.Abc):
     @property
@@ -478,8 +551,10 @@ class ThingBase(abc.Abc):
     @abc.abstractmethod
     def process(self) -> bool: ...
 
-def takes_my_protocol(o: MyProtocol) -> bool:
+
+def takes_my_protocol(o: Thing) -> bool:
     return o.process()
+
 
 def do_something(o: object) -> bool:
     if isinstance(o, ThingBase):
@@ -520,13 +595,27 @@ def do_something(o: object) -> bool:
 </p>
 
 <p>
-    For example using <mark>import_string</mark> on some string you found on django
-    settings. The return of that could be literally anything. And it’s reasonable
-    to say:
+    For example on a Django project using <a
+        href="https://docs.djangoproject.com/en/5.1/ref/utils/#django.utils.module_loading.import_string"
+        >import_string</a
+    > on some string you found on django settings. The return of that could be literally
+    anything. And so we need a way to assert the type of that return matches what
+    is expected.
+</p>
+
+<p>
+    The pattern that I have landed on around this is to set an expectation that
+    what is found will be called, and we care about the type of the thing that
+    has been returned
 </p>
 
 <Python
-    source={`def get_some_instance() -> MyProtocol:
+    source={`
+from django.conf import settings
+from django.utils.module_loading import import_string
+
+
+def get_some_instance() -> MyProtocol:
     constructor = import_string(settings.SOME_CLASS)
     instance = constructor()
     assert isinstance(instance, SomeKnownABC)
@@ -534,70 +623,120 @@ def do_something(o: object) -> bool:
 `}
 />
 
-<Note>
-    I’m expanding on the ideas above that a constructor is separate from the
-    object and i’m not assuming that what I get back is a subclass of the abc,
-    but rather that it’s a callable object that gives me an instance of that
-    abc.
+<p>
+    If having known abc classes feels like an unnecessary restriction, remember
+    that a Protocol doesn't exist at runtime, but an abc class does.
+</p>
+
+<Note
+    >I think it's an anti-pattern to instead check that we've imported a
+    specific class instance like the following for the same reasons that it's a
+    good idea to split the shape of an object from how that object is created.
+
+    <Python
+        source={`
+from django.conf import settings
+from django.utils.module_loading import import_string
+
+
+def get_some_instance() -> MyProtocol:
+    constructor = import_string(settings.SOME_CLASS)
+    # anti-pattern!!!! Don't do this
+    # instead prefer isinstance on what is returned from calling the constructor
+    assert issubclass(constructor, SomeKnownABC)
+    return constructor()
+`}
+    />
 </Note>
 
 <p>
-    If you have a situation where you need to pass something in to what we get
-    from import_string then i’d strongly recommend
+    If you have a situation where you need to pass something in to that
+    callable, then we have the same problem where we need to first assert a
+    value is some concrete type before we can do anything with any kind of type
+    safety. The pattern I advocate is to expect an intermediary:
 </p>
 
 <Python
-    source={`Class Maker(abc):
+    source={`
+import abc
+from typing import Protocol
+
+from django.conf import settings
+from django.utils.module_loading import import_string
+
+
+class Want(Protocol):
+    info: str
+
+    def process() -> int: ...
+
+
+class WantMaker(abc.ABC):
     @abc.abstractmethod
-    def create_thing(stuff: Stuff) -> MyThingProtocol:...
- 
-def get_some_instance(stuff: Stuff) -> MyThingProtocol:
+    def make(info: str) -> Want: ...
+
+
+def get_some_instance(info: str) -> Want:
     constructor = import_string(settings.SOME_CLASS)
-    instance = constructor()
-    assert isinstance(instance, Maker)
-    return instance.create_thing(stuff)
+    maker = constructor()
+    assert isinstance(maker, WantMaker)
+    return maker.make(info)
 `}
 />
 
 <p>
-    This allows to ensure that the object the setting points to is able to avoid
-    any processing at import time, and means we are able to have a type safe
-    function to pass some specific object into.
+    In all cases the idea is that what we get from <mark>import_string</mark> should
+    always be treated as a callable that receives no arguments and either returns
+    the thing we want, or the ability to make the thing we want given some extra
+    runtime information.
 </p>
 
 <Note>
-    This is also nice because the abc class becomes a really thin bridge between
-    runtime and static time.
+    The reason we want to call what we get from <mark>import_string</mark> is because
+    without some interesting code (I've built some nice test helpers at work around
+    this mechanism) it will always return something at the top level of a module.
+    So making sure it's a callable means that we have the capacity to avoid import
+    time side effects and have the control to ensure specific operations only happen
+    after everything else has been loaded.
 </Note>
 
 <h2>Generics</h2>
 
 <p>
-    Things are pretty simple until we start to add generics, and then it gets a
-    bit less simple, and a little less straight forward.
+    Things are pretty simple until we start to add generics, and whilst it's
+    certainly manageable, it is a bit less simple and straight forward.
+    Personally I see that as an education problem, same as every programming
+    concept in any language. Some concepts require more effort to take on than
+    others, but it can be easy sometimes to mistake unfamiliarity as complexity.
 </p>
 
 <p>
-    The main problem we come across is that mypy doesn’t have generic type vars.
+    The main difficulty when it comes to generics in mypy is we don't have
+    "higher kinded type vars", which prevents the following:
 </p>
 
-<p>So you can’t do this</p>
-
 <Python
-    source={`T_Item = TypeVar("T")
+    source={`
+from typinng import Generic, TypeVar
+
+T_Item = TypeVar("T")
 T_MyCollection = TypeVar("T_MyCollection", bound="MyCollection")
+
 
 class MyCollection(Generic[T_Item]):
     # imagine some implementation here
     ...
 
-def add_to_collection(item: T_Item, collection: T_MyCollection[T_Item]) -> None:
-    ...
+
+def add_to_collection(item: T_Item, collection: T_MyCollection[T_Item]) -> None: ...
 `}
 />
 
 <p>
-    Unfortunately this looks intuitive, but just doesn’t do what it looks like.
+    This looks intuitive and I'd certainly love to have that, but <a
+        href="https://github.com/python/typing/issues/548"
+        >mypy doesn't support it</a
+    >
 </p>
 
 <p>
@@ -605,69 +744,135 @@ def add_to_collection(item: T_Item, collection: T_MyCollection[T_Item]) -> None:
     appears. The rules I follow are:
 </p>
 
-<ul>
+<ul class="tight-list">
     <li><p>Never make a type var from a generic class</p></li>
-    <li><p>Avoid contravariant types (pattern for this mentioned below)</p></li>
-    <li><p>Make the data generic and the apis well defined</p></li>
+    <li><p>Make the data generic and the APIs well defined</p></li>
     <li>
         <p>
-            Disconnect what is needed for the api from what is needed to
-            implement the api
+            Disconnect what is needed for the API from what is needed to
+            implement the API.
         </p>
     </li>
+    <li><p>Avoid contravariant types (pattern for this mentioned below)</p></li>
 </ul>
 
-<h2>don’t make a typevar from a generic class</h2>
+<h2>Don’t make a typevar from a generic class</h2>
 
 <p>
-    This becomes a bit more obvious when you have strict mode turned on but
+    This becomes a bit more obvious when you have strict mode turned on as
     you’ll find mypy complains about requiring the type var gets filled in. So
     for example in the example above the type var for the collection is
     implicitly represented as
 </p>
 
 <Python
-    source={`T_MyCollection = TypeVar("T_MyCollection", bound=T_MyCollection[Any])
+    source={`
+T_MyCollection = TypeVar("T_MyCollection", bound=T_MyCollection[Any])
 `}
 />
 
 <p>
-    So it becomes a question of what to fill that in with. The problem becomes
-    whatever we fill it in with will restrict that type var in a way that cannot
-    be customised. And it’s inevitable to reach a point where we end up with
-    some code that we want to extend such that the Item has some extra method on
-    it and it becomes a liskov violation to depend on that extra method.
+    So it becomes a question of what to fill have in place of that <mark
+        >Any</mark
+    >. The problem becomes whatever we fill it in with will restrict that type
+    var in a way that cannot be customised. And it’s inevitable to reach a point
+    where we end up with some code that we want to extend such that the Item has
+    some extra method on it and it becomes a liskov violation to depend on that
+    extra method.
+</p>
+
+<Note
+    >In mypy <mark>object</mark> and <mark>Any</mark> are both wildcards but
+    <mark>object</mark>
+    represents no functionality whereas <mark>Any</mark> represents no types,
+    and as a general rule avoiding <mark>Any</mark> makes for code that ages less
+    poorly</Note
+>
+
+<Python
+    source={`
+import dataclasses
+from collections.abc import Sequence
+from typing import Protocol, TypeVar
+
+T_Item = TypeVar("T_Item", bound="Item")
+T_Collection = TypeVar("T_Collection", bound="Collection[Item]")
+
+
+class Item(Protocol):
+    a: int
+
+
+class Collection(Protocol[T_Item]):
+    items: Sequence[Item]
+
+
+@dataclasses.dataclass
+class ItemWithMore:
+    a: int
+    b: str
+
+
+class MyCollection(Collection[ItemWithMore]):
+    items: Sequence[ItemWithMore]
+
+
+def takes_collection(collection: T_Collection) -> T_Collection:
+    # Something happens with the collection here
+    return collection
+
+
+collection = MyCollection(items=[ItemWithMore(a=1, b="two")])
+after_doing_something = takes_collection(collection)
+
+first_item = after_doing_something.items[0]
+first_item.b  # attr-defined error cause T_Collection is defined in terms of Item
+`}
+/>
+
+<p>
+    This however is less of a problem than it first seems, cause a type var is
+    used to represent different API surfaces and isn't necessary to represent
+    different implementations for the same API surface. We don't need to use a
+    type var for something that has a stable API.
 </p>
 
 <p>
-    The argument I make is that it’s far easier to have stable apis that hold
-    changeable apis.
-</p>
-
-<p>
-    For example it’s far easier to string through different data if instead of a
-    variable api for the collection, we instead have a transformation to a
-    different collection type
+    The example above is a very simple case of the problem but the one change to
+    make the types carry through would be to not have the <mark
+        >T_Collection</mark
+    > type var at all:
 </p>
 
 <Python
-    source={`#I need an example here, too hard to make on a phone#
+    source={`
+def takes_collection(collection: Collection[T_Item]) -> T_Collection[T_Item]:
+    # Something happens with the collection here
+    return collection
 `}
 />
 
 <p>
-    The key thing to remember is that the only time a type var is necessary is
-    when the api surface may change. If a type var is used to represent
-    different functionality expressed through the same api surface then a
-    protocol will be perfectly sufficient. And the game becomes making it
-    unnecessary to have a changing api surface
+    Essentially we want to make it so we are defining a stable API in terms of
+    an unstable source of data and then it becomes a case of spending the design
+    effort to make sure that the stable API surface is defined by what is being
+    achieved rather than in terms of how it's being achieved.
 </p>
 
-<h2>a side note about variance</h2>
+<p>
+    I recommend <a href="https://www.youtube.com/watch?v=OMPfEXIlTVE"
+        >this Sandi Metz talk</a
+    > talking about using composition to expand an API surface
+</p>
 
-<p>There are three general types of typevars in mypy</p>
+<h2>A side note about variance</h2>
 
-<ul>
+<p>
+    TypeVars have a property to them called "variance", of which there are three
+    types:
+</p>
+
+<ul class="tight-list">
     <li><p>Invarant</p></li>
     <li><p>Covariant</p></li>
     <li><p>Contravariant</p></li>
@@ -680,8 +885,8 @@ def add_to_collection(item: T_Item, collection: T_MyCollection[T_Item]) -> None:
 
 <p>
     So say we have a container generic called <mark>Container</mark> and it
-    takes a single TypeVar of any type. And we have two classes <mark>A</mark>
-    and <mark>B</mark> we want to know if
+    takes a single TypeVar, and we have two classes <mark>A</mark>
+    and <mark>B</mark>. We want to know if
     <mark>Collection[A]</mark> can be used where a <mark>Collection[B]</mark> is
     required.
 </p>
@@ -689,32 +894,29 @@ def add_to_collection(item: T_Item, collection: T_MyCollection[T_Item]) -> None:
 <p>So say our Collection is defined as</p>
 
 <Python
-    source={`T_Item = TypeVar("T_Item")
+    source={`
+T_Item = TypeVar("T_Item")
 
-class Collection(Protocol[T_Item]):
-    ...
+
+class Collection(Protocol[T_Item]): ...
 `}
 />
 
 <p>
-    In this case <mark>T_Item</mark> is "invariant". T_Item can be "covariant" if
-    we say instead
+    In this case <mark>T_Item</mark> is defined as "invariant".
+    <mark>T_Item</mark> can be "covariant" if we say instead
 </p>
 
-<Python
-    source={`T_CO_Item = TypeVar("T_CO_Item", covarant=True
-`}
-/>
+<Python source={`T_CO_Item = TypeVar("T_CO_Item", covarant=True`} />
 
 <p>Or contravariant if we say</p>
 
-<Python
-    source={`T_COT_Item = TypeVar("T_COT_Item", contravariant=True
-`}
-/>
+<Python source={`T_COT_Item = TypeVar("T_COT_Item", contravariant=True`} />
 
 <Note>
-    The name is irrelevant, but I do name them this way to visually disambiguate
+    The name is irrelevant, but I do name them as "T_XXX" to visually
+    disambiguate type vars from other variables. And I never use "T" or "U" as
+    doing a find in a document for a single capital "T" is an awful experience.
 </Note>
 
 <p>
@@ -748,47 +950,64 @@ class Collection(Protocol[T_Item]):
 <p>To show what I mean:</p>
 
 <Python
-    source={`class ImmutableCollection(Protocol[T_CO_Item]):
+    source={`
+from collections.abc import Sequence
+from typing import Protocol, TypeVar
+
+T_CO_Item = TypeVar("T_CO_Item", covariant=True)
+T_Item = TypeVar("T_Item")
+
+
+class ImmutableCollection(Protocol[T_CO_Item]):
     @property
     def items(self) -> Sequence[T_CO_Item]: ...
+
 
 class MutableCollection(Protocol[T_Item]):
     @property
     def items(self) -> Sequence[T_Item]: ...
-    def add_item(self, item: T_Item) -> None:
-        ...
+
+    def add_item(self, item: T_Item) -> None: ...
 `}
 />
 
 <p>
-    In our mutable collection, the item is used as input in add_item and so we
-    cannot make that type var be covariant.
+    In our mutable collection, the item is used as an input in <mark
+        >add_item</mark
+    > and so we cannot make that type var be covariant.
 </p>
 
 <p>This is why the following is a liskov violation</p>
 
 <Python
-    source={`class A:
-    def hello() -> None:...
+    source={`
+import dataclasses
+
+
+class A:
+    def hello() -> None: ...
+
 
 class B(A):
-    def hi() -> None:...
+    def hi() -> None: ...
 
-@attrs.frozen
+
+@dataclasses.dataclass(frozen=True)
 class Thing:
     items: list[A]
-   
+
     def process(self) -> None:
-        for item in items:
+        for item in self.items:
             item.hello()
 
-@attrs.frozen(frozen=True)
+
+@dataclasses.dataclass(frozen=True)
 class ThingChild(Thing):
-    items: list[B] # liskov violation!
-   
+    items: list[B]  # liskov violation!
+
     def process(self) -> None:
         super().process()
-        for item in items:
+        for item in self.items:
             item.hi()
 `}
 />
@@ -796,44 +1015,61 @@ class ThingChild(Thing):
 <p>Because say we have a function that takes one of these Thing instances</p>
 
 <Python
-    source={`def processes_thing(thing: Thing) -> None:
+    source={`
+def processes_thing(thing: Thing) -> None:
     thing.items.append(A())
     thing.process()
 `}
 />
 
 <p>
-    We should be able to pass an instance of ThingChild into this function but
-    if we do so we don’t realise in processes_thing that we need to append an
+    We should be able to pass an instance of <mark>ThingChild</mark> into this function
+    but if we do so we don’t realise in processes_thing that we need to append an
     instance of B into the items!
 </p>
 
-<p>This is also a lesson about mutability in public interfaces being bad.</p>
-
-<p>The way to solve this is something like</p>
+<p>
+    The way to solve this is to make the actions here a part of the explicit
+    public API surface:
+</p>
 
 <Python
-    source={`class Processor(Protocol):
-    def add_one(self) -> None:...
-    def process(self) -> None:...
+    source={`
+import abc
+import dataclasses
+from collections.abc import MutableSequence
+from typing import Generic, Protocol, TypeVar
+
+T_Item = TypeVar("T_Item")
+
+
+# The public interface doesn't need to be generic!
+class Processor(Protocol):
+    def add_one(self) -> None: ...
+    def process(self) -> None: ...
+
 
 class A:
-    def hello() -> None:...
+    def hello() -> None: ...
+
 
 class B(A):
-    def hi() -> None:...
+    def hi() -> None: ...
 
+
+# The implementation is generic because the information used
+# to satisfy "Processor" likely has an unstable API surface.
 class ThingBase(Generic[T_Item], abc.Abc):
-    _items: list[T_Item]
+    _items: MutableSequence[T_Item]
 
     @abc.abstractmethod
-    def add_one(self) -> None:...
-   
-    @abc.abstractmethod
-    def process(self) -> None:
-        ...
+    def add_one(self) -> None: ...
 
-@attrs.frozen
+    @abc.abstractmethod
+    def process(self) -> None: ...
+
+
+@dataclasses.dataclass(frozen=True)
 class ThingA(ThingBase[A]):
     _items: list[A]
 
@@ -841,10 +1077,11 @@ class ThingA(ThingBase[A]):
         self._items.append(A())
 
     def process(self) -> None:
-        for item in items:
+        for item in self._items:
             item.hello()
 
-@attrs.frozen
+
+@dataclasses.dataclass(frozen=True)
 class ThingB(ThingBase[B]):
     _items: list[B]
 
@@ -856,6 +1093,7 @@ class ThingB(ThingBase[B]):
         for item in self.items:
             item.hello()
 
+
 def processes_thing(thing: Processor) -> None:
     thing.add_one()
     thing.process()
@@ -866,13 +1104,14 @@ def processes_thing(thing: Processor) -> None:
     This works because the Processor interface does not care about the how, it
     only cares about the what. So keeping the specifics of the Item as an
     implementation detail means we are able to make an orchestrator (what
-    processes_thing is) that works for many different implementations without
-    itself being defined as generic.
+    <mark>processes_thing</mark> is) that works for many different implementations
+    without itself being defined as generic.
 </p>
 
 <Note>
-    We can pass in a list[B] to the constructor of ThingA because input
-    arguments are always contravariant.
+    Note we can pass in a list[B] to the constructor of <mark>ThingA</mark> because
+    input arguments are always contravariant, which means extra API surface is ignored
+    rather than remembered.
 </Note>
 
 <p>
@@ -882,11 +1121,11 @@ def processes_thing(thing: Processor) -> None:
     figuring out what happens when we substitute in a different implementation.
 </p>
 
-<h2>different data, same functionality</h2>
+<h2>Different data, same functionality</h2>
 
 <p>
-    Trying to design an api from protocols first becomes a lot easier when as
-    the developer you recognise that what the protocol needs does not need to
+    Trying to design an API protocols first becomes a lot easier when as the
+    developer you recognise that what the protocol needs does not need to
     include everything the implementation needs.
 </p>
 
@@ -896,31 +1135,7 @@ def processes_thing(thing: Processor) -> None:
     of the data/logic flow had the wrong responsibilities by being awkward to
     work with. The more I was able to make for good coupling and cohesion in the
     design, the more helpful the protocols became. This however is the part
-    that’s hard to sell: the need for a lot of upfront patience and
-    perseverance. Other than patterns that discourage footguns I don’t have a
-    great answer to that, but I think the same is true for every part of what we
-    do as programmers.
-</p>
-
-<p>
-    I’ve found that often when some object is made generic, it’s external api
-    surface stays the same, the part that’s different is the shape of the data
-    it holds. And so the solution is to separate the idea of that external api
-    surface from how it’s implemented.
-</p>
-
-<Python
-    source={`
-# I need some kind of diagram venn thing happening here showing the external api is made up by combining different interfaces# 
-`}
-/>
-
-<p>
-    The hat metaphor is really useful for api design. A role is like a hat,
-    there are many hats, and any single person can put on any combination of
-    hats. As an api designer I have to think of how the api is used by users of
-    the api, implementors of the api, and from the perspective of people
-    benefiting from the api being used to solve a problem. The api is very
-    different things to these different perspectives and we have the tools to
-    hide and show the parts that are relevant to each hat.
+    that’s hard to sell: the need for a lot of upfront patient design work.
+    Other than patterns that discourage easy-to-avoid foot guns I don’t have
+    good answers for this problem yet.
 </p>
