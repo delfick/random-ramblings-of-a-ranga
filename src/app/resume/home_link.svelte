@@ -1,61 +1,61 @@
 <script lang="ts">
-  import avatar from "@assets/avatar.svg";
+    import avatar from "@assets/avatar.svg";
 
-  export let inline = false;
+    export let inline = false;
 
-  $: className = inline ? "resume-home-link-inline" : "resume-home-link";
+    $: className = inline ? "resume-home-link-inline" : "resume-home-link";
 </script>
 
 <a href="/" class={className} style:display="none">
-  <img
-    width={inline ? "40px" : "52px"}
-    height={inline ? "30px" : "50px"}
-    src={avatar}
-    alt="The delfick avatar"
-  />
+    <img
+        width={inline ? "40px" : "52px"}
+        height={inline ? "30px" : "50px"}
+        src={avatar}
+        alt="The delfick avatar"
+    />
 </a>
 
 <style lang="scss">
-  @media screen and (min-width: 769px) {
-    .resume-home-link {
-      top: 20px;
-      left: 20px;
-      float: left;
-      position: absolute;
+    @media screen and (min-width: 769px) {
+        .resume-home-link {
+            top: 20px;
+            left: 20px;
+            float: left;
+            position: absolute;
 
-      display: block !important;
+            display: block !important;
 
-      img {
-        height: 50px;
-      }
+            img {
+                height: 50px;
+            }
+        }
     }
-  }
 
-  @media screen and (max-width: 768px) {
-    .resume-home-link-inline {
-      float: left;
+    @media screen and (max-width: 768px) {
+        .resume-home-link-inline {
+            float: left;
 
-      display: block !important;
+            display: block !important;
 
-      img {
-        height: 30px;
-        padding-right: 10px;
-        margin-bottom: -17px;
-      }
+            img {
+                height: 30px;
+                padding-right: 10px;
+                margin-bottom: -17px;
+            }
+        }
     }
-  }
 
-  @media screen and (width: 768px) {
-    .resume-home-link-inline {
-      float: left;
+    @media screen and (width: 768px) {
+        .resume-home-link-inline {
+            float: left;
 
-      display: block !important;
+            display: block !important;
 
-      img {
-        height: 30px;
-        padding-right: 10px;
-        margin-bottom: -17px;
-      }
+            img {
+                height: 30px;
+                padding-right: 10px;
+                margin-bottom: -17px;
+            }
+        }
     }
-  }
 </style>
