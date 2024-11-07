@@ -44,6 +44,14 @@
         :global(ul) {
             list-style: disc;
         }
+
+        :global(ol) {
+            list-style: decimal;
+        }
+
+        :global(.tight-list) {
+            line-height: 0;
+        }
     }
 
     :global(body.dark) {
