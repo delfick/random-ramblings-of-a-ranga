@@ -15,10 +15,9 @@
     My appreciation for a type checker started when I learnt how to write Scala
     and then cemented when I spent five years writing Go for LIFX. Around 2022 I
     started to figure out how to use mypy and what it looks like to take my
-    style of Python and formalise how everything fits together and from the
-    start of 2023 I've had a few sprints where I tried to push the limits of
-    mypy and I'm gonna use this post to explain the approach I've currently
-    landed on.
+    style of Python and formalise how everything fits together. From the start
+    of 2023 I've had a few sprints where I tried to push the limits of mypy and
+    I'm gonna use this post to explain the approaches I've currently landed on.
 </p>
 
 <h2>What is a typing.Protocol?</h2>
@@ -45,8 +44,8 @@
 </p>
 
 <p>
-    For example, if I want to represent an object that has at least a <code
-        >blah</code
+    For example, if I want to represent an object that has at least a <mark
+        >blah</mark
     > method:
 </p>
 
@@ -349,6 +348,9 @@ class MySecondCallable:
 
 MyThirdCallable = lambda: True
 
+###############################################
+## The interesting part starts here::
+
 if TYPE_CHECKING:
     _MFC: Want = cast(MyFirstCallable, None)
     _MSC: Want = cast(MySecondCallable, None)
@@ -356,7 +358,7 @@ if TYPE_CHECKING:
 `}
 />
 
-<p>There are several parts to this orchestra:</p>
+<p>There are several parts to this <mark>if TYPE_CEHCKING</mark> block:</p>
 
 <ul class="tight-list">
     <li><p>The if condition</p></li>
@@ -403,8 +405,8 @@ if TYPE_CHECKING:
 <Python source={`_MFC: Want = cast(A, None)`} />
 
 <p>
-    Mypy will interpret this as saying we have a variable that has type <code
-        >Want</code
+    Mypy will interpret this as saying we have a variable that has type <mark
+        >Want</mark
     >
     and we are assigning to it an instance of <mark>A</mark> This is useful
     because if A does not in fact satisfy <mark>Want</mark> then mypy will complain
@@ -449,7 +451,7 @@ if TYPE_CHECKING:
 
 <p>
     We don't need the same <mark>cast</mark> trick here because
-    <mark>MyThirdCallable</mark> is already an object that satisfies the protocol!
+    <mark>MyThirdCallable</mark> is already an object that satisfies the protocol
 </p>
 
 <p>
@@ -489,7 +491,7 @@ if TYPE_CHECKING:
 <p>
     In short, Protocol classes are the interface for use and abc classes are the
     interface for implementation. There is a 1:n relationship between a protocol
-    and an abc class (and potentially vice verca!)
+    and an abc class (and potentially vice verca)
 </p>
 
 <p>
@@ -567,7 +569,8 @@ def do_something(o: object) -> bool:
     about abstract classes that satisfy the protocol but I’d argue the
     situations where we’ve dynamically created some object that can be anything
     should be limited and part of that contract is saying it should be
-    implemented in terms of some specific abc class.
+    implemented in terms of some specific class (Protocol classes aren't "real"
+    in the same way other classes are).
 </p>
 
 <p>
@@ -584,8 +587,9 @@ def do_something(o: object) -> bool:
 <p>
     So when we have a value that only exists at runtime, we can’t represent it
     only in terms of type checking concepts. We must first represent it as a
-    concrete runtime object (in this case a subclass of some specific abc)
-    before we can then represent it in terms of a type checking concept.
+    concrete runtime object (in this case a subclass of some specific non
+    protocol class) before we can then represent it in terms of a static time
+    concept.
 </p>
 
 <p>
@@ -605,8 +609,8 @@ def do_something(o: object) -> bool:
 
 <p>
     The pattern that I have landed on around this is to set an expectation that
-    what is found will be called, and we care about the type of the thing that
-    has been returned
+    what is found will be called and we care about the type of whatever we get
+    from doing that invocation.
 </p>
 
 <Python
@@ -625,7 +629,7 @@ def get_some_instance() -> MyProtocol:
 
 <p>
     If having known abc classes feels like an unnecessary restriction, remember
-    that a Protocol doesn't exist at runtime, but an abc class does.
+    that a Protocol is a static time concept rather than a run time concept.
 </p>
 
 <Note
@@ -717,7 +721,7 @@ def get_some_instance(info: str) -> Want:
 
 <Python
     source={`
-from typinng import Generic, TypeVar
+from typing import Generic, TypeVar
 
 T_Item = TypeVar("T")
 T_MyCollection = TypeVar("T_MyCollection", bound="MyCollection")
@@ -744,7 +748,7 @@ def add_to_collection(item: T_Item, collection: T_MyCollection[T_Item]) -> None:
     appears. The rules I follow are:
 </p>
 
-<ul class="tight-list">
+<ul>
     <li><p>Never make a type var from a generic class</p></li>
     <li><p>Make the data generic and the APIs well defined</p></li>
     <li>
@@ -753,7 +757,7 @@ def add_to_collection(item: T_Item, collection: T_MyCollection[T_Item]) -> None:
             implement the API.
         </p>
     </li>
-    <li><p>Avoid contravariant types (pattern for this mentioned below)</p></li>
+    <li><p>Avoid contravariant types</p></li>
 </ul>
 
 <h2>Don’t make a typevar from a generic class</h2>
@@ -767,18 +771,17 @@ def add_to_collection(item: T_Item, collection: T_MyCollection[T_Item]) -> None:
 
 <Python
     source={`
-T_MyCollection = TypeVar("T_MyCollection", bound=T_MyCollection[Any])
+T_MyCollection = TypeVar("T_MyCollection", bound="MyCollection[Any]")
 `}
 />
 
 <p>
-    So it becomes a question of what to fill have in place of that <mark
-        >Any</mark
-    >. The problem becomes whatever we fill it in with will restrict that type
-    var in a way that cannot be customised. And it’s inevitable to reach a point
-    where we end up with some code that we want to extend such that the Item has
-    some extra method on it and it becomes a liskov violation to depend on that
-    extra method.
+    So it becomes a question of what to have in place of that <mark>Any</mark>.
+    The problem becomes whatever we fill it in with will restrict that type var
+    in a way that cannot be further specialised. And it’s inevitable to reach a
+    point where we end up with some code that we want to extend such that the
+    Item has some extra method on it and it becomes a liskov violation to depend
+    on that extra method.
 </p>
 
 <Note
@@ -837,6 +840,12 @@ first_item.b  # attr-defined error cause T_Collection is defined in terms of Ite
     type var for something that has a stable API.
 </p>
 
+<Note>
+    When I say "stable" API, what I effectively mean is that the available
+    attributes and methods on the API, inputs, and outputs don't change
+    depending on the specifics of the implementation
+</Note>
+
 <p>
     The example above is a very simple case of the problem but the one change to
     make the types carry through would be to not have the <mark
@@ -855,8 +864,10 @@ def takes_collection(collection: Collection[T_Item]) -> T_Collection[T_Item]:
 <p>
     Essentially we want to make it so we are defining a stable API in terms of
     an unstable source of data and then it becomes a case of spending the design
-    effort to make sure that the stable API surface is defined by what is being
-    achieved rather than in terms of how it's being achieved.
+    effort to make sure that the stable API surface is defined by <strong
+        >what</strong
+    >
+    is being achieved rather than in terms of <strong>how</strong> it's being achieved.
 </p>
 
 <p>
@@ -879,8 +890,9 @@ def takes_collection(collection: Collection[T_Item]) -> T_Collection[T_Item]:
 </ul>
 
 <p>
-    These terms relate to how the relationship between types in different
-    containers affect the relationship between those containers.
+    A handy simplification to help understand the difference in variance is that
+    these terms relate to how the types used to implement a container affects
+    how different implementations can be substituted.
 </p>
 
 <p>
@@ -923,14 +935,14 @@ class Collection(Protocol[T_Item]): ...
     If the type var is contravariant then <mark>Collection[A]</mark> can be used
     where
     <mark>Collection[B]</mark> is required if <mark>B</mark> is always a subtype
-    of <mark>A</mark>
+    of <mark>A</mark> (extra API surface is always dropped)
 </p>
 
 <p>
     If the type var is covariant then <mark>Collection[A]</mark> can be used
     where
     <mark>Collection[B]</mark> is required if <mark>A</mark> is always a subtype
-    of <mark>B</mark>
+    of <mark>B</mark> (extra API surface is always kept)
 </p>
 
 <p>An invariant type var is when the other two rules can be violated.</p>
@@ -1124,8 +1136,8 @@ def processes_thing(thing: Processor) -> None:
 <h2>Different data, same functionality</h2>
 
 <p>
-    Trying to design an API protocols first becomes a lot easier when as the
-    developer you recognise that what the protocol needs does not need to
+    Trying to design an API using protocols first becomes a lot easier when as
+    the developer you recognise that what the protocol needs does not need to
     include everything the implementation needs.
 </p>
 
@@ -1135,9 +1147,11 @@ def processes_thing(thing: Processor) -> None:
     of the data/logic flow had the wrong responsibilities by being awkward to
     work with. The more I was able to make for good coupling and cohesion in the
     design, the more helpful the protocols became. This however is the part
-    that’s hard to sell: the need for a lot of upfront patient design work.
-    Other than patterns that discourage easy-to-avoid foot guns I don’t have
-    good answers for this problem yet.
+    that’s hard to sell: the need for a decent level of patient design work.
+    Other than patterns that discourage easy-to-avoid foot guns I personally
+    don’t have good answers for how to carry out that design work (the way I
+    think about API design is highly contextual and difficult for me to
+    generalise).
 </p>
 
 <h2>Avoid contravariant type vars</h2>
@@ -1150,7 +1164,7 @@ def processes_thing(thing: Processor) -> None:
 </p>
 
 <p>
-    As mentioned before a contravariant type var is used to represent a value
+    As mentioned before, a contravariant type var is used to represent a value
     where extra API surface is always dropped:
 </p>
 
@@ -1253,12 +1267,12 @@ if TYPE_CHECKING:
 />
 
 <p>
-    If this is the extent of requirements then it's likely to have a record
-    method directly on the items themselves, but it's easy to imagine a scenario
-    where there's a 1:n relationship between item and "recording" functionality
-    and this pattern lets us separate the action of this "record" from what that
-    actually means so that it's the caller that controls what that means rather
-    than the orchestrator.
+    If this is the extent of requirements then it's likely reasonable to only
+    need to have a record method directly on the items themselves, but it's easy
+    to imagine a scenario where there's a 1:n relationship between item and
+    "recording" functionality and this pattern lets us separate the action of
+    this "record" from what that actually means so that it's the caller that
+    controls what that means rather than the orchestrator.
 </p>
 
 <p>To be more explicit about what the pattern is, when you have this:</p>
