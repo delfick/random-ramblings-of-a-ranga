@@ -1139,3 +1139,214 @@ def processes_thing(thing: Processor) -> None:
     Other than patterns that discourage easy-to-avoid foot guns I don’t have
     good answers for this problem yet.
 </p>
+
+<h2>Avoid contravariant type vars</h2>
+
+<p>
+    Avoid is perhaps too strong a word, but in general, I find that having a
+    contravariant type var can be restrictive in a way that isn't immediately
+    obvious, and I do have a pattern that resolves that at the cost of some
+    minor extra boilerplate
+</p>
+
+<p>
+    As mentioned before a contravariant type var is used to represent a value
+    where extra API surface is always dropped:
+</p>
+
+<Python
+    source={`
+import dataclasses
+from typing import TYPE_CHECKING, Protocol, TypeVar, cast
+
+T_COT_Item = TypeVar("T_COT_Item", contravariant=True)
+
+
+class Recorder(Protocol[T_COT_Item]):
+    def record(self, item: T_COT_Item) -> None: ...
+
+
+@dataclasses.dataclass(frozen=True)
+class ItemA:
+    a: int
+
+
+@dataclasses.dataclass(frozen=True)
+class ItemB(ItemA):
+    b: int
+
+
+class RecorderA:
+    def record(self, item: ItemA) -> None:
+        print(item.a)
+
+
+class RecorderB:
+    def record(self, item: ItemB) -> None:
+        print(item.a, item.b)
+
+
+def record_things(recorder: Recorder[ItemA]) -> None:
+    recorder.record(ItemA(a=1))
+
+
+# This fails because Recorder[ItemB] cannot be used where Recorder[ItemA] is required
+record_things(RecorderB())
+
+if TYPE_CHECKING:
+    _RA: Recorder[ItemA] = cast(RecorderA, None)
+    _RB: Recorder[ItemB] = cast(RecorderB, None)
+`}
+/>
+
+<p>
+    The pattern I prefer is to lean into "the only problem layers don't solve is
+    having too many layers" and create an intermediary object that is specific
+    to what is being operated on. This is a bit of a subtle distinction in this
+    example, but it would look like this:
+</p>
+
+<Python
+    source={`
+import dataclasses
+from typing import TYPE_CHECKING, Protocol, cast
+
+
+class Recorder(Protocol):
+    def record(self) -> None: ...
+
+
+@dataclasses.dataclass(frozen=True)
+class ItemA:
+    a: int
+
+
+class ItemARecorder:
+    item: ItemA
+
+    def record(self) -> None:
+        print(self.item.a)
+
+
+@dataclasses.dataclass(frozen=True)
+class ItemB(ItemA):
+    b: int
+
+
+class ItemBRecorder:
+    item: ItemB
+
+    def record(self) -> None:
+        print(self.item.a, self.item.b)
+
+
+def record_things(recorder: Recorder) -> None:
+    recorder.record()
+
+
+record_things(ItemARecorder(item=ItemA(a=1)))
+
+if TYPE_CHECKING:
+    _RA: Recorder = cast(ItemARecorder, None)
+    _RB: Recorder = cast(ItemBRecorder, None)
+`}
+/>
+
+<p>
+    If this is the extent of requirements then it's likely to have a record
+    method directly on the items themselves, but it's easy to imagine a scenario
+    where there's a 1:n relationship between item and "recording" functionality
+    and this pattern lets us separate the action of this "record" from what that
+    actually means so that it's the caller that controls what that means rather
+    than the orchestrator.
+</p>
+
+<p>To be more explicit about what the pattern is, when you have this:</p>
+
+<Python
+    source={`
+from typing import Protocol, TypeVar
+
+T_COT_Item = TypeVar("T_COT_Item", contravariant=True)
+
+
+class Thing(Protocol[T_COT_Item]):
+    def do_something(self, item: T_COT_Item) -> None: ...
+`}
+/>
+
+<p>To instead have this:</p>
+
+<Python
+    source={`
+from typing import Protocol, TypeVar
+
+T_Item = TypeVar("T_Item")
+
+
+class Thing(Protocol[T_Item]):
+    item: T_Item
+
+    def do_something(self) -> None: ...
+`}
+/>
+
+<p>Or this:</p>
+
+<Python
+    source={`
+from typing import Protocol, TypeVar
+
+T_CO_Item = TypeVar("T_CO_Item", covariant=True)
+
+
+class Thing(Protocol[T_CO_Item]):
+    @property
+    def item(self) -> T_CO_Item: ...
+
+    def do_something(self) -> None: ...
+`}
+/>
+
+<p>
+    Such that the changeable API surface being acted on is separate from the
+    signature of the function doing the action.
+</p>
+
+<Note
+    >Note that in both these situations, we are able to represent the two sides
+    of the design coin such that the implementation is generic and the usage is
+    not
+    <Python
+        source={`
+import dataclasses
+from typing import TYPE_CHECKING, Protocol, TypeVar, cast
+
+T_CO_Item = TypeVar("T_CO_Item", covariant=True)
+
+
+class ForImplementation(Protocol[T_CO_Item]):
+    @property
+    def item(self) -> T_CO_Item: ...
+
+    def do_something(self) -> None: ...
+
+
+class ForUse(Protocol):
+    def do_something(self) -> None: ...
+
+
+@dataclasses.dataclass(frozen=True)
+class Implementation:
+    item: MyItem
+
+    def do_something(self) -> None:
+        self.item.take_over_the_world()
+
+
+if TYPE_CHECKING:
+    _II: ForImplementation[MyItem] = cast(Implementation, None)
+    _IU: ForUse = cast(Implementation, None)
+`}
+    />
+</Note>
