@@ -1550,3 +1550,34 @@ def get_some_specific_instance() -> Collection[Item]:
     return get_some_instance(Item)
 `}
 />
+
+<h2>So why not pass around the base classes instead?</h2>
+
+<p>
+    When I think about API design, I think of it as the "two sides of the coin"
+    as I've mentioned in passing above, where you have the API from the
+    perspective of how it's used and the API from the perspective of how it's
+    implemented
+</p>
+
+<p>
+    In my experience, there generally isn't a 1:1 relationship between the API
+    surface from those two perspectives because the user doesn't want to change
+    their code when the implementation changes, and different implementations
+    tend to think about the solution in different ways.
+</p>
+
+<p>
+    This means it's possible, and good, to create different abc classes that all
+    satisfy the same interface, but prioritise different aspects of how to
+    achieve that interface. This means you may have an abc class that already
+    has an implementation for the primary interface and requires subclasses to
+    implement a different set of methods to fill in the blanks. Whereas a
+    different abc for the same primary interface may do the same but for an
+    entirely different set of methods, or indeed only care about the primary
+    interface. In all cases, these extra methods are not relevant to the primary
+    interface and the caller should not know about them, and the static type
+    checker ain't gonna complain about you accessing underscore prefixed
+    attributes, but it will complain about attributes that statically aren't
+    available!
+</p>
