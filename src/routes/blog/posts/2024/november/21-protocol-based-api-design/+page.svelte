@@ -1582,6 +1582,18 @@ def get_some_specific_instance() -> Collection[Item]:
     available!
 </p>
 
+<p>
+    There's also the scenario where different parts of the codebase may have
+    different, non overlapping needs from the same object. Perhaps one part of
+    the codebase only requires an interface for writing data, whereas a
+    different part of the codebase only requires reading data. This is
+    especially obvious when you create stub implementations for tests and find
+    yourself creating a method that raises <mark>NotImplementedError</mark> cause
+    that method is part of the interface, but irrelevant to that part of the code.
+    Using a protocol we are able to specify the API surface we need, without imposing
+    any restriction or expectation around what is needed to implement that API surface.
+</p>
+
 <h2>Namespaces are one honking great idea</h2>
 
 <p>
