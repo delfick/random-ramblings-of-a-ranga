@@ -1693,3 +1693,14 @@ my_amazing_code.protocols
 `}
     />
 </Note>
+
+<h2>Thanks for reading</h2>
+
+<p>
+    Hopefully this has been useful. It's a different mindset to think about
+    Python from a static perspective. It's such a dynamic language and the best
+    kind of python is able to lean into that without relying on hidden side
+    effects. I really do believe that having static types can be used to add
+    structure without removing flexibility, and tends to only very awkward when
+    we're doing things we shouldn't be doing anyways!
+</p>
