@@ -1396,3 +1396,157 @@ if TYPE_CHECKING:
 `}
     />
 </Note>
+
+<h2>The import_string pattern for generics</h2>
+
+<p>
+    The pattern I introduced above to make <mark>import_string</mark> type safe also
+    works really well for generics. For example, in comparison to this incorrect
+    implementation:
+</p>
+
+<Python
+    source={`
+from collections.abc import Sequence
+from typing import Protocol, TypeVar
+
+from django.conf import settings
+from django.utils.module_loading import import_string
+
+T_Item = TypeVar("T_Item")
+
+
+class Collection(Protocol[T_Item]):
+    @property
+    def calculate(self) -> Sequence[T_Item]: ...
+
+
+# There's nothing to bind to T_Item here!
+def get_some_instance() -> Collection[T_Item]:
+    return import_string(settings.MY_COLLECTION_CLASS)()
+
+
+class Item:
+    pass
+
+
+def get_some_specific_instance() -> Collection[Item]:
+    return import_string(settings.MY_COLLECTION_CLASS)()
+`}
+/>
+
+<p>
+    In both of our getter functions here, there's nothing to confirm that what
+    we're returning matches what we've specified. And, even worse, that first
+    one effectively returns a shrug emoji!
+</p>
+
+<p>
+    Let's handle the slightly less straightforward one first,
+    <mark>get_some_instance</mark>
+</p>
+
+<p>
+    First we need to be able to bind that type var. Essentially a type var needs
+    to be associated with an input to be bound to something specific.
+    Essentially like simple algebra, given "X + 3", substitute in a value for
+    "X" to solve the equation
+</p>
+
+<Python
+    source={`
+def get_some_instance(item_kls: type[T_Item]) -> Collection[T_Item]:
+    return import_string(settings.MY_COLLECTION_CLASS)()
+`}
+/>
+
+<p>
+    And then we can create our intermediary that can create the final result in
+    a way that's type safe
+</p>
+
+<Python
+    source={`
+import abc
+from collections.abc import Sequence
+from typing import Generic, Protocol, TypeVar
+
+from django.conf import settings
+from django.utils.module_loading import import_string
+
+T_Item = TypeVar("T_Item")
+
+
+class Collection(Protocol[T_Item]):
+    @property
+    def calculate(self) -> Sequence[T_Item]: ...
+
+
+class CollectionMaker(Generic[T_Item], abc):
+    @abc.abstractmethod
+    def make(self, item_kls: type[T_Item]) -> Collection[T_Item]: ...
+
+
+def get_some_instance(item_kls: type[T_Item]) -> Collection[T_Item]:
+    constructor = import_string(settings.MY_COLLECTION_CLASS)()
+    assert isinstance(constructor, CollectionMaker)
+    return constructor.make(item_kls)
+`}
+/>
+
+<p>
+    The other getter might be a little simpler depending on whether our base
+    class is generic or not. Easiest case being we have a base class that isn't
+    generic itself:
+</p>
+
+<Python
+    source={`
+import abc
+from collections.abc import Sequence
+from typing import TYPE_CHECKING, Protocol, TypeVar, cast
+
+from django.conf import settings
+from django.utils.module_loading import import_string
+
+T_Item = TypeVar("T_Item")
+
+
+class Collection(Protocol[T_Item]):
+    @property
+    def calculate(self) -> Sequence[T_Item]: ...
+
+
+class Item:
+    pass
+
+
+class SpecificCollection(abc):
+    @abc.abstractmethod
+    @property
+    def calculate(self) -> Sequence[Item]: ...
+
+
+def get_some_specific_instance() -> Collection[Item]:
+    instance = import_string(settings.MY_COLLECTION_CLASS)()
+    assert isinstance(instance, SpecificCollection)
+    return instance
+
+
+if TYPE_CHECKING:
+    _SA: Collection[Item] = cast(SpecificCollection, None)
+`}
+/>
+
+<p>
+    Otherwise we can say the expectation is that the setting points to a
+    <mark>CollectionMaker</mark>
+    and implement our specific getter in terms of the generic getter
+</p>
+
+<Python
+    source={`
+def get_some_specific_instance() -> Collection[Item]:
+    return get_some_instance(Item)
+`}
+/>
