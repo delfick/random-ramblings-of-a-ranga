@@ -1581,3 +1581,115 @@ def get_some_specific_instance() -> Collection[Item]:
     attributes, but it will complain about attributes that statically aren't
     available!
 </p>
+
+<h2>Namespaces are one honking great idea</h2>
+
+<p>
+    Naming is an important thing and I'll quickly give my strong opinion on this
+    as well. Say we have these two classes:
+</p>
+
+<Python
+    source={`
+import dataclasses
+from typing import Protocol
+
+
+class Item(Protocol):
+    @property
+    def a(self) -> int: ...
+
+
+@dataclasses.dataclass(frozen=True)
+class Item:
+    a: int
+ `}
+/>
+
+<p>
+    We need a way to differentiate the two. Personally I'm not a fan of doing
+    something like <mark>class P_Item</mark> and I'd rather keep the protocols as
+    "clean" as possible to make them more natural to use
+</p>
+
+<p>
+    What I do instead is to prefer a file structure such that my module has a
+    "protocols" namespace so whenever I use a protocol it always appears as
+    <mark>my_module.protocols.XXX</mark>. So within the same module:
+</p>
+
+<Python
+    source={`
+import dataclasses
+from typing import TYPE_CHECKING, cast
+
+from . import protocols
+
+
+@dataclasses.dataclass(frozen=True)
+class Item:
+    a: int
+
+
+if TYPE_CHECKING:
+    _I: protocols.Item = cast(Item, None)
+`}
+/>
+
+<p>And outside of the module:</p>
+
+<Python
+    source={`
+from my_codebase import my_amazing_code
+
+
+def takes_item(item: my_amazing_code.protocols.Item) -> int:
+    return item.a
+
+
+def make_item() -> my_amazing_code.protocols.Item:
+    return my_amazing_code.items.Item(a=20)
+`}
+/>
+
+<p>
+    This also means I do have one place that defines the API surface that my
+    code wants to provide and work with
+</p>
+
+<Note
+    >To make this work without also explicitly doing a <mark
+        >from my_codebase.my_amazing_code import protocols, items</mark
+    >
+    requires a <mark>__init__.py</mark> for that module that has something like
+
+    <Python
+        source={`
+from . import protocols, items
+`}
+    />
+
+    <p>
+        Which will work as long as the files within that module don't do an
+        import that accesses attributes on the module itself. So this is fine:
+    </p>
+
+    <Python
+        source={`
+# assuming the module has a protocols.py 
+from . import protocols
+`}
+    />
+
+    <p>But within the module, this is not:</p>
+
+    <Python
+        source={`
+from my_codebase import my_amazing_code
+
+# If this happens at module level while importing the module, then python
+# would complain that you're accessing an attribute on a partially imported module
+my_amazing_code.protocols
+`}
+    />
+</Note>
