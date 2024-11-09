@@ -44,9 +44,8 @@
 </p>
 
 <p>
-    For example, if I want to represent an object that has at least a <mark
-        >blah</mark
-    > method:
+    For example, if I want to represent an object that has at least a
+    <mark>blah</mark> method:
 </p>
 
 <Python
@@ -248,13 +247,13 @@ class MyStuff:
     source={`
 import dataclasses
 from collections.abc import Sequence
-from typing import Protocol
+from typing import Protocol, Self
 
 
 class Stuff(Protocol):
     numbers: Sequence[int]
 
-    def __init__(self, *, start: int, end: int) -> "Stuff": ...
+    def __init__(self, *, start: int, end: int) -> Self: ...
 
 
 class MyStuffWithOperationInConstructor:
@@ -400,7 +399,7 @@ if TYPE_CHECKING:
     isn’t type safe, but it’s perfect for this situation.
 </p>
 
-<p>So in effect we say</p>
+<p>So in effect, when we say</p>
 
 <Python source={`_MFC: Want = cast(A, None)`} />
 
@@ -494,6 +493,38 @@ if TYPE_CHECKING:
     and an abc class (and potentially vice verca)
 </p>
 
+<Note>
+    For those unfamiliar with this "abc" class, it's a
+    <a href="https://docs.python.org/3/library/abc.html">
+        standard library in Python
+    </a>
+    for creating <strong>A</strong>bstract <strong>B</strong>ase
+    <strong>C</strong>lasses and the two main features it gives us are
+
+    <ul>
+        <li>
+            <p>
+                The ability to mark specific methods as abstract such that
+                subclasses cannot be instantiated if they don't have an
+                implementation for those methods
+            </p>
+        </li>
+        <li>
+            <p>
+                The ability to register non inherited classes as a member of
+                that abc, so that the abc can be used in an <mark
+                    >isinstance</mark
+                > check against the abstract class
+            </p>
+        </li>
+    </ul>
+
+    <p>
+        For the purposes of my argument, any standard non protocol class can be
+        the base class for the implementation
+    </p>
+</Note>
+
 <p>
     This is relevant to a conversation about protocols because sometimes you
     need to do checks at runtime to know what shape an object is. And it’s
@@ -545,7 +576,7 @@ class Thing(Protocol):
     def process(self) -> bool: ...
 
 
-class ThingBase(abc.Abc):
+class ThingBase(abc.ABC):
     @property
     @abc.abstractmethod
     def val(self) -> str: ...
@@ -634,8 +665,8 @@ def get_some_instance() -> MyProtocol:
 
 <Note
     >I think it's an anti-pattern to instead check that we've imported a
-    specific class instance like the following for the same reasons that it's a
-    good idea to split the shape of an object from how that object is created.
+    specific class type like the following for the same reasons that it's a good
+    idea to split the shape of an object from how that object is created.
 
     <Python
         source={`
@@ -697,11 +728,11 @@ def get_some_instance(info: str) -> Want:
 
 <Note>
     The reason we want to call what we get from <mark>import_string</mark> is because
-    without some interesting code (I've built some nice test helpers at work around
-    this mechanism) it will always return something at the top level of a module.
-    So making sure it's a callable means that we have the capacity to avoid import
-    time side effects and have the control to ensure specific operations only happen
-    after everything else has been loaded.
+    without some interesting code (which I've written at work in some nice test helpers
+    at for this mechanism) it will always return something at the top level of a
+    module. So making sure it's a callable means that we have the capacity to avoid
+    import time side effects and have the control to ensure specific operations only
+    happen after everything else has been loaded.
 </Note>
 
 <h2>Generics</h2>
@@ -780,8 +811,8 @@ T_MyCollection = TypeVar("T_MyCollection", bound="MyCollection[Any]")
     The problem becomes whatever we fill it in with will restrict that type var
     in a way that cannot be further specialised. And it’s inevitable to reach a
     point where we end up with some code that we want to extend such that the
-    Item has some extra method on it and it becomes a liskov violation to depend
-    on that extra method.
+    Item has some extra method on it and we start having to do some dodgy casts
+    to depend on that extra method.
 </p>
 
 <Note
@@ -842,8 +873,8 @@ first_item.b  # attr-defined error cause T_Collection is defined in terms of Ite
 
 <Note>
     When I say "stable" API, what I effectively mean is that the available
-    attributes and methods on the API, inputs, and outputs don't change
-    depending on the specifics of the implementation
+    attributes and methods on the API, it's inputs, and it's outputs don't
+    change depending on the specifics of the implementation
 </Note>
 
 <p>
@@ -863,8 +894,8 @@ def takes_collection(collection: Collection[T_Item]) -> T_Collection[T_Item]:
 
 <p>
     Essentially we want to make it so we are defining a stable API in terms of
-    an unstable source of data and then it becomes a case of spending the design
-    effort to make sure that the stable API surface is defined by <strong
+    an unstable source of data/logic and then it becomes a case of spending the
+    design effort to make sure that the stable API surface is defined by <strong
         >what</strong
     >
     is being achieved rather than in terms of <strong>how</strong> it's being achieved.
@@ -919,16 +950,17 @@ class Collection(Protocol[T_Item]): ...
     <mark>T_Item</mark> can be "covariant" if we say instead
 </p>
 
-<Python source={`T_CO_Item = TypeVar("T_CO_Item", covarant=True`} />
+<Python source={`T_CO_Item = TypeVar("T_CO_Item", covarant=True)`} />
 
 <p>Or contravariant if we say</p>
 
-<Python source={`T_COT_Item = TypeVar("T_COT_Item", contravariant=True`} />
+<Python source={`T_COT_Item = TypeVar("T_COT_Item", contravariant=True)`} />
 
 <Note>
-    The name is irrelevant, but I do name them as "T_XXX" to visually
-    disambiguate type vars from other variables. And I never use "T" or "U" as
-    doing a find in a document for a single capital "T" is an awful experience.
+    The name is irrelevant, but I do name them as "T_XXX", "T_CO_XXX" and
+    "T_COT_XXX" to visually disambiguate type vars from other variables. And I
+    never use "T" or "U" as doing a find in a document for a single capital "T"
+    is an awful experience.
 </Note>
 
 <p>
@@ -984,9 +1016,9 @@ class MutableCollection(Protocol[T_Item]):
 />
 
 <p>
-    In our mutable collection, the item is used as an input in <mark
-        >add_item</mark
-    > and so we cannot make that type var be covariant.
+    In our mutable collection, the item is used as an input in
+    <mark>add_item</mark> and so mypy will complain at us if define that type var
+    as covariant.
 </p>
 
 <p>This is why the following is a liskov violation</p>
@@ -997,11 +1029,11 @@ import dataclasses
 
 
 class A:
-    def hello() -> None: ...
+    def hello(self) -> None: ...
 
 
 class B(A):
-    def hi() -> None: ...
+    def hi(self) -> None: ...
 
 
 @dataclasses.dataclass(frozen=True)
@@ -1071,7 +1103,7 @@ class B(A):
 
 # The implementation is generic because the information used
 # to satisfy "Processor" likely has an unstable API surface.
-class ThingBase(Generic[T_Item], abc.Abc):
+class ThingBase(Generic[T_Item], abc.ABC):
     _items: MutableSequence[T_Item]
 
     @abc.abstractmethod
