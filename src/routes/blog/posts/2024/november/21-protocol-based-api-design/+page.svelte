@@ -50,7 +50,10 @@
 
 <Python
     source={`
-class Thing:
+from typing import Protocol
+
+
+class Thing(Protocol):
     def blah(self) -> None: ...
 `}
 />
@@ -293,7 +296,7 @@ class MyStuffWithDynamicNumbersAttribute:
     <li>
         <p>
             When writing stub implementations of <mark>Stuff</mark> for tests, I
-            have to know about and care about the objects use to construct this object
+            have to know and care about the objects use to construct this object
             in deployed environments that I otherwise may not care about in that
             test (i.e. unnecessary coupling with implementation details).
         </p>
@@ -317,8 +320,8 @@ class MyStuffWithDynamicNumbersAttribute:
     It’s very useful that we don’t have to explicitly declare that an object
     implements an interface, but it still can be useful to make mypy confirm
     that’s true when we make something specifically to implement an interface
-    (having a choice is about being able to do something just as much as it’s
-    about having the choice to not do something!)
+    (having a choice is about the opportunity to do something just as much as
+    it's about the opportunity to not do that something)
 </p>
 
 <p>
@@ -328,6 +331,7 @@ class MyStuffWithDynamicNumbersAttribute:
 
 <Python
     source={`
+import dataclasses
 from typing import TYPE_CHECKING, Protocol, cast
 
 
@@ -335,9 +339,12 @@ class Want(Protocol):
     def __call__(self) -> bool: ...
 
 
+@dataclasses.dataclass(frozen=True)
 class MyFirstCallable:
+    answer: bool
+
     def __call__(self) -> bool:
-        return True
+        return self.answer
 
 
 class MySecondCallable:
@@ -370,19 +377,19 @@ if TYPE_CHECKING:
     So first, that if condition. This says only look at this code at static
     time. Effectively this means this code is never executed. It is only ever
     statically analyzed. This isn’t strictly necessary but as python is an
-    interpreted language, it brings the neglible runtime risk to zero, ensures
-    we don’t create anything that may accidentally be used by external modules
-    at runtime to zero, and tells other humans these words are explicitly only
-    for the type checker
+    interpreted language, it brings the neglible runtime risk to zero including
+    the risk that modules external to this one start depending on those objects
+    at runtime, and tells other humans these words are explicitly only for the
+    type checker
 </p>
 
 <p>
-    The naming scheme is each variable we create is prefixed with an underscore
-    and is the name of the variable we are checking as an acronym. The idea is
-    that in python the same name cannot be given different types and so we want
-    a different name for each object we are checking but we don’t actually care
-    what that name is. I tend to find most of the time an acronym will be unique
-    enough that extra letters aren’t required.
+    The naming scheme I use here makes it such that each variable is prefixed
+    with an underscore and is the name of the variable we are checking as an
+    acronym. The idea is that in python the same name cannot be given different
+    types and so we want a different name for each object we are checking but we
+    don’t actually care what that name is. I tend to find most of the time an
+    acronym will be unique enough that extra letters aren’t required.
 </p>
 
 <p>
@@ -392,11 +399,14 @@ if TYPE_CHECKING:
 
 <p>
     In Python the cast lets us tell mypy to think that we have an object here
-    whose type is the first argument. At runtime this function returns that
-    second argument without any processing and nothing changes. But at static
-    time mypy will believe the object here is this other type. As a general rule
-    i’m not a fan of cast and I think it’s easy to use it to create code that
-    isn’t type safe, but it’s perfect for this situation.
+    whose type is an instance of the first argument. At runtime this function
+    returns that second argument without any processing and nothing changes. But
+    at static time mypy will believe the value here has that declared type. So
+    in this case we have the <mark>None</mark> value but mypy believes us that
+    this value actually is an instance of the type we passed into
+    <mark>cast</mark>. As a general rule I’m not a fan of cast and I think it’s
+    easy to use it to create code that isn’t type safe, but it’s perfect for
+    this situation.
 </p>
 
 <p>So in effect, when we say</p>
@@ -404,13 +414,15 @@ if TYPE_CHECKING:
 <Python source={`_MFC: Want = cast(A, None)`} />
 
 <p>
-    Mypy will interpret this as saying we have a variable that has type <mark
-        >Want</mark
-    >
+    Mypy will interpret this as saying we have a variable that has type
+    <mark>Want</mark>
     and we are assigning to it an instance of <mark>A</mark> This is useful
-    because if A does not in fact satisfy <mark>Want</mark> then mypy will complain
-    at us about that! (the point of a linter is to complain when things don’t match
-    our expectations)
+    because if A does not in fact satisfy <mark>Want</mark> then mypy will
+    complain at us about that! (the point of a linter is to complain when things
+    don’t match our expectations). Also if creating an instance of a class
+    requires passing in inputs, as is the case with
+    <mark>MyFirstCallable</mark>, those requirements can effectively be ignored
+    as they aren't relevant to what this check is for.
 </p>
 
 <p>When a developer is new to mypy it’s tempting to instead do this</p>
@@ -521,7 +533,8 @@ if TYPE_CHECKING:
 
     <p>
         For the purposes of my argument, any standard non protocol class can be
-        the base class for the implementation
+        the base class for the implementation, but for brevity I will keep
+        referring to any such class as an "abc" class.
     </p>
 </Note>
 
@@ -596,12 +609,12 @@ def do_something(o: object) -> bool:
 />
 
 <p>
-    The downside is the code that does this kind of check does need to know
-    about abstract classes that satisfy the protocol but I’d argue the
-    situations where we’ve dynamically created some object that can be anything
-    should be limited and part of that contract is saying it should be
-    implemented in terms of some specific class (Protocol classes aren't "real"
-    in the same way other classes are).
+    The downside is the code that does this kind of check does need to have
+    known base classes that satisfy the protocol but I’d argue the situations
+    where we’ve dynamically created some object that can be anything should be
+    limited and part of that contract is saying it should be implemented in
+    terms of some specific class (Protocol classes aren't "real" in the same way
+    other classes are).
 </p>
 
 <p>
@@ -688,7 +701,7 @@ def get_some_instance() -> MyProtocol:
     If you have a situation where you need to pass something in to that
     callable, then we have the same problem where we need to first assert a
     value is some concrete type before we can do anything with any kind of type
-    safety. The pattern I advocate is to expect an intermediary:
+    safety. The pattern I advocate for is to expect an intermediary:
 </p>
 
 <Python
@@ -1133,9 +1146,11 @@ class ThingB(ThingBase[B]):
         self._items.append(B())
 
     def process(self) -> None:
+        # Plenty of room for more nuance of the design of this
+        # but this post is long enough already!
         ThingA(items=self._items).process()
         for item in self.items:
-            item.hello()
+            item.hi()
 
 
 def processes_thing(thing: Processor) -> None:
@@ -1291,6 +1306,7 @@ def record_things(recorder: Recorder) -> None:
 
 
 record_things(ItemARecorder(item=ItemA(a=1)))
+record_things(ItemBRecorder(item=ItemB(a=1, b=5)))
 
 if TYPE_CHECKING:
     _RA: Recorder = cast(ItemARecorder, None)
@@ -1391,8 +1407,8 @@ class Implementation:
 
 
 if TYPE_CHECKING:
-    _II: ForImplementation[MyItem] = cast(Implementation, None)
-    _IU: ForUse = cast(Implementation, None)
+    _FI: ForImplementation[MyItem] = cast(Implementation, None)
+    _FU: ForUse = cast(Implementation, None)
 `}
     />
 </Note>
@@ -1450,7 +1466,7 @@ def get_some_specific_instance() -> Collection[Item]:
     First we need to be able to bind that type var. Essentially a type var needs
     to be associated with an input to be bound to something specific.
     Essentially like simple algebra, given "X + 3", substitute in a value for
-    "X" to solve the equation
+    "X" to solve the equation.
 </p>
 
 <Python
@@ -1461,8 +1477,8 @@ def get_some_instance(item_kls: type[T_Item]) -> Collection[T_Item]:
 />
 
 <p>
-    And then we can create our intermediary that can create the final result in
-    a way that's type safe
+    And then we can create our intermediary class used to create the final
+    result in a way that's type safe:
 </p>
 
 <Python
@@ -1557,7 +1573,7 @@ def get_some_specific_instance() -> Collection[Item]:
     When I think about API design, I think of it as the "two sides of the coin"
     as I've mentioned in passing above, where you have the API from the
     perspective of how it's used and the API from the perspective of how it's
-    implemented
+    implemented.
 </p>
 
 <p>
