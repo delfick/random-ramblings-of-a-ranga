@@ -1722,6 +1722,247 @@ my_amazing_code.protocols
     />
 </Note>
 
+<h2>Prefer immutable protocols</h2>
+
+<p>
+    One final strong opinion from me is around preferring immutable interfaces.
+    The general rule I have here is that if you have an object that requires a
+    transformation after instantiation to be complete, then you actually have
+    two objects. One object representing the first "wave" of data, and an object
+    that represents the transformation of that data.
+</p>
+
+<p>
+    A great example of this is in a mypy plugin I made for Django projects that
+    requires runtime Django introspection to do what it needs to do. I start
+    with information about where the project is and what is needed to start it
+    up. I use this <mark>Project</mark> object to create a
+    <mark>Loaded</mark>
+    instance which has all the information from starting up Django, and then I use
+    that to create a <mark>Discovered</mark> which has all information that is relevant
+    to my plugin and in a format that's easy to work with.
+</p>
+
+<p>
+    Whereas a more "straight forward" approach would be to have all of this
+    extra information that requires an operation be defined as optional values
+    on the <mark>Project</mark> that get filled. By representing these different
+    states as different objects I remove the need to do a bunch of
+    <mark>is None</mark> checks all over the place to ensure that these optional
+    values have values.
+</p>
+
+<Python
+    source={`
+from __future__ import annotations
+
+import pathlib
+from collections.abc import Mapping, Sequence
+from typing import NewType, Protocol, Self, TypeVar
+
+from django.apps.registry import Apps
+from django.conf import LazySettings
+
+T_Project = TypeVar("T_Project", bound="Project")
+
+ImportPath = NewType("ImportPath", str)
+ConcreteModelsMap = Mapping[ImportPath, Sequence["Model"]]
+
+
+# The real code has more properties, but I'll ignore that here for brevity
+class Project(Protocol):
+    """
+    Represents a Django project to be analyzed
+    """
+
+    @property
+    def root_dir(self) -> pathlib.Path:
+        """
+        Where the django project lives
+        """
+
+    @property
+    def additional_sys_path(self) -> Sequence[str]:
+        """
+        Any additional paths that need to be added to sys.path
+        """
+
+    @property
+    def env_vars(self) -> Mapping[str, str]:
+        """
+        Any additional environment variables needed to setup Django
+        """
+
+    def load_project(self) -> Loaded[Self]:
+        """
+        Do necessary work to load Django into memory
+        """
+
+
+# The real code has more properties, but I'll ignore that here for brevity
+class Loaded(Protocol[T_Project]):
+    """
+    Represents a Django project that has been setup and loaded into memory
+    """
+
+    @property
+    def project(self) -> T_Project:
+        """
+        The project that was loaded
+        """
+
+    @property
+    def settings(self) -> LazySettings:
+        """
+        The instantiated Django settings object
+        """
+
+    @property
+    def apps(self) -> Apps:
+        """
+        The instantiated Django apps registry
+        """
+
+    def perform_discovery(self) -> Discovered[T_Project]:
+        """
+        Perform discovery of important information from the loaded Django project
+        """
+
+
+# The real code has more properties, but I'll ignore that here for brevity
+class Discovered(Protocol[T_Project]):
+    @property
+    def loaded_project(self) -> Loaded[T_Project]:
+        """
+        The loaded django project that was analyzed
+        """
+
+    @property
+    def installed_apps(self) -> list[str]:
+        """
+        The value of the settings.INSTALLED_APPS setting.
+        """
+
+    @property
+    def concrete_models(self) -> ConcreteModelsMap:
+        """
+        The map of concrete models key'd by their import path.
+        """
+
+
+# Including this for completeness of the example, but ignoring what's on it for brevity
+class Model(Protocol):
+    pass
+`}
+/>
+
+<Note>
+    <p>
+        Something to notice about this example is that on each protocol class,
+        all the attributes are decorated with <mark>@property</mark> which means
+        that they are read only. I'd love to instead have something like
+        <mark>apps: ReadOnly[Apps]</mark> but mypy does not provide that.
+    </p>
+    <p>
+        I tend to then implement these protocols with frozen
+        <mark>dataclasses</mark>
+        or frozen <mark>attr</mark> classes.
+    </p>
+</Note>
+
+<p>And then in that project I use it via this orchestrator class:</p>
+
+<Python
+    source={`
+import abc
+import dataclasses
+import pathlib
+from typing import Generic
+
+from typing_extensions import Self
+
+from .. import protocols
+
+
+# Parts of this are removed for brevity
+@dataclasses.dataclass(frozen=True, kw_only=True)
+class VirtualDependencyHandler(Generic[protocols.T_Project], abc.ABC):
+    discovered: protocols.Discovered[protocols.T_Project]
+
+    @classmethod
+    def create(cls, *, project_root: pathlib.Path, django_settings_module: str) -> Self:
+        return cls(
+            discovered=(
+                cls.make_project(
+                    project_root=project_root,
+                    django_settings_module=django_settings_module,
+                )
+                .load_project()
+                .perform_discovery()
+            ),
+        )
+
+    @classmethod
+    @abc.abstractmethod
+    def make_project(
+        cls, *, project_root: pathlib.Path, django_settings_module: str
+    ) -> protocols.T_Project: ...
+`}
+/>
+
+<p>
+    Or if I already have a loaded instance of Django, like I do in the tests for
+    the project at work, I can instead start from the <mark>Loaded</mark> class:
+</p>
+
+<Python
+    source={`
+import dataclasses
+import pathlib
+
+from extended_mypy_django_plugin import django_analysis
+from tools.typechecking.virtual_dependencies import VirtualDependencyHandler
+
+PROJECT_ROOT = pathlib.Path(__file__).parent.parent
+
+
+def test_querysets_have_unique_names():
+    # We can't use the settings fixture because it's not actually a LazySettings
+    # This test does not make changes to this object and so this is fine
+    from django.apps import apps
+    from django.conf import settings
+
+    # Create the object representing the project with a custom discoverer
+    # That will record information about each model/field it comes across
+    project = dataclasses.replace(
+        VirtualDependencyHandler.make_project(
+            project_root=PROJECT_ROOT / "src", django_settings_module="tests.settings"
+        ),
+        discovery=django_analysis.discovery.Discovery(
+            # Here I add custom discovery logic so the test can do something different
+            # These are objects that take in an instance of Loaded to operate on
+        ),
+    )
+
+    # We already have a loaded django project, so we can create our own Loaded instance
+    # without performing that startup logic again
+    loaded_project = django_analysis.Loaded(
+        project=project,
+        root_dir=project.root_dir,
+        env_vars=project.env_vars,
+        discovery=project.discovery,
+        settings=settings,
+        apps=apps,
+    )
+
+    # Execute the discovery logic
+    loaded_project.perform_discovery()
+
+    # And then logic happens here that interprets what was discovered
+    # To find querysets that need to be given unique names
+`}
+/>
+
 <h2>Thanks for reading</h2>
 
 <p>
