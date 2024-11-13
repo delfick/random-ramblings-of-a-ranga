@@ -326,7 +326,8 @@ class MyStuffWithDynamicNumbersAttribute:
 
 <p>
     There isn’t a purpose built way to do this in mypy but there is a trick that
-    I find most people go through the stages of grief over:
+    I find most people go through the stages of grief over (specifically denial,
+    bargaining and acceptance):
 </p>
 
 <Python
@@ -363,6 +364,11 @@ if TYPE_CHECKING:
     _MTC: Want = MyThirdCallable
 `}
 />
+
+<Note>
+    Note that this is purely a technique for making mypy give us more useful
+    errors closer to where we are explicitly trying to implement a protocol.
+</Note>
 
 <p>There are several parts to this <mark>if TYPE_CEHCKING</mark> block:</p>
 
@@ -462,7 +468,7 @@ if TYPE_CHECKING:
 
 <p>
     We don't need the same <mark>cast</mark> trick here because
-    <mark>MyThirdCallable</mark> is already an object that satisfies the protocol
+    <mark>MyThirdCallable</mark> is already an object that satisfies the protocol.
 </p>
 
 <p>
@@ -496,7 +502,7 @@ if TYPE_CHECKING:
 <p>
     I want to dive into the difference between an <mark>abc</mark> class and a protocol.
     On the surface it appears they do the same thing and can be used for the same
-    purpose. I’m here to tell you that’s not the case!
+    purpose. I’m here to tell you that’s not always the case!
 </p>
 
 <p>
@@ -580,7 +586,7 @@ def do_something(o: object) -> bool:
 <Python
     source={`
 import abc
-from typing import Protocol
+from typing import TYPE_CHECKING, Protocol, cast
 
 
 class Thing(Protocol):
@@ -606,6 +612,10 @@ def takes_my_protocol(o: Thing) -> bool:
 def do_something(o: object) -> bool:
     if isinstance(o, ThingBase):
         return takes_my_protocol(o)
+
+
+if TYPE_CHECKING:
+    _TB: Thing = cast(ThingBase, None)
 `}
 />
 
@@ -625,9 +635,9 @@ def do_something(o: object) -> bool:
 
 <p>It’s an important concept that does need to be repeated</p>
 
-<Quote
-    >Values are a run time concept and are irrelevant to the type checker.</Quote
->
+<Quote>
+    Values are a run time concept and are irrelevant to the type checker.
+</Quote>
 
 <p>
     So when we have a value that only exists at runtime, we can’t represent it
@@ -644,12 +654,14 @@ def do_something(o: object) -> bool:
 </p>
 
 <p>
-    For example on a Django project using <a
+    For example on a Django project using
+    <a
         href="https://docs.djangoproject.com/en/5.1/ref/utils/#django.utils.module_loading.import_string"
-        >import_string</a
-    > on some string you found on django settings. The return of that could be literally
-    anything. And so we need a way to assert the type of that return matches what
-    is expected.
+    >
+        import_string
+    </a> on some string you found on django settings. The return of that could be
+    literally anything. And so we need a way to assert the type of that value matches
+    what is expected.
 </p>
 
 <p>
@@ -720,6 +732,7 @@ class Want(Protocol):
     def process() -> int: ...
 
 
+# yes, this is the factory pattern!
 class WantMaker(abc.ABC):
     @abc.abstractmethod
     def make(info: str) -> Want: ...
@@ -900,7 +913,7 @@ first_item.b  # attr-defined error cause T_Collection is defined in terms of Ite
 
 <Python
     source={`
-def takes_collection(collection: Collection[T_Item]) -> T_Collection[T_Item]:
+def takes_collection(collection: Collection[T_Item]) -> Collection[T_Item]:
     # Something happens with the collection here
     return collection
 `}
@@ -1031,8 +1044,8 @@ class MutableCollection(Protocol[T_Item]):
 
 <p>
     In our mutable collection, the item is used as an input in
-    <mark>add_item</mark> and so mypy will complain at us if define that type var
-    as covariant.
+    <mark>add_item</mark> and so mypy will complain at us if we define that type
+    var as covariant.
 </p>
 
 <p>This is why the following is a liskov violation</p>
@@ -1081,9 +1094,9 @@ def processes_thing(thing: Thing) -> None:
 />
 
 <p>
-    We should be able to pass an instance of <mark>ThingChild</mark> into this function
-    but if we do so we don’t realise in processes_thing that we need to append an
-    instance of B into the items!
+    We should be able to pass an instance of <mark>ThingChild</mark> into this
+    function but if we do so we don’t realise in <mark>processes_thing</mark> that
+    we need to append an instance of B into the items!
 </p>
 
 <p>
@@ -1551,7 +1564,7 @@ def get_some_specific_instance() -> Collection[Item]:
 
 
 if TYPE_CHECKING:
-    _SA: Collection[Item] = cast(SpecificCollection, None)
+    _SC: Collection[Item] = cast(SpecificCollection, None)
 `}
 />
 
@@ -1747,8 +1760,8 @@ my_amazing_code.protocols
 <p>
     Whereas a more "straight forward" approach would be to have all of this
     extra information that requires an operation be defined as optional values
-    on the <mark>Project</mark> that get filled. By representing these different
-    states as different objects I remove the need to do a bunch of
+    on the <mark>Project</mark>. By representing these different states as
+    different objects I remove the need to do a bunch of
     <mark>is None</mark> checks all over the place to ensure that these optional
     values have values.
 </p>
