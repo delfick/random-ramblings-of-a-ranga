@@ -500,9 +500,10 @@ if TYPE_CHECKING:
 </p>
 
 <p>
-    In short, Protocol classes are the interface for use and abc classes are the
-    interface for implementation. There is a 1:n relationship between a protocol
-    and an abc class (and potentially vice verca)
+    In short, Protocol classes are the contract for what is available on an API
+    whereas abc classes are a contract for how to provide an API. There is a 1:n
+    relationship between a protocol and an abc class (and potentially vice
+    verca)
 </p>
 
 <Note>
