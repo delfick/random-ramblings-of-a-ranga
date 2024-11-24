@@ -28,6 +28,10 @@
             @apply py-4;
         }
 
+        :global(a) {
+            @apply underline text-blue-600 hover:text-blue-800 visited:text-purple-600;
+        }
+
         :global(h2) {
             @apply leading-tight text-4xl mt-0 mb-2 pr-2 text-right font-bold font-mono;
             @apply border-r-8 border-indigo-500;
