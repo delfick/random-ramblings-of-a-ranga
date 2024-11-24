@@ -20,6 +20,10 @@
     I'm gonna use this post to explain the approaches I've currently landed on.
 </p>
 
+<Note>
+    This is a long post, don't feel like you have to read it all in one go!
+</Note>
+
 <h2>What is a typing.Protocol?</h2>
 
 <p>
@@ -57,6 +61,14 @@ class Thing(Protocol):
     def blah(self) -> None: ...
 `}
 />
+
+<Note>
+    In this case those three dots are valid Python syntax and lets us define a
+    function with an empty body. Protocols in Python are purely a static time
+    concept and so by definition lack an implementation, which is why all
+    methods on a protocol should be empty (so either a doc comment, or those
+    three dots)
+</Note>
 
 <p>
     And like Go interfaces (and unlike java interfaces) I don’t need to
@@ -309,9 +321,10 @@ class MyStuffWithDynamicNumbersAttribute:
 
 <Note>
     The important thing isn’t the type annotations, but rather using the
-    annotations to guide thinking about data and logic flow. The annotations are
-    a tool rather than a goal. If the annotations are awkward, it’s the linter
-    trying to communicate that something about that flow is awkward.
+    annotations to guide thinking about data and logic flow.
+    <strong> The annotations are a tool rather than a goal. </strong>
+    If the annotations are awkward, it’s the linter trying to communicate that something
+    about that flow is awkward.
 </Note>
 
 <h2>Confirming something satisfies an interface</h2>
@@ -326,8 +339,8 @@ class MyStuffWithDynamicNumbersAttribute:
 
 <p>
     There isn’t a purpose built way to do this in mypy but there is a trick that
-    I find most people go through the stages of grief over (specifically denial,
-    bargaining and acceptance):
+    I find most people have a negative knee jerk reaction to, followed by trying
+    to suggest alternatives, and then finally landing on acceptance:
 </p>
 
 <Python
@@ -368,6 +381,9 @@ if TYPE_CHECKING:
 <Note>
     Note that this is purely a technique for making mypy give us more useful
     errors closer to where we are explicitly trying to implement a protocol.
+    There is no loss of functionality by not doing this, but it does produce
+    better notices from mypy when an implementation made specifically to satisfy
+    a protocol no longer satisfies that protocol.
 </Note>
 
 <p>There are several parts to this <mark>if TYPE_CEHCKING</mark> block:</p>
@@ -431,20 +447,29 @@ if TYPE_CHECKING:
     as they aren't relevant to what this check is for.
 </p>
 
+<Note>
+    I'm gonna repeat this several times to make sure it sinks in, but the
+    <strong>
+        type checker is a static linter and does not interpret the code.
+    </strong> It does the same checks in this block that it does everywhere else,
+    but we're taking a shortcut here because we don't also need to make the code
+    do something useful at runtime.
+</Note>
+
 <p>When a developer is new to mypy it’s tempting to instead do this</p>
 
 <Python source={`_MFC: type[Want] = A`} />
 
 <p>
-    However this gives really poor errors cause, whilst this description isn't
-    technically true, mypy effectively sees:
+    However this gives really poor errors cause, whilst the following
+    description isn't technically true, mypy effectively sees this:
 </p>
 
 <Python source={`_MFC: Callable[[] Want] = Callable[[], A]`} />
 
 <p>
     And mypy doesn't give the same level of detail when comparing the values
-    inside a generic (<mark>Callable</mark> is a generic container)
+    inside a generic (<mark>Callable</mark> is a generic container).
 </p>
 
 <p>Also, I'll draw some attention to that last example:</p>
@@ -509,7 +534,7 @@ if TYPE_CHECKING:
     In short, Protocol classes are the contract for what is available on an API
     whereas abc classes are a contract for how to provide an API. There is a 1:n
     relationship between a protocol and an abc class (and potentially vice
-    verca)
+    verca). And more importantly they serve different audiences.
 </p>
 
 <Note>
@@ -615,6 +640,8 @@ def do_something(o: object) -> bool:
 
 
 if TYPE_CHECKING:
+    # Note that the point of the liskov violation rules is that if the base class
+    # satisfies the protocol, then all subclasses will also satisfy the protocol.
     _TB: Thing = cast(ThingBase, None)
 `}
 />
@@ -666,8 +693,8 @@ if TYPE_CHECKING:
 
 <p>
     The pattern that I have landed on around this is to set an expectation that
-    what is found will be called and we care about the type of whatever we get
-    from doing that invocation.
+    what is found will be treated as a callable object and we care about the
+    type of whatever we get from invoking that object.
 </p>
 
 <Python
@@ -704,6 +731,7 @@ def get_some_instance() -> MyProtocol:
     constructor = import_string(settings.SOME_CLASS)
     # anti-pattern!!!! Don't do this
     # instead prefer isinstance on what is returned from calling the constructor
+    # so that we aren't creating an unecessary implementation restriction.
     assert issubclass(constructor, SomeKnownABC)
     return constructor()
 `}
@@ -984,10 +1012,18 @@ class Collection(Protocol[T_Item]): ...
 <Python source={`T_COT_Item = TypeVar("T_COT_Item", contravariant=True)`} />
 
 <Note>
-    The name is irrelevant, but I do name them as "T_XXX", "T_CO_XXX" and
-    "T_COT_XXX" to visually disambiguate type vars from other variables. And I
-    never use "T" or "U" as doing a find in a document for a single capital "T"
-    is an awful experience.
+    The name has no functional purpose and is irrelevant, but I do name them as
+    "T_XXX", "T_CO_XXX" and "T_COT_XXX" to visually disambiguate type vars from
+    other variables. And I never use "T" or "U" as doing a find in a document
+    for a single capital "T" is an awful experience.
+    <p>
+        Also, I'm gonna ignore
+        <a href="https://peps.python.org/pep-0695/">PEP 695</a> for this blog post.
+    </p>
+    <p>
+        And also there is a section that could be written about what it means to
+        bind a type var but I'll instead only mention that in passing later on.
+    </p>
 </Note>
 
 <p>
@@ -1038,6 +1074,8 @@ class MutableCollection(Protocol[T_Item]):
     @property
     def items(self) -> Sequence[T_Item]: ...
 
+    # T_Item used as an input here and output in the items method
+    # so it can only be invariant
     def add_item(self, item: T_Item) -> None: ...
 `}
 />
@@ -1048,7 +1086,11 @@ class MutableCollection(Protocol[T_Item]):
     var as covariant.
 </p>
 
-<p>This is why the following is a liskov violation</p>
+<p>
+    This is why the following is a liskov violation (mypy doesn't explicitly
+    call this one out as violating the liskov substitution principle, but that's
+    what is happening here)
+</p>
 
 <Python
     source={`
@@ -1512,7 +1554,7 @@ class Collection(Protocol[T_Item]):
     def calculate(self) -> Sequence[T_Item]: ...
 
 
-class CollectionMaker(Generic[T_Item], abc):
+class CollectionMaker(Generic[T_Item], abc.ABC):
     @abc.abstractmethod
     def make(self, item_kls: type[T_Item]) -> Collection[T_Item]: ...
 
@@ -1551,7 +1593,7 @@ class Item:
     pass
 
 
-class SpecificCollection(abc):
+class SpecificCollection(abc.ABC):
     @abc.abstractmethod
     @property
     def calculate(self) -> Sequence[Item]: ...
@@ -1587,7 +1629,8 @@ def get_some_specific_instance() -> Collection[Item]:
     When I think about API design, I think of it as the "two sides of the coin"
     as I've mentioned in passing above, where you have the API from the
     perspective of how it's used and the API from the perspective of how it's
-    implemented.
+    implemented. And that perspective is relative to what/who is using the code
+    rather than relative to the code itself.
 </p>
 
 <p>
@@ -1618,11 +1661,16 @@ def get_some_specific_instance() -> Collection[Item]:
     the codebase only requires an interface for writing data, whereas a
     different part of the codebase only requires reading data. This is
     especially obvious when you create stub implementations for tests and find
-    yourself creating a method that raises <mark>NotImplementedError</mark> cause
-    that method is part of the interface, but irrelevant to that part of the code.
-    Using a protocol we are able to specify the API surface we need, without imposing
-    any restriction or expectation around what is needed to implement that API surface.
+    yourself creating a method that raises <mark>NotImplementedError</mark>
+    cause that method is part of the interface, but irrelevant to that part of the
+    code.
 </p>
+
+<Quote>
+    Using a protocol we are able to specify the API surface we need, without
+    imposing any restriction or expectation around what is needed to implement
+    that API surface.
+</Quote>
 
 <h2>Namespaces are one honking great idea</h2>
 
