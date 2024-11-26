@@ -21,7 +21,8 @@
 </p>
 
 <Note>
-    This is a long post, don't feel like you have to read it all in one go!
+    This post is around 5000 words excluding code examples, the read time for
+    this post may be around 40 minutes.
 </Note>
 
 <h2>What is a typing.Protocol?</h2>
