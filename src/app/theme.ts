@@ -8,5 +8,5 @@ export const theme = writable<Theme>(val);
 export const isDark = derived(theme, ($theme) => $theme == "dark");
 export const isLight = derived(theme, ($theme) => $theme == "light");
 export const changeableTheme = derived(page, ($page) =>
-    $page.url.pathname.includes("/blog")
+  $page.url.pathname.includes("/blog")
 );
