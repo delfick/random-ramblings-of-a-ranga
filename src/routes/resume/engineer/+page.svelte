@@ -23,51 +23,55 @@
 <Resume>
   <HomeLink inline />
 
-  <Title hide_overflow>Senior Software Engineer</Title>
+  <Title hide_overflow>Senior Software DevEx Engineer</Title>
 
   <Blurb
     source={dedent`
-    I'm a senior software engineer with 11 years of industry experience who is
-    passionate about using software to solve real problems. I have a history of
-    finding challenges that can be assisted with automation and building tools
-    that do just that.
+    I'm a senior software developer experience engineer with over 13 years of
+    industry experience (as of 2024) who is passionate about writing software
+    that ages well.
 
-    In my career I have touched a range of problem areas including data pipelines,
-    simple Web services, performance profiling and optimisation of high load
-    services, tooling used by warehouse workers, asynchronously interacting with
-    IoT hardware over local and remote networks; and creation and maintenance of
-    an internal portal for user information. As well as interacting with third
-    party developers, infrastructure and tooling for testing, application
-    deployment, and cloud sysadmin activities.
+    My career has been defined by two tracks: the day to day tasks that
+    I'm assigned; and improving the technical productivity of my colleagues.
 
-    I have also developed a focus on how I work to ensure what I build matches the
-    constraints of the problems they aim to help with; and also don't lead to a
-    maintenance burden over time. I am comfortable spreading these techniques to
-    my colleagues so we can all benefit from thinking about software in a way that
-    lets us have confidence in our changes.
+    Over this time I have worked as a Software developer before embarking
+    on a detour into the sysadmin/cloud operations space for nearly a decade
+    before returning as a developer and moving towards the devEx space.
 
-    I'm interested in finding a work environment that encourages pragmatism when
-    it comes to how we work, what we work on, and how technical debt is bought,
-    managed, and paid back.
+    In my career I have touched a range of problem areas including data
+    pipelines, Web services, tooling used by warehouse workers, interacting
+    with IoT hardware over local and remote networks, creation and
+    maintenance of web-based internal portals for user information, activities
+    around bringing software into deployed environments, interacting with
+    third party developers, and paying back technical debt in large codebases.
+
+    I have also developed a focus on how I work to ensure what I build
+    matches the constraints of the problems they aim to help with; and also
+    don't lead to a maintenance burden over time. I have reached a level of
+    seniority where I enjoy and seek out opportunities to pass on these
+    techniques and attitudes to others to increase the quality of the software
+    we are all working on.
+
+    I'm interested in finding a work environment that encourages pragmatism
+    when it comes to how we work, what we work on, and how technical debt is
+    bought, managed, and paid back.
             `}
   />
   <ResumeSections>
     <SummaryPoints>
       <SummaryPoint>
-        Over 16 years experience with Python as of 2022
+        Over 18 years experience with Python as of 2024
       </SummaryPoint>
-      <SummaryPoint>Over 11 years industry experience as of 2022</SummaryPoint>
+      <SummaryPoint>Over 13 years industry experience as of 2024</SummaryPoint>
       <SummaryPoint>Over 8 years focus on server/cloud operations</SummaryPoint>
       <SummaryPoint>Extremely comfortable with Git and scripting</SummaryPoint>
       <SummaryPoint>
         Experience with AWS and GCE cloud environments
       </SummaryPoint>
+      <SummaryPoint>Well defined software philosophy and approach</SummaryPoint>
       <SummaryPoint>
-        Experience in a microsystem environment backed by GCE managed K8S
-      </SummaryPoint>
-      <SummaryPoint>
-        History and interest in building tools that become invaluable to my
-        colleagues
+        History and interest in building tools/processes that become invaluable
+        to my colleagues
       </SummaryPoint>
       <SummaryPoint>Approachable, available, honest and helpful</SummaryPoint>
       <SummaryPoint>
@@ -87,7 +91,7 @@
     difference between running software locally, on CI, and in a deployed
     environment. I have lots of experience in taking a project and "shuffling"
     the code **so that it becomes possible to expand it's feature set without
-    buying unmanageable technical debt**. All my experience is within small
+    buying unmanageable technical debt**. Most of my experience is within small
     teams that have a wide range of responsibilities and I have seen the cost
     of different leadership and prioritisation approaches.
 
@@ -128,25 +132,21 @@
       print_breakable
       title_color="#1938b0"
       source={dedent`
-    I'm most comfortable with Python, which I've been using for around 16
-    years. I am proficient with JavaScript, am comfortable with Typescript and
-    have a a passable ability to create web GUIs using React and Redux.
+    I'm most comfortable with Python, which I've been using for around 18
+    years. I am proficient with JavaScript and have a passable ability to create
+    web GUIs using React/Svelte/Vue.
+
     I built applications for the cloud using Go and gRPC for most of the 5
-    years I was at LIFX. And at Papercut I found an appreciation for modern PHP.
-    
-    I have worked with Ruby before and whilst I enjoy the language I never got
-    into the ecosystem to any large extent. Though I sometimes use some ruby
-    language features when I write pseudo code, which is a weird combination
-    of python, ruby and English.
+    years I was at LIFX.    
 
     My background in operations work means I have a strong grasp of using bash,
     and the terminal in general. These skills and an ability to find the right
     tool for the job has meant that I'm known for delivering value quickly.
 
-    When it comes to databases I have a reasonable understanding of SQL and
-    tend to favour Postgres and sqlite. However when it comes to maintaining
-    a Postgres cluster, I'm much more comfortable when I have access to people
-    who can provide guidance.
+    My time at Octopus/Kraken has been defined by a deep interest in using Python
+    in a large codebase with a focus on using static types effectively
+    and I have spent a lot of effort in developing techniques for safely refactoring
+    code.
     `}
     />
     <ResumeSection
@@ -155,9 +155,7 @@
       source={dedent`
     I have found that **I learn best when I have a need** for the skill or
     technology that I'm trying to gain. This means I tend not to dedicate time
-    to research just for the sake of knowledge. For example I attempted to
-    learn Rust but because I had no need for it I couldn't find the motivation
-    to continue that. It did seem interesting though!
+    to research just for the sake of knowledge. 
 
     In the Photons framework I mention below, it was very clear very early
     on that using Python async/await would be very useful and this is around
@@ -167,12 +165,10 @@
     but enabled me to write Photons in a way that is maintainable and scales
     at run time.
 
-    My understanding of Redux Saga comes from finding Redux Thunk difficult
-    to scale and in my search for an alternative I decided Saga would be much
-    better and incorporated that into those projects instead.
+    I learnt TypeScript and modern PHP as part of uplifting old code at Papercut.
 
-    I learnt TypeScript and modern PHP as part of uplifting old code at
-    Papercut and along with learning type hints in Python **I have a large
+    And my efforts to improve the static typing maturity at Octopus/Kraken has
+    given me a deep understanding of how to use mypy effectively. **I have a large
     appreciation for type annotations** helping us clarify the code
     for humans and the computer.
 
@@ -186,6 +182,26 @@
       title_color="#228c8c"
       print_breakable
     >
+      <SubResumeSection
+        title="Paying back technical debt"
+        source={dedent`
+        Within my role inside the internal developer experience team at Kraken
+        I have successfully led the effort to get a codebase containing millions
+        of lines of python onto the latest version of mypy. This required
+        co-ordinating and delivering a very high number of prefactors over 1.5
+        years to safely get from a very old version of mypy to the latest version.
+
+        This work involved also work to upgrade Django, creating a mypy plugin
+        to solve a problem that was causing many 100s of errors, making decisions
+        around what could be safely ignored and ensuring required changes to the
+        codebase were merged as we went along to mitigate risks around a "big
+        bang" change.
+
+        Upon reaching the latest version, the effort has turned towards using
+        the features we now have access to for the purpose of getting 100%
+        typing coverage in the codebase.
+        `}
+      />
       <SubResumeSection
         notoppadding
         title="Deployment Tooling"
@@ -254,24 +270,6 @@
 
         Alongside this in a different code base I created and maintained a vital
         part of the factory pipeline.
-        `}
-      />
-      <SubResumeSection
-        title="Other projects"
-        source={dedent`
-        I believe that as a software engineer my job requires a lot more than
-        typing, but the programming part is definitely the most fun and so
-        outside of work I have played with a number of things.
-        
-        Included in these projects are tools for making the process of writing
-        tests easier; data transformation; fast decryption of gpg packets;
-        and a number of older projects that taught me about how to
-        structure large programs. These exist on my Github profile at
-        https://github.com/delfick and I'd love to walk through those and
-        explain their history and functionality.
-
-        Since late 2020 I have considerably less time for these side projects but
-        it is something I enjoy to do every so often.
         `}
       />
     </ResumeSection>
