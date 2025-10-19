@@ -29,7 +29,7 @@ export const GET: RequestHandler = async () => {
     feed.item({
       title: post.meta.title,
       description: post.meta.tldr,
-      url: `https://delfick.com/${post.path}`,
+      url: `https://delfick.com${post.path}`,
       categories: post.meta.tags,
       date: post.date.toUTCString(),
     })
