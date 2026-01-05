@@ -1,18 +1,26 @@
-<div
-  class="shadow-lg border-sky-200 border-2 mb-6 full-width min-w-0 p-4 bg-white rounded-lg dark:bg-gray-800 dark:shadow-dark-front"
->
-  <div class="px-4 py-2 mt-2 dark:text-white">
-    <div
-      class="bg-emerald-100 dark:bg-dark-green-tldr shadow-2xl rounded-lg px-3 py-1 inline"
-    >
-      tldr
-    </div>
-    <slot />
-  </div>
-</div>
-
 <style lang="postcss" global>
   @tailwind base;
 
   @tailwind utilities;
 </style>
+
+<script lang="ts">
+  interface Props {
+    children?: import('svelte').Snippet
+  }
+
+  let { children }: Props = $props()
+</script>
+
+<div
+  class="full-width mb-6 min-w-0 rounded-lg border-2 border-sky-200 bg-white p-4 shadow-lg dark:bg-gray-800 dark:shadow-dark-front"
+>
+  <div class="mt-2 px-4 py-2 dark:text-white">
+    <div
+      class="inline rounded-lg bg-emerald-100 px-3 py-1 shadow-2xl dark:bg-dark-green-tldr"
+    >
+      tldr
+    </div>
+    {@render children?.()}
+  </div>
+</div>

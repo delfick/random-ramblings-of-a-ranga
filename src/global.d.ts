@@ -1,1 +1,1 @@
-declare module "prism-svelte";
+declare module 'prism-svelte'

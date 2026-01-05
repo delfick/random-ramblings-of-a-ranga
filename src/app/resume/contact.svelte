@@ -1,8 +1,12 @@
 <script lang="ts">
-  import HR from "./hr.svelte";
-  import ResumeSection from "./resume_section.svelte";
+  import HR from './hr.svelte'
+  import ResumeSection from './resume_section.svelte'
 
-  export let source: string;
+  interface Props {
+    source: string
+  }
+
+  let { source }: Props = $props()
 </script>
 
 <HR before_contact />

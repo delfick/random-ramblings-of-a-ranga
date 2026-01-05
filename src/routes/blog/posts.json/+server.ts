@@ -1,15 +1,15 @@
-import type { Module } from "@blog/posts";
-import { getter } from "@blog/posts";
+import type { Module } from '@blog/posts'
+import { getter } from '@blog/posts'
 
-export const GET = async () =>
-  new Response(
+export const GET = async () => {
+  return new Response(
     JSON.stringify(
-      (await getter("blog", import.meta.glob<Module>("../posts/**/+page.ts")))
-        .body
+      (await getter('blog', import.meta.glob<Module>('../posts/**/+page.ts'))).body
     ),
     {
       headers: {
-        "content-type": "application/json; charset=utf-8",
-      },
+        'content-type': 'application/json; charset=utf-8'
+      }
     }
-  );
+  )
+}

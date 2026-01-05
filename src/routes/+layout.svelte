@@ -1,10 +1,15 @@
 <script lang="ts">
-  import Icon192 from "@assets/android-chrome-192x192.png";
-  import Icon512 from "@assets/android-chrome-512x512.png";
-  import AppleTouchIcon from "@assets/apple-touch-icon.png";
-  import Icon16 from "@assets/favicon-16x16.png";
-  import Icon32 from "@assets/favicon-32x32.png";
-  import Icon from "@assets/favicon.ico";
+  import Icon192 from '@assets/android-chrome-192x192.png'
+  import Icon512 from '@assets/android-chrome-512x512.png'
+  import AppleTouchIcon from '@assets/apple-touch-icon.png'
+  import Icon16 from '@assets/favicon-16x16.png'
+  import Icon32 from '@assets/favicon-32x32.png'
+  import Icon from '@assets/favicon.ico'
+  interface Props {
+    children?: import('svelte').Snippet
+  }
+
+  let { children }: Props = $props()
 </script>
 
 <svelte:head>
@@ -21,4 +26,4 @@
   <meta name="theme-color" content="#ffffff" />
 </svelte:head>
 
-<slot />
+{@render children?.()}

@@ -1,60 +1,66 @@
-<script context="module" lang="ts">
-  import { writable } from "svelte/store";
+<script module lang="ts">
+  import { writable } from 'svelte/store'
 
-  let loaded = writable(false);
+  let loaded = writable(false)
   const ready = () => {
-    loaded.set(true);
-  };
+    loaded.set(true)
+  }
 </script>
 
 <script lang="ts">
-  import { browser } from "$app/environment";
-  import { theme } from "@app/theme";
-  import { onMount } from "svelte";
-  import { fade } from "svelte/transition";
+  import { browser } from '$app/environment'
+  import { onMount } from 'svelte'
+  import { fade } from 'svelte/transition'
 
-  export let href: string;
-  export let tweet: string;
-  export let minheight: number;
+  import { mode } from 'mode-watcher'
+  interface Props {
+    href: string
+    tweet: string
+    minheight: number
+  }
 
-  let wrapperWidth = 250;
+  let { href, tweet, minheight }: Props = $props()
 
-  let el: HTMLElement;
-  const targetElementID = `tweet-container-${tweet}`;
+  let wrapperWidth = $state(250)
+
+  let el: HTMLElement = $state()
+  const targetElementID = $derived(`tweet-container-${tweet}`)
 
   interface Settings {
-    conversation: string;
-    cards: string;
-    theme: string;
+    conversation: string
+    cards: string
+    theme: string
   }
 
   interface Widgets {
-    createTweet: (tweet: string, el: HTMLElement, settings: Settings) => void;
+    createTweet: (tweet: string, el: HTMLElement, settings: Settings) => void
   }
 
   interface Twttr {
-    widgets: Widgets;
+    widgets: Widgets
   }
 
   interface WindowWithTwitter {
-    twttr: Twttr;
+    twttr: Twttr
   }
 
-  $: if (el && $loaded) {
-    let widgets = (window as unknown as WindowWithTwitter).twttr.widgets;
-    el.innerHTML = "";
-    widgets.createTweet(tweet, el, {
-      conversation: "none",
-      cards: "hidden",
-      theme: $theme as string,
-    });
-  }
+  $effect(() => {
+    if (el && $loaded) {
+      let widgets = (window as unknown as WindowWithTwitter).twttr.widgets
+      el.innerHTML = ''
+      widgets.createTweet(tweet, el, {
+        conversation: 'none',
+        cards: 'hidden',
+        theme: mode.current || 'light'
+      })
+    }
+  })
 
   onMount(() => {
-    if (browser && Object.hasOwnProperty.call(window, "twttr")) {
-      loaded.set(true);
+    if (browser && Object.hasOwnProperty.call(window, 'twttr')) {
+      loaded.set(true)
     }
-  });
+  })
 </script>
 
 <svelte:head>
@@ -62,7 +68,7 @@
     async
     id="twitter-lib-script"
     data-testid="twitter-lib-script"
-    on:load={ready}
+    onload={ready}
     src="//platform.twitter.com/widgets.js"
   ></script>
 </svelte:head>
@@ -81,15 +87,15 @@
         ? wrapperWidth
         : 500}px"
       style:position="absolute"
-      in:fade={{ duration: 1500 }}
-    />
+      in:fade|global={{ duration: 1500 }}
+    ></div>
   {:else}
     <div
       style="min-height: {minheight}px; width: {wrapperWidth < 500
         ? wrapperWidth
         : 500}px"
       style:position="absolute"
-      out:fade={{ duration: 1000 }}
+      out:fade|global={{ duration: 1000 }}
     >
       <p><a {href}>{href}</a></p>
     </div>

@@ -1,21 +1,21 @@
 <script>
-  import { onMount } from "svelte";
-  import { dedent } from "ts-dedent";
+  import { onMount } from 'svelte'
+  import { dedent } from 'ts-dedent'
 
-  import SubResumeSection from "@resume/sub_resume_section.svelte";
-  import ResumeSections from "@resume/resume_sections.svelte";
-  import ResumeSection from "@resume/resume_section.svelte";
-  import SummaryPoints from "@resume/summary_points.svelte";
-  import SummaryPoint from "@resume/summary_point.svelte";
-  import HomeLink from "@resume/home_link.svelte";
-  import Contact from "@resume/contact.svelte";
-  import Resume from "@resume/resume.svelte";
-  import Blurb from "@resume/blurb.svelte";
-  import Title from "@resume/title.svelte";
+  import SubResumeSection from '@resume/sub_resume_section.svelte'
+  import ResumeSections from '@resume/resume_sections.svelte'
+  import ResumeSection from '@resume/resume_section.svelte'
+  import SummaryPoints from '@resume/summary_points.svelte'
+  import SummaryPoint from '@resume/summary_point.svelte'
+  import HomeLink from '@resume/home_link.svelte'
+  import Contact from '@resume/contact.svelte'
+  import Resume from '@resume/resume.svelte'
+  import Blurb from '@resume/blurb.svelte'
+  import Title from '@resume/title.svelte'
 
   onMount(() => {
-    document.body.className = "light";
-  });
+    document.body.className = 'light'
+  })
 </script>
 
 <HomeLink />
@@ -59,19 +59,15 @@
   />
   <ResumeSections>
     <SummaryPoints>
-      <SummaryPoint>
-        Over 18 years experience with Python as of 2024
-      </SummaryPoint>
+      <SummaryPoint>Over 18 years experience with Python as of 2024</SummaryPoint>
       <SummaryPoint>Over 13 years industry experience as of 2024</SummaryPoint>
       <SummaryPoint>Over 8 years focus on server/cloud operations</SummaryPoint>
       <SummaryPoint>Extremely comfortable with Git and scripting</SummaryPoint>
-      <SummaryPoint>
-        Experience with AWS and GCE cloud environments
-      </SummaryPoint>
+      <SummaryPoint>Experience with AWS and GCE cloud environments</SummaryPoint>
       <SummaryPoint>Well defined software philosophy and approach</SummaryPoint>
       <SummaryPoint>
-        History and interest in building tools/processes that become invaluable
-        to my colleagues
+        History and interest in building tools/processes that become invaluable to my
+        colleagues
       </SummaryPoint>
       <SummaryPoint>Approachable, available, honest and helpful</SummaryPoint>
       <SummaryPoint>
@@ -177,11 +173,7 @@
     someone who can provide opinion or guidance.
     `}
     />
-    <ResumeSection
-      title="Notable examples"
-      title_color="#228c8c"
-      print_breakable
-    >
+    <ResumeSection title="Notable examples" title_color="#228c8c" print_breakable>
       <SubResumeSection
         title="Paying back technical debt"
         source={dedent`

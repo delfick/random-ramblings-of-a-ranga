@@ -1,20 +1,3 @@
-<script lang="ts">
-  import avatar from "@assets/avatar.svg";
-
-  export let inline = false;
-
-  $: className = inline ? "resume-home-link-inline" : "resume-home-link";
-</script>
-
-<a href="/" class={className} style:display="none">
-  <img
-    width={inline ? "40px" : "52px"}
-    height={inline ? "30px" : "50px"}
-    src={avatar}
-    alt="The delfick avatar"
-  />
-</a>
-
 <style lang="scss">
   @media screen and (min-width: 769px) {
     .resume-home-link {
@@ -59,3 +42,24 @@
     }
   }
 </style>
+
+<script lang="ts">
+  import avatar from '@assets/avatar.svg'
+
+  interface Props {
+    inline?: boolean
+  }
+
+  let { inline = false }: Props = $props()
+
+  let className = $derived(inline ? 'resume-home-link-inline' : 'resume-home-link')
+</script>
+
+<a href="/" class={className} style:display="none">
+  <img
+    width={inline ? '40px' : '52px'}
+    height={inline ? '30px' : '50px'}
+    src={avatar}
+    alt="The delfick avatar"
+  />
+</a>

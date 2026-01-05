@@ -1,6 +1,14 @@
 <script lang="ts">
-  import FullPost from "@blog/full_post.svelte";
-  import { meta as m } from "@blog/meta";
+  import type { PageData } from './$types'
+  import FullPost from '@blog/full_post.svelte'
+  import { meta as m } from '@blog/meta'
+  interface Props {
+    children?: import('svelte').Snippet
+    data: PageData
+  }
+
+  let { children, data }: Props = $props()
+  let base = $derived(data.base)
 </script>
 
 <svelte:head>
@@ -9,9 +17,6 @@
   <meta name="author" content={$m.author} />
 </svelte:head>
 
-<FullPost
-  tldr={$m.tldr}
-  published={$m.published}
-  tags={$m.tags}
-  title={$m.title}><slot /></FullPost
->
+<FullPost {base} tldr={$m.tldr} published={$m.published} tags={$m.tags} title={$m.title}>
+  {@render children?.()}
+</FullPost>

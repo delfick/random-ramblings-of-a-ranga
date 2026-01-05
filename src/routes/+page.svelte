@@ -1,13 +1,19 @@
+<style>
+  p {
+    text-align: center;
+  }
+</style>
+
 <script lang="ts">
-  import "./layout.postcss";
-  import avatar from "@assets/avatar.svg";
-  import LinkedIn from "@blog/links/linkedin.svelte";
-  import { onMount } from "svelte";
-  import { fade } from "svelte/transition";
+  import './layout.css'
+  import avatar from '@assets/avatar.svg'
+  import LinkedIn from '@blog/links/linkedin.svelte'
+  import { onMount } from 'svelte'
+  import { fade } from 'svelte/transition'
 
   onMount(() => {
-    document.body.className = "light";
-  });
+    document.body.className = 'light'
+  })
 </script>
 
 <svelte:head>
@@ -16,9 +22,9 @@
 
 <main class="flex h-screen">
   <div
-    class="grid grid-cols-1 gap-4 content-center m-auto"
-    in:fade={{ duration: 200, delay: 500 }}
-    out:fade={{ duration: 200 }}
+    class="m-auto grid grid-cols-1 content-center gap-4"
+    in:fade|global={{ duration: 200, delay: 500 }}
+    out:fade|global={{ duration: 200 }}
   >
     <div>
       <img
@@ -44,9 +50,3 @@
     </div>
   </div>
 </main>
-
-<style>
-  p {
-    text-align: center;
-  }
-</style>

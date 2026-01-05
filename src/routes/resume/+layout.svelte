@@ -1,9 +1,23 @@
+<style lang="postcss">
+  @page {
+    size: auto;
+    margin: 0;
+    margin-top: 5mm;
+    margin-bottom: 5mm;
+  }
+</style>
+
 <script lang="ts">
-  import { onMount } from "svelte";
+  import { onMount } from 'svelte'
+  interface Props {
+    children?: import('svelte').Snippet
+  }
+
+  let { children }: Props = $props()
 
   onMount(() => {
-    document.body.className = "light";
-  });
+    document.body.className = 'light'
+  })
 </script>
 
 <svelte:head>
@@ -15,13 +29,4 @@
   />
 </svelte:head>
 
-<slot />
-
-<style lang="postcss">
-  @page {
-    size: auto;
-    margin: 0;
-    margin-top: 5mm;
-    margin-bottom: 5mm;
-  }
-</style>
+{@render children?.()}

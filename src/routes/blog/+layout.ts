@@ -1,3 +1,3 @@
 export const load = async () => ({
-  base: "blog",
-});
+  base: 'blog'
+})

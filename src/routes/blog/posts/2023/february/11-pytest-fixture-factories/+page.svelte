@@ -1,19 +1,19 @@
 <script lang="ts">
-  import Python from "@app/prism/python.svelte";
+  import Python from '@app/prism/python.svelte'
 </script>
 
 <p>
-  I'm a big of pytest fixtures. They're so much better for setup and teardown
-  compared to xunit style <code>setup</code>/<code>teardown</code> methods. Having
-  a single method would force you to deal with multiple dependant objects in one
-  place. And, especially for cleanup, the failure in one of those can mess up handling
-  others if not enough care is taken. It was awful!
+  I'm a big of pytest fixtures. They're so much better for setup and teardown compared to
+  xunit style <code>setup</code>/<code>teardown</code> methods. Having a single method would
+  force you to deal with multiple dependant objects in one place. And, especially for cleanup,
+  the failure in one of those can mess up handling others if not enough care is taken. It was
+  awful!
 </p>
 
 <p>
-  pytest fixtures instead let us think about each dependency separately, and
-  also only use them as needed by each individual test. They're essentially
-  dependency injected into the test by name:
+  pytest fixtures instead let us think about each dependency separately, and also only use
+  them as needed by each individual test. They're essentially dependency injected into the
+  test by name:
 </p>
 
 <Python
@@ -28,10 +28,7 @@ def test_it_works(some_number: int):
 "
 />
 
-<p>
-  with the ability to transparently make them context managers with specific
-  cleanup
-</p>
+<p>with the ability to transparently make them context managers with specific cleanup</p>
 
 <Python
   source="import pytest
@@ -49,22 +46,21 @@ def test_it_works(a_thing: Thing):
 />
 
 <p>
-  These are then found by pytest by traversing the scope outwards from the test.
-  So if a test is on a class, then pytest will look at methods/attributes on the
-  class, then at the module level of the file the test is in, then the
-  conftest.py file of each package beyond that
+  These are then found by pytest by traversing the scope outwards from the test. So if a
+  test is on a class, then pytest will look at methods/attributes on the class, then at
+  the module level of the file the test is in, then the conftest.py file of each package
+  beyond that
 </p>
 
 <p>
-  This means it's possible to put a fixture in a conftest.py file and it'll be
-  discovered by any test below that conftest.py. This is useful to a point, but
-  after a large enough codebase it can become difficult to track where fixtures
-  come from.
+  This means it's possible to put a fixture in a conftest.py file and it'll be discovered
+  by any test below that conftest.py. This is useful to a point, but after a large enough
+  codebase it can become difficult to track where fixtures come from.
 </p>
 
 <p>
-  A pattern that I'm starting to like is where I have a factory that spits out a
-  fixture and then I create that fixture at the top of the file where I use it
+  A pattern that I'm starting to like is where I have a factory that spits out a fixture
+  and then I create that fixture at the top of the file where I use it
 </p>
 
 <Python
@@ -81,10 +77,10 @@ def test_it_works(s3_pipeline: S3Pipeline):
 <h2>A concrete example</h2>
 
 <p>
-  I wanted the other day to test that my Django template was getting href values
-  from url arguments and displaying those. I also didn't want my test to have a
-  specific root urlconf (it makes sense in context) and so I only cared that the
-  correct url names/arguments were being used
+  I wanted the other day to test that my Django template was getting href values from url
+  arguments and displaying those. I also didn't want my test to have a specific root
+  urlconf (it makes sense in context) and so I only cared that the correct url
+  names/arguments were being used
 </p>
 
 <p>A simple naive solution would look like:</p>
@@ -147,15 +143,14 @@ def test_it_renders_buttons_correctly(reverse_mock: mock.Mock):
 />
 
 <p>
-  But if we want to put this mock in a global place, naming it meaningfully
-  becomes important and tricky. It's much nicer to keep it local to where it's
-  used, so that the dependency injection by name only retains enough meaning of
-  what we actually want here
+  But if we want to put this mock in a global place, naming it meaningfully becomes
+  important and tricky. It's much nicer to keep it local to where it's used, so that the
+  dependency injection by name only retains enough meaning of what we actually want here
 </p>
 
 <p>
-  So instead of making the fixture itself global, we make something that will
-  return our fixture
+  So instead of making the fixture itself global, we make something that will return our
+  fixture
 </p>
 
 <Python
@@ -196,16 +191,15 @@ def test_it_renders_buttons_correctly(reverse_mock: mock.Mock):
 />
 
 <p>
-  One downside to this is we need to know the type that the fixture returns so
-  we can type it in the signature to our test (nothing enforces that the type
-  hint is correct, but giving the correct type hint helps with code completion
-  and code jumping)
+  One downside to this is we need to know the type that the fixture returns so we can type
+  it in the signature to our test (nothing enforces that the type hint is correct, but
+  giving the correct type hint helps with code completion and code jumping)
 </p>
 
 <p>
-  A nice way to make it easier to type hint is to make it so that the fixture
-  factory is on a class and the fixture gets us an instance of that class. That
-  way we import one thing to make the fixture and type hint it
+  A nice way to make it easier to type hint is to make it so that the fixture factory is
+  on a class and the fixture gets us an instance of that class. That way we import one
+  thing to make the fixture and type hint it
 </p>
 
 <Python
@@ -248,8 +242,8 @@ def test_it_renders_buttons_correctly(reverse_result: ReverseResult):
 />
 
 <p>
-  The best part about doing this is now we can add multiple points of
-  functionality to our fixture!
+  The best part about doing this is now we can add multiple points of functionality to our
+  fixture!
 </p>
 
 <Python
@@ -300,10 +294,9 @@ def test_it_renders_buttons_correctly(reverse_result: ReverseResult):
 <h2>Separating functionality from fixture</h2>
 
 <p>
-  The above is cool and all, but now the functionality of <code
-    >ReverseResult</code
-  > is consumed by the fact that it's a fixture and this makes it difficult to get
-  to that functionality if we aren't using it as a fixture!
+  The above is cool and all, but now the functionality of <code>ReverseResult</code> is consumed
+  by the fact that it's a fixture and this makes it difficult to get to that functionality if
+  we aren't using it as a fixture!
 </p>
 
 <p>So let's make it such that make_fixture doesn't have any logic in it</p>
@@ -324,9 +317,9 @@ class ReverseResult:
 />
 
 <p>
-  For this to work we need to also make our class a context manager. In Python a
-  context manager is essentially an object that is compatible with pythons
-  "with" syntax. The full documentation is over at <a
+  For this to work we need to also make our class a context manager. In Python a context
+  manager is essentially an object that is compatible with pythons "with" syntax. The full
+  documentation is over at <a
     href="https://docs.python.org/3/library/stdtypes.html#typecontextmanager"
     >the python docs</a
   >
@@ -364,10 +357,10 @@ class ReverseResult:
 />
 
 <p>
-  This works, but it's kinda awful to split the cleanup over two methods like
-  that. We can do better! The python standard library comes with a number of
-  tools that make contextmanagers easier to make and work with. The first we'll
-  use is the contextmanager decorator:
+  This works, but it's kinda awful to split the cleanup over two methods like that. We can
+  do better! The python standard library comes with a number of tools that make
+  contextmanagers easier to make and work with. The first we'll use is the contextmanager
+  decorator:
 </p>
 
 <Python
@@ -386,8 +379,8 @@ def patch_reverse() -> tp.Generator[None, None, None]
 />
 
 <p>
-  The second tool that can help us is the ExitStack. This is an object that lets
-  us use the context manager without extra indentation
+  The second tool that can help us is the ExitStack. This is an object that lets us use
+  the context manager without extra indentation
 </p>
 <p>
   <Python
@@ -445,8 +438,8 @@ class ReverseResult:
 />
 
 <p>
-  With a functional <code>typing.Self</code> you can also get rid of some of this
-  boilerplate (I have yet to try this though)
+  With a functional <code>typing.Self</code> you can also get rid of some of this boilerplate
+  (I have yet to try this though)
 </p>
 
 <Python
@@ -492,8 +485,8 @@ class ReverseResult(FixtureCM)
 
 <h2>Factories are flexible</h2>
 <p>
-  The last nice thing about this pattern is that factories are flexible, you can
-  ask the factory to customize what it spits out!
+  The last nice thing about this pattern is that factories are flexible, you can ask the
+  factory to customize what it spits out!
 </p>
 
 <Python
@@ -531,21 +524,18 @@ fixture2 = MyFixtureFactory.make_fixture(20)
 </p>
 <ul>
   <li>
-    Names of fixtures don't need to be globally sensitive, which becomes more
-    important the larger your collections of tests become
+    Names of fixtures don't need to be globally sensitive, which becomes more important
+    the larger your collections of tests become
   </li>
   <li>Fixtures can be customized at point of use</li>
   <li>Fixtures are more straight forward to type hint</li>
   <li>
-    Fixtures can provide multiple methods for the test to get specific
-    functionality from
+    Fixtures can provide multiple methods for the test to get specific functionality from
   </li>
   <li>
-    Easier to see where fixtures are used and where they come from if they
-    aren't globally available without intervention
+    Easier to see where fixtures are used and where they come from if they aren't globally
+    available without intervention
   </li>
-  <li>
-    Easier to have multiple instances of the same fixture at the same time
-  </li>
+  <li>Easier to have multiple instances of the same fixture at the same time</li>
   <li>Easier to write tests for fixture logic (tests are code too!!)</li>
 </ul>

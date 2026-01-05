@@ -1,9 +1,14 @@
 <script lang="ts">
-  import type { PageData } from "./$types";
-  import Posts from "@blog/posts.svelte";
+  import type { PageData } from './$types'
+  import Posts from '@blog/posts.svelte'
 
-  export let data: PageData;
-  const posts = data.posts;
+  interface Props {
+    data: PageData
+  }
+
+  let { data }: Props = $props()
+  let posts = $derived(data.posts)
+  let base = $derived(data.base)
 </script>
 
-<Posts description="delfick's blog" {posts} noheading rss showupcoming />
+<Posts {base} description="delfick's blog" {posts} noheading rss />

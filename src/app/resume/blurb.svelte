@@ -1,13 +1,3 @@
-<script lang="ts">
-  import Markdown from "svelte-markdown";
-
-  export let source: string;
-</script>
-
-<div class="blurb">
-  <Markdown {source} />
-</div>
-
 <style lang="scss">
   .blurb {
     :global(p) {
@@ -15,3 +5,17 @@
     }
   }
 </style>
+
+<script lang="ts">
+  import { marked } from 'marked'
+
+  interface Props {
+    source: string
+  }
+
+  let { source }: Props = $props()
+</script>
+
+<div class="blurb">
+  {@html marked(source)}
+</div>

@@ -1,41 +1,41 @@
-import { EmptyMeta } from "@blog/meta";
-import type { Post, BlogMeta, BlogMetaUpdater } from "@blog/meta";
-import pathParse from "path-parse";
+import { EmptyMeta } from '@blog/meta'
+import type { Post, BlogMeta, BlogMetaUpdater } from '@blog/meta'
+import pathParse from 'path-parse'
 
 export type Module = {
-  update: BlogMetaUpdater;
-};
+  _update: BlogMetaUpdater
+}
 
 export const getter = async (
   base: string,
   allposts: Record<string, () => Promise<Module>>
 ) => {
-  const iterablePostFiles = Object.entries(allposts);
+  const iterablePostFiles = Object.entries(allposts)
 
-  const allPosts: Array<Post> = [];
+  const allPosts: Array<Post> = []
 
   await Promise.all(
     iterablePostFiles.map(async ([p, resolver]) => {
-      const resolved = (await resolver()) as Module;
+      const resolved = (await resolver()) as Module
 
-      const parsed = pathParse(p);
+      const parsed = pathParse(p)
 
-      if (!resolved.update || parsed.name == "+layout") {
-        return;
+      if (!resolved._update || parsed.name == '+layout') {
+        return
       }
 
-      const meta: BlogMeta = { ...resolved.update(EmptyMeta) };
-      const path = `/${base}${parsed.dir.substring(2)}`;
+      const meta: BlogMeta = { ...resolved._update(EmptyMeta) }
+      const path = `/${base}${parsed.dir.substring(2)}`
       const match =
-        new RegExp(`/${base}/posts/([^/]+)/([^/]+)/([^-]+).+`).exec(path) || [];
+        new RegExp(`/${base}/posts/([^/]+)/([^/]+)/([^-]+).+`).exec(path) || []
 
       allPosts.push({
         meta,
         path,
-        date: new Date(`${match[1]}-${match[2]}-${match[3]}`),
-      });
+        date: new Date(`${match[1]}-${match[2]}-${match[3]}`)
+      })
     })
-  );
+  )
 
   const compare = (p1: Post, p2: Post): number => {
     const numbered = (path: string): string =>
@@ -55,20 +55,20 @@ export const getter = async (
               september: 9,
               october: 10,
               november: 11,
-              december: 12,
-            }[month] || "0"
+              december: 12
+            }[month] || '0'
           )
-      );
+      )
 
-    const path1 = numbered(p1?.path || "");
-    const path2 = numbered(p2?.path || "");
-    return path1.localeCompare(path2) || 0;
-  };
+    const path1 = numbered(p1?.path || '')
+    const path2 = numbered(p2?.path || '')
+    return path1.localeCompare(path2) || 0
+  }
 
   return {
     body: allPosts
-      .filter((p) => p != null)
+      .filter(p => p != null)
       .sort(compare)
-      .reverse(),
-  };
-};
+      .reverse()
+  }
+}
