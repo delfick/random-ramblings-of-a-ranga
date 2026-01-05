@@ -1,20 +1,27 @@
 <script lang="ts">
-  import "../layout.postcss";
-  import type { PageData } from "./$types";
-  import PageTransition from "@app/page_transition.svelte";
-  import Nav from "@blog/nav.svelte";
+  import '../layout.css'
+  import PageTransition from '@app/page_transition.svelte'
+  import Nav from '@blog/nav.svelte'
 
-  export let data: PageData;
-  let pathname: string;
-  $: pathname = data.pathname;
+  import { page } from '$app/state'
+
+  let pathname = $derived(page.url.pathname)
+
+  interface Props {
+    data: any
+    children?: import('svelte').Snippet
+  }
+
+  let { children, data }: Props = $props()
+  let base = $derived(data.base)
 </script>
 
-<svelte:body class="bg-gray-100 font-sans leading-normal tracking-normal" />
+<svelte:body />
 
-{#if pathname !== "/index"}
-  <Nav />
-{/if}
+<Nav {base} />
 
 <PageTransition refresh={pathname}>
-  <slot />
+  <div class="font-sans leading-normal tracking-normal">
+    {@render children?.()}
+  </div>
 </PageTransition>

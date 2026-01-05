@@ -1,9 +1,3 @@
-<script lang="ts">
-  export let before_contact = false;
-</script>
-
-<hr class={before_contact ? "before-contact" : ""} />
-
 <style lang="scss">
   hr {
     margin-bottom: 0;
@@ -24,3 +18,13 @@
     }
   }
 </style>
+
+<script lang="ts">
+  interface Props {
+    before_contact?: boolean
+  }
+
+  let { before_contact = false }: Props = $props()
+</script>
+
+<hr class={before_contact ? 'before-contact' : ''} />

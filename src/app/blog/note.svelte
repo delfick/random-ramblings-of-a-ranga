@@ -1,13 +1,15 @@
+<script lang="ts">
+  interface Props {
+    children?: import('svelte').Snippet
+  }
+
+  let { children }: Props = $props()
+</script>
+
 <div
-  class="shadow-lg border-yellow-400 border-2 mb-6 full-width min-w-0 p-4 bg-white rounded-lg dark:bg-gray-800 dark:shadow-dark-front"
+  class="full-width mb-6 min-w-0 rounded-lg border-2 border-yellow-400 bg-white p-4 shadow-lg dark:bg-gray-800 dark:shadow-dark-front"
 >
-  <div class="px-4 py-2 mt-2 dark:text-white">
-    <slot />
+  <div class="mt-2 px-4 py-2 dark:text-white">
+    {@render children?.()}
   </div>
 </div>
-
-<style lang="postcss" global>
-  @tailwind base;
-
-  @tailwind utilities;
-</style>

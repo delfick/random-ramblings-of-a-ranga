@@ -1,14 +1,12 @@
-import type { Post } from "@blog/meta";
-import type { PageLoad } from "@sveltejs/kit";
+import type { PageLoad } from './$types'
+import type { Post } from '@blog/meta'
 
 export const load: PageLoad = async ({ fetch, params }) => {
-  const posts: Array<Post> = await (
-    await fetch(`/experiments/posts.json`)
-  ).json();
+  const posts: Array<Post> = await (await fetch(`/experiments/posts.json`)).json()
   return {
-    posts: posts.filter((post) =>
+    posts: posts.filter(post =>
       post.path.startsWith(`/experiments/posts/${params.year}/`)
     ),
-    year: params.year,
-  };
-};
+    year: params.year
+  }
+}

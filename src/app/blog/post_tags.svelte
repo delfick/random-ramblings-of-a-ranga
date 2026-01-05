@@ -1,17 +1,22 @@
 <script lang="ts">
-  import TagPill from "@blog/tag_pill.svelte";
+  import TagPill from '@blog/tag_pill.svelte'
 
-  export let tags: Array<string>;
-  export let published: string;
-  export let margin = "-1rem";
+  interface Props {
+    base: string
+    tags: Array<string>
+    published: string
+    margin?: string
+  }
+
+  let { base, tags, published, margin = '-1rem' }: Props = $props()
 </script>
 
 <div
-  class="border-sky-200 text-right border-t-2 full-width min-w-0 mt-2 p-2 !pb-1 bg-white rounded-lg dark:bg-gray-800 dark:shadow-dark-front"
+  class="full-width mt-2 min-w-0 rounded-lg border-t-2 border-sky-200 bg-white p-2 !pb-1 text-right dark:bg-gray-800 dark:shadow-dark-front"
   style={`margin-left: ${margin}; margin-right: ${margin}`}
 >
-  {#each tags as tag}
-    <TagPill {tag} />
+  {#each tags as tag (tag)}
+    <TagPill {base} {tag} />
   {/each}
 
   <div class="dark:text-white">

@@ -1,18 +1,29 @@
 <script lang="ts">
-  export let size = 0;
-  export let color = "black";
-  export let hide_overflow = false;
-  export let right = false;
+  interface Props {
+    size?: number
+    color?: string
+    hide_overflow?: boolean
+    right?: boolean
+    children?: import('svelte').Snippet
+  }
 
-  $: component = `h${size || 1}`;
+  let {
+    size = 0,
+    color = 'black',
+    hide_overflow = false,
+    right = false,
+    children
+  }: Props = $props()
+
+  let component = $derived(`h${size || 1}`)
 </script>
 
 <svelte:element
   this={component}
   class="title {size === 0 ? '' : 'is-4'}"
-  style:text-align={right ? "right" : "auto"}
+  style:text-align={right ? 'right' : 'auto'}
   style:color
-  style:overflow={hide_overflow ? "hidden" : "auto"}
+  style:overflow={hide_overflow ? 'hidden' : 'auto'}
 >
-  <slot />
+  {@render children?.()}
 </svelte:element>

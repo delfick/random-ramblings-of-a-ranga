@@ -1,5 +1,3 @@
-<div class="resume-sections"><slot /></div>
-
 <style lang="scss">
   .resume-sections {
     :global(p) {
@@ -7,3 +5,13 @@
     }
   }
 </style>
+
+<script lang="ts">
+  interface Props {
+    children?: import('svelte').Snippet
+  }
+
+  let { children }: Props = $props()
+</script>
+
+<div class="resume-sections">{@render children?.()}</div>

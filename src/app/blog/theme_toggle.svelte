@@ -1,49 +1,67 @@
+<style lang="postcss">
+  .icons :global(svg) {
+    fill: var(--background);
+    z-index: 0;
+  }
+</style>
+
 <script lang="ts">
-  import { browser } from "$app/environment";
-  import { changeableTheme, theme, isDark } from "@app/theme";
-  import Cookies from "js-cookie";
-  import DarkMode from "svelte-dark-mode";
+  import { page } from '$app/state'
+  import { ModeWatcher } from 'mode-watcher'
+  import { browser } from '$app/environment'
+  import { mode } from 'mode-watcher'
+  import { toggleMode } from 'mode-watcher'
+  import Cookies from 'js-cookie'
 
-  export let hidden = false;
-
-  let started = !browser;
-
-  let toggle = () => theme.set($theme == "light" ? "dark" : "light");
-
-  $: if ($changeableTheme) {
-    Cookies.set("theme", $theme);
+  interface Props {
+    hidden?: boolean
   }
-  $: if (browser) {
-    let t = $theme as string;
-    if (!changeableTheme) {
-      t = "light";
-    }
-    document.body.className = t;
 
-    const docEl = document.documentElement;
+  let { hidden = false }: Props = $props()
 
-    if (t == "dark") {
-      docEl.style.setProperty("--background", "#839495");
-    } else {
-      docEl.style.setProperty("--background", "#252525");
+  $effect(() => {
+    let current: string = mode.current || ''
+    if (current == 'light' || current == 'dark') {
+      if (page.url.pathname.includes('/blog')) {
+        Cookies.set('theme', current)
+      }
     }
-  }
+  })
+  $effect(() => {
+    if (browser) {
+      let t = mode.current as string
+      if (!page.url.pathname.includes('/blog')) {
+        t = 'light'
+      }
+      document.body.className = t
+
+      const docEl = document.documentElement
+
+      if (t == 'dark') {
+        docEl.style.setProperty('--background', '#839495')
+      } else {
+        docEl.style.setProperty('--background', '#252525')
+      }
+    }
+  })
 </script>
 
-<DarkMode bind:theme={$theme} on:change={() => (started = true)} />
+<ModeWatcher defaultMode={mode.current} />
 
-{#if !hidden && started}
+{#if !hidden}
   <div
+    tabindex="0"
+    role="button"
     class="icons"
-    on:click={toggle}
+    onkeyup={() => {}}
+    onclick={toggleMode}
     style="padding-left:10px; padding-top:4px"
   >
     <button
-      aria-label="switch to {$isDark ? 'light' : 'dark'} theme"
-      width="24px"
-      height="24px"
+      aria-label="switch to {mode.current == 'dark' ? 'light' : 'dark'} theme"
+      style="width:24px height:24px"
     >
-      {#if $isDark}
+      {#if mode.current == 'dark'}
         <svg
           id="hidden-sun-svg"
           width="24px"
@@ -85,10 +103,3 @@
     </button>
   </div>
 {/if}
-
-<style lang="postcss">
-  .icons :global(svg) {
-    fill: var(--background);
-    z-index: 0;
-  }
-</style>

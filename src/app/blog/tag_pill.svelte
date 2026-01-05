@@ -1,22 +1,23 @@
 <script lang="ts">
-  import { page } from "$app/stores";
+  interface Props {
+    tag: string
+    float?: boolean
+    size?: string
+    linkable?: boolean
+    base: string
+  }
 
-  export let tag: string;
-  export let float = true;
-  export let size = "sm";
-  export let linkable = true;
-
-  const base = $page.data.base;
+  let { base, tag, float = true, size = 'sm', linkable = true }: Props = $props()
 </script>
 
 <svelte:element
-  this={linkable ? "a" : "span"}
+  this={linkable ? 'a' : 'span'}
   {...linkable ? { href: `/${base}/tags/${encodeURIComponent(tag)}` } : {}}
 >
   <span
     class="{float
       ? 'float-left'
-      : ''} inline-block dark:bg-gray-200 bg-black rounded-full px-3 text-{size} font-semibold dark:text-gray-700 text-white mr-2"
+      : ''} inline-block rounded-full bg-black px-3 dark:bg-gray-200 text-{size} mr-2 font-semibold text-white dark:text-gray-700"
     >#{tag}</span
   >
 </svelte:element>
