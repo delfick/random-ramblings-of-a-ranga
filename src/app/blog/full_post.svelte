@@ -85,10 +85,7 @@
 </script>
 
 <div class="mx-auto w-full max-w-4xl pt-20 pb-5">
-  <div
-    class="blog-content text-l w-full px-4 leading-normal md:px-6"
-    style="font-family:Georgia,serif;"
-  >
+  <div class="blog-content text-l w-full px-4 leading-normal md:px-6">
     {#if tldr != ''}
       <Heading {title} {published} {tldr} />
     {/if}

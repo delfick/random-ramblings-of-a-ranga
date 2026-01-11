@@ -88,10 +88,7 @@
 </svelte:head>
 
 <div class="mx-auto w-full max-w-4xl pt-20 pb-5">
-  <div
-    class="experiment-content text-l w-full px-4 leading-normal md:px-6"
-    style="font-family:Georgia,serif;"
-  >
+  <div class="experiment-content text-l w-full px-4 leading-normal md:px-6">
     {#if $m.tldr != ''}
       <Heading title={$m.title} published={$m.published} tldr={$m.tldr} />
     {/if}
