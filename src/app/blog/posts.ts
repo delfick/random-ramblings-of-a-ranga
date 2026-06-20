@@ -40,11 +40,11 @@ export const getter = async (
   const compare = (p1: Post, p2: Post): number => {
     const numbered = (path: string): string =>
       path.replace(
-        /(january|february|march|april|may|june|july|august|september|october|november|december)/,
+        /(jan|february|march|april|may|june|july|august|september|october|november|december)/i,
         (_, month: string) =>
           String(
             {
-              january: 1,
+              jan: 1,
               february: 2,
               march: 3,
               april: 4,
