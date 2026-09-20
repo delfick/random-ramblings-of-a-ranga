@@ -21,10 +21,9 @@
   <link rel="apple-touch-icon" sizes="180x180" href={AppleTouchIcon} />
 
   <link rel="manifest" href="/site.webmanifest" />
-  <link
-    href="https://bsky.brid.gy/ap/did:plc:myln4meshy6cfnpyky6sz7kb"
-    rel="me atproto"
-  />
+  <link href="@shout.delfick.com" rel="me atproto" />
+  <link rel="me" href="@shout@delfick.com" />
+  <link rel="me" href="https://mastodon.social/@delfick" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#ffffff" />
 </svelte:head>
