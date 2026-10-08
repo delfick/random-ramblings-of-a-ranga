@@ -1,5 +1,5 @@
-import adapter from '@sveltejs/adapter-netlify'
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte'
+import adapter from '@sveltejs/adapter-node'
 
 const prod = process.env.NODE_ENV == 'production'
 
@@ -23,8 +23,7 @@ const config = {
           'self',
           'https://twitter.com',
           'platform.twitter.com',
-          'syndication.twitter.com',
-          'app.netlify.com'
+          'syndication.twitter.com'
         ],
 
         'img-src': [
